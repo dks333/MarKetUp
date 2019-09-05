@@ -8,13 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		182EDA09231D9B25003D1B2A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182EDA08231D9B25003D1B2A /* AppDelegate.swift */; };
-		182EDA0B231D9B25003D1B2A /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182EDA0A231D9B25003D1B2A /* FirstViewController.swift */; };
-		182EDA0D231D9B25003D1B2A /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182EDA0C231D9B25003D1B2A /* SecondViewController.swift */; };
+		182EDA0B231D9B25003D1B2A /* StockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182EDA0A231D9B25003D1B2A /* StockViewController.swift */; };
 		182EDA10231D9B25003D1B2A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 182EDA0E231D9B25003D1B2A /* Main.storyboard */; };
 		182EDA12231D9B28003D1B2A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 182EDA11231D9B28003D1B2A /* Assets.xcassets */; };
 		182EDA15231D9B28003D1B2A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 182EDA13231D9B28003D1B2A /* LaunchScreen.storyboard */; };
 		182EDA20231D9B28003D1B2A /* MarKetUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182EDA1F231D9B28003D1B2A /* MarKetUpTests.swift */; };
 		182EDA2B231D9B28003D1B2A /* MarKetUpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182EDA2A231D9B28003D1B2A /* MarKetUpUITests.swift */; };
+		18A13F01231F8DFB00710999 /* Stocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A13F00231F8DFB00710999 /* Stocks.swift */; };
+		18A13F03231F8E7200710999 /* StockTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A13F02231F8E7200710999 /* StockTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,8 +38,7 @@
 /* Begin PBXFileReference section */
 		182EDA05231D9B25003D1B2A /* MarKetUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarKetUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		182EDA08231D9B25003D1B2A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		182EDA0A231D9B25003D1B2A /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
-		182EDA0C231D9B25003D1B2A /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		182EDA0A231D9B25003D1B2A /* StockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockViewController.swift; sourceTree = "<group>"; };
 		182EDA0F231D9B25003D1B2A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		182EDA11231D9B28003D1B2A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		182EDA14231D9B28003D1B2A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -49,6 +49,8 @@
 		182EDA26231D9B28003D1B2A /* MarKetUpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarKetUpUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		182EDA2A231D9B28003D1B2A /* MarKetUpUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarKetUpUITests.swift; sourceTree = "<group>"; };
 		182EDA2C231D9B28003D1B2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18A13F00231F8DFB00710999 /* Stocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stocks.swift; sourceTree = "<group>"; };
+		18A13F02231F8E7200710999 /* StockTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,13 +101,12 @@
 		182EDA07231D9B25003D1B2A /* MarKetUp */ = {
 			isa = PBXGroup;
 			children = (
-				182EDA08231D9B25003D1B2A /* AppDelegate.swift */,
-				182EDA0A231D9B25003D1B2A /* FirstViewController.swift */,
-				182EDA0C231D9B25003D1B2A /* SecondViewController.swift */,
+				182EDA0A231D9B25003D1B2A /* StockViewController.swift */,
+				18A13F02231F8E7200710999 /* StockTableViewCell.swift */,
+				18A13F00231F8DFB00710999 /* Stocks.swift */,
 				182EDA0E231D9B25003D1B2A /* Main.storyboard */,
-				182EDA11231D9B28003D1B2A /* Assets.xcassets */,
-				182EDA13231D9B28003D1B2A /* LaunchScreen.storyboard */,
 				182EDA16231D9B28003D1B2A /* Info.plist */,
+				18A13EFF231F8D8200710999 /* Supporting Files */,
 			);
 			path = MarKetUp;
 			sourceTree = "<group>";
@@ -126,6 +127,16 @@
 				182EDA2C231D9B28003D1B2A /* Info.plist */,
 			);
 			path = MarKetUpUITests;
+			sourceTree = "<group>";
+		};
+		18A13EFF231F8D8200710999 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				182EDA08231D9B25003D1B2A /* AppDelegate.swift */,
+				182EDA11231D9B28003D1B2A /* Assets.xcassets */,
+				182EDA13231D9B28003D1B2A /* LaunchScreen.storyboard */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,9 +270,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				182EDA0D231D9B25003D1B2A /* SecondViewController.swift in Sources */,
 				182EDA09231D9B25003D1B2A /* AppDelegate.swift in Sources */,
-				182EDA0B231D9B25003D1B2A /* FirstViewController.swift in Sources */,
+				18A13F03231F8E7200710999 /* StockTableViewCell.swift in Sources */,
+				18A13F01231F8DFB00710999 /* Stocks.swift in Sources */,
+				182EDA0B231D9B25003D1B2A /* StockViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
