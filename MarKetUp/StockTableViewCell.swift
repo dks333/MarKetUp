@@ -9,17 +9,17 @@
 import UIKit
 
 class StockTableViewCell: UITableViewCell {
-
+    
     @IBOutlet weak var quoteLbl: UILabel!
     @IBOutlet weak var priceLbl: UILabel!
     @IBOutlet weak var percentageLbl: UILabel!
     
-    func setup(quote: String, price: Float, percentage: String){
+    func setup(quote: String, price: Float?, percentage: String?){
         quoteLbl.text = quote
-        priceLbl.text = String(price)
+        priceLbl.text = String(price!)
         percentageLbl.text = percentage
         
-        if percentage.first == "-" {
+        if percentage?.first == "-" {
             priceLbl.backgroundColor = .red
             percentageLbl.textColor = .red
         } else {

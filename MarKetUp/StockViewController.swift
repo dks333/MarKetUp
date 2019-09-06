@@ -22,14 +22,18 @@ struct StockAPI: Codable { // or Decodable
 
 class StockViewController: UITableViewController {
     
+    var symbols = ["AAPL", "MSFT", "AMZN", "FB", "BABA"]
     var stocks = [Stocks]()
+    
     let AlphaVintageAPIKey = "VX24AALA4RTGKL99"
+    
+    var APILimitAlert = UIAlertController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         
-        
+
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
             self.fetchStockData("AAPL")
@@ -39,6 +43,7 @@ class StockViewController: UITableViewController {
             self.fetchStockData("BABA")
             self.fetchStockData("TSLA")
         }
+        
         self.tableView.reloadData()
 
     
@@ -56,9 +61,17 @@ class StockViewController: UITableViewController {
                     do {
                         
                         let myJson = try JSONSerialization.jsonObject(with: content, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+                        
+                        // Warning: if the API has reached its limit
                         if let limit = myJson["Note"] as? String {
-                            print("\(symbol) didn't get to be called because `\(limit)`")
+                            print("\(symbol) didn't get to be called because Warning: `\(limit)`")
+                            DispatchQueue.main.async {
+                                self.APILimitAlert.message = limit
+                                self.present(self.APILimitAlert, animated: true, completion: nil)
+                            }
+                            
                         }
+                        
                         // Get the lastest time refreshed
                         var lastRefreshedTime = ""
                         if let metaData = myJson["Meta Data"] as? NSDictionary {
@@ -70,7 +83,12 @@ class StockViewController: UITableViewController {
                             let timeBlock = time[lastRefreshedTime]! as? NSDictionary
                             let closedPriceStr = timeBlock!["4. close"] as! String
                             let closedPrice = (closedPriceStr as NSString).floatValue
-                            self.stocks.append(Stocks(quote: symbol, currentPrice: closedPrice, percentage: "1.23"))
+                            for i in 0..<self.stocks.count {
+                                if self.stocks[i].quote == symbol {
+                                    self.stocks[i].currentPrice = closedPrice
+                                    self.stocks[i].percentage = "1.23%"
+                                }
+                            }
                             DispatchQueue.main.async {
                                 self.tableView.reloadData()
                             }
@@ -89,7 +107,14 @@ class StockViewController: UITableViewController {
     
     
     private func setupView(){
+        //TODO: to get user's stock list
+        for i in symbols {
+            stocks.append(Stocks(quote: i, currentPrice: 0.00, percentage: "0%"))
+        }
         
+        //Set an alert controller if API has reach its limit
+        APILimitAlert = UIAlertController(title: "Reach API requests limit(5)", message: nil, preferredStyle: .alert)
+        APILimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
     }
 
 
@@ -98,15 +123,20 @@ class StockViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return stocks.count
+        if stocks.count > 0 {
+            return stocks.count
+        } else {
+            return 10
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "stockCell", for: indexPath) as! StockTableViewCell
-        let stock = stocks[indexPath.row]
         
-        cell.setup(quote: stock.quote, price: stock.currentPrice, percentage: stock.percentage)
-        
+        if stocks.count > 0 {
+            let stock = stocks[indexPath.row]
+            cell.setup(quote: stock.quote, price: stock.currentPrice, percentage: stock.percentage)
+        }
         
         return cell
     }
@@ -116,5 +146,5 @@ class StockViewController: UITableViewController {
     }
 
     
-}
 
+}
