@@ -22,31 +22,31 @@ struct StockAPI: Codable { // or Decodable
 
 class StockViewController: UITableViewController {
     
-    var symbols = ["AAPL", "MSFT", "AMZN", "FB", "BABA"]
+    var symbols = ["AAPL", "MSFT", "AMZN"]
     var stocks = [Stocks]()
     
     let AlphaVintageAPIKey = "VX24AALA4RTGKL99"
     
-    var APILimitAlert = UIAlertController()
+    @IBAction func reloadStocks(_ sender: Any) {
+        loadingStocks()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        
-
+        loadingStocks()
+    
+    }
+    
+    private func loadingStocks(){
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-            self.fetchStockData("AAPL")
-            self.fetchStockData("MSFT")
-            self.fetchStockData("AMZN")
-            self.fetchStockData("FB")
-            self.fetchStockData("BABA")
-            self.fetchStockData("TSLA")
+            for symbol in self.symbols {
+                if self.presentedViewController as? UIAlertController == nil{
+                    self.fetchStockData(symbol)
+                }
+            }
         }
-        
-        self.tableView.reloadData()
-
-    
     }
     
     func fetchStockData(_ symbol: String) {
@@ -65,9 +65,16 @@ class StockViewController: UITableViewController {
                         // Warning: if the API has reached its limit
                         if let limit = myJson["Note"] as? String {
                             print("\(symbol) didn't get to be called because Warning: `\(limit)`")
+                            
                             DispatchQueue.main.async {
-                                self.APILimitAlert.message = limit
-                                self.present(self.APILimitAlert, animated: true, completion: nil)
+                                //Set an alert controller if API has reach its limit
+                                if self.presentedViewController as? UIAlertController == nil{
+                                    let APILimitAlert = UIAlertController(title: "Reach API requests limit", message: nil, preferredStyle: .alert)
+                                    APILimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
+                                    APILimitAlert.message = limit
+                                    
+                                    self.present(APILimitAlert, animated: true, completion: nil)
+                                }
                             }
                             
                         }
@@ -112,9 +119,7 @@ class StockViewController: UITableViewController {
             stocks.append(Stocks(quote: i, currentPrice: 0.00, percentage: "0%"))
         }
         
-        //Set an alert controller if API has reach its limit
-        APILimitAlert = UIAlertController(title: "Reach API requests limit(5)", message: nil, preferredStyle: .alert)
-        APILimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
+
     }
 
 
