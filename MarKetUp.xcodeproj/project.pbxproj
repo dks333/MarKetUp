@@ -14,6 +14,11 @@
 		182EDA15231D9B28003D1B2A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 182EDA13231D9B28003D1B2A /* LaunchScreen.storyboard */; };
 		182EDA20231D9B28003D1B2A /* MarKetUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182EDA1F231D9B28003D1B2A /* MarKetUpTests.swift */; };
 		182EDA2B231D9B28003D1B2A /* MarKetUpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182EDA2A231D9B28003D1B2A /* MarKetUpUITests.swift */; };
+		18A0F371232DA29A00BCBE50 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F36F232DA29A00BCBE50 /* Model.xcdatamodeld */; };
+		18A0F397233048A500BCBE50 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F396233048A500BCBE50 /* ProfileViewController.swift */; };
+		18A0F399233048BC00BCBE50 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F398233048BC00BCBE50 /* User.swift */; };
+		18A0F39B233065B100BCBE50 /* IndividualStockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F39A233065B100BCBE50 /* IndividualStockViewController.swift */; };
+		18A0F39D233095DB00BCBE50 /* UIKitExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A0F39C233095DB00BCBE50 /* UIKitExtensions.swift */; };
 		18A13F01231F8DFB00710999 /* Stocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A13F00231F8DFB00710999 /* Stocks.swift */; };
 		18A13F03231F8E7200710999 /* StockTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A13F02231F8E7200710999 /* StockTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -49,6 +54,11 @@
 		182EDA26231D9B28003D1B2A /* MarKetUpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarKetUpUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		182EDA2A231D9B28003D1B2A /* MarKetUpUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarKetUpUITests.swift; sourceTree = "<group>"; };
 		182EDA2C231D9B28003D1B2A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		18A0F370232DA29A00BCBE50 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		18A0F396233048A500BCBE50 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		18A0F398233048BC00BCBE50 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		18A0F39A233065B100BCBE50 /* IndividualStockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndividualStockViewController.swift; sourceTree = "<group>"; };
+		18A0F39C233095DB00BCBE50 /* UIKitExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitExtensions.swift; sourceTree = "<group>"; };
 		18A13F00231F8DFB00710999 /* Stocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stocks.swift; sourceTree = "<group>"; };
 		18A13F02231F8E7200710999 /* StockTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,7 +113,11 @@
 			children = (
 				182EDA0A231D9B25003D1B2A /* StockViewController.swift */,
 				18A13F02231F8E7200710999 /* StockTableViewCell.swift */,
+				18A0F39A233065B100BCBE50 /* IndividualStockViewController.swift */,
 				18A13F00231F8DFB00710999 /* Stocks.swift */,
+				18A0F396233048A500BCBE50 /* ProfileViewController.swift */,
+				18A0F398233048BC00BCBE50 /* User.swift */,
+				18A0F36F232DA29A00BCBE50 /* Model.xcdatamodeld */,
 				182EDA0E231D9B25003D1B2A /* Main.storyboard */,
 				182EDA16231D9B28003D1B2A /* Info.plist */,
 				18A13EFF231F8D8200710999 /* Supporting Files */,
@@ -135,6 +149,7 @@
 				182EDA08231D9B25003D1B2A /* AppDelegate.swift */,
 				182EDA11231D9B28003D1B2A /* Assets.xcassets */,
 				182EDA13231D9B28003D1B2A /* LaunchScreen.storyboard */,
+				18A0F39C233095DB00BCBE50 /* UIKitExtensions.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -270,10 +285,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18A0F397233048A500BCBE50 /* ProfileViewController.swift in Sources */,
 				182EDA09231D9B25003D1B2A /* AppDelegate.swift in Sources */,
+				18A0F39D233095DB00BCBE50 /* UIKitExtensions.swift in Sources */,
+				18A0F39B233065B100BCBE50 /* IndividualStockViewController.swift in Sources */,
 				18A13F03231F8E7200710999 /* StockTableViewCell.swift in Sources */,
+				18A0F371232DA29A00BCBE50 /* Model.xcdatamodeld in Sources */,
 				18A13F01231F8DFB00710999 /* Stocks.swift in Sources */,
 				182EDA0B231D9B25003D1B2A /* StockViewController.swift in Sources */,
+				18A0F399233048BC00BCBE50 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -602,6 +622,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		18A0F36F232DA29A00BCBE50 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				18A0F370232DA29A00BCBE50 /* Model.xcdatamodel */,
+			);
+			currentVersion = 18A0F370232DA29A00BCBE50 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 182ED9FD231D9B25003D1B2A /* Project object */;
 }

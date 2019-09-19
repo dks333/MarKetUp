@@ -22,8 +22,9 @@ struct StockAPI: Codable { // or Decodable
 
 class StockViewController: UITableViewController {
     
-    var symbols = ["AAPL", "MSFT", "AMZN"]
+    var symbols = ["AAPL", "MSFT"]
     var stocks = [Stocks]()
+    
     
     let AlphaVintageAPIKey = "VX24AALA4RTGKL99"
     
@@ -37,6 +38,7 @@ class StockViewController: UITableViewController {
         loadingStocks()
     
     }
+    
     
     private func loadingStocks(){
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -99,7 +101,7 @@ class StockViewController: UITableViewController {
                             DispatchQueue.main.async {
                                 self.tableView.reloadData()
                             }
-                            print("done")
+                            print("done fetch \(symbol)")
                         }
                         
                     }  catch  {
@@ -118,6 +120,9 @@ class StockViewController: UITableViewController {
         for i in symbols {
             stocks.append(Stocks(quote: i, currentPrice: 0.00, percentage: "0%"))
         }
+        
+        // Clear separators of empty rows
+        tableView.tableFooterView = UIView()
         
 
     }
@@ -138,17 +143,39 @@ class StockViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "stockCell", for: indexPath) as! StockTableViewCell
         
-        if stocks.count > 0 {
-            let stock = stocks[indexPath.row]
-            cell.setup(quote: stock.quote, price: stock.currentPrice, percentage: stock.percentage)
-        }
+        let stock = stocks[indexPath.row]
+        cell.setup(quote: stock.quote, price: stock.currentPrice, percentage: stock.percentage)
+        
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = storyboard?.instantiateViewController(withIdentifier: "IndividualStockViewController") as! IndividualStockViewController
+        let selectedStock = stocks[indexPath.row]
+        vc.stockName = selectedStock.quote
+        vc.stockPrice = selectedStock.currentPrice
+        vc.stockPercentage = selectedStock.percentage
+        
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
+    
+//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        tableView.headerView(forSection: section)?.backgroundColor = .black
+//        if section == 0 {
+//            return "Stocks"
+//        } else {
+//            return "Watchlists"
+//        }
+//    }
+    
+    
+
+    
 
     
 
