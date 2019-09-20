@@ -12,10 +12,10 @@ struct User {
     var userId: String
     var cashes: Float
     var values: Float
-    var ownedStocks: [Stocks]
-    var watchList: [Stocks]
+    var ownedStocks: [Stock]
+    var watchList: [Stock]
     
-    init(userId: String, cashes: Float, values: Float, ownedStocks: [Stocks], watchList: [Stocks]){
+    init(userId: String, cashes: Float, values: Float, ownedStocks: [Stock], watchList: [Stock]){
         self.userId = userId
         self.cashes = cashes
         self.values = values

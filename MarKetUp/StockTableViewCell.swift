@@ -20,17 +20,17 @@ class StockTableViewCell: UITableViewCell {
         percentageLbl.text = percentage
         
         if percentage?.first == "-" {
-            priceLbl.backgroundColor = .red
-            percentageLbl.textColor = .red
+            priceLbl.textColor = .red
+            percentageLbl.backgroundColor = .red
         } else {
-            priceLbl.backgroundColor = .green
-            percentageLbl.textColor = .green
+            priceLbl.textColor = .green
+            percentageLbl.backgroundColor = .green
         }
     }
     
     private func setupView(){
         self.selectionStyle = .none
-        self.priceLbl.layer.cornerRadius = 5
+        self.percentageLbl.layer.cornerRadius = 5
         
     }
     

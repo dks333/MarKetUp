@@ -9,15 +9,27 @@
 import Foundation
 
 
-struct Stocks{
-    var quote: String
-    var currentPrice: Float
-    var percentage: String
+struct Stock{
+
+    var symbol: String            // "AAPL"
+    var price: Float              // 210.98
+    //var name: String              // "Apple Inc."
+    var change_pct: String        // "-0.81"
+    //var day_change: String        // “-1.81”
+    //var volumn: String            // “20234415”
     
-    init(quote: String, currentPrice: Float, percentage: String){
-        self.quote = quote
-        self.currentPrice = currentPrice
-        self.percentage = percentage
+    init(symbol: String, price: Float, change_pct: String){
+        self.symbol = symbol
+        self.price = price
+        self.change_pct = change_pct
+    }
+    
+    init(_ dictionary: [String: Any]) {
+        self.symbol = dictionary["symbol"] as? String ?? ""
+        let priceStr = dictionary["price"] as? String ?? ""
+        self.price = (Float(priceStr))!
+        self.change_pct = dictionary["change_pct"] as? String ?? ""
+        self.change_pct += "%"
     }
     
 }

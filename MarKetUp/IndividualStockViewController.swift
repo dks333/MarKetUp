@@ -46,6 +46,14 @@ class IndividualStockViewController: UIViewController {
         priceLbl.text = String("\(stockPrice)")
         percentageLbl.text = stockPercentage
         
+        if percentageLbl.text?.first == "-" {
+            priceLbl.textColor = .red
+            percentageLbl.textColor = .red
+        } else {
+            priceLbl.textColor = .green
+            percentageLbl.textColor = .green
+        }
+        
     }
 
     

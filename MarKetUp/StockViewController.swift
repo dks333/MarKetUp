@@ -9,24 +9,16 @@
 import UIKit
 import Foundation
 
-struct StockAPI: Codable { // or Decodable
-    let MetaData: String
-    let TimeSeries: String
-    
-    init(json: [String: Any]){
-        MetaData = json["Meta Data"] as? String ?? ""
-        TimeSeries = json["Time Series (1min)"] as? String ?? ""
-    }
-}
 
 
 class StockViewController: UITableViewController {
     
-    var symbols = ["AAPL", "MSFT"]
-    var stocks = [Stocks]()
+    var symbols = ["AAPL", "MSFT", "AMZN"]
+    var stocks = [Stock]()
     
     
     let AlphaVintageAPIKey = "VX24AALA4RTGKL99"
+    let WorldTradingDataAPIKey = "fhGOT6U6HafLz2aazzTXti58aetYaJNZAr6cZzkibkcMut0p2MMgbgMLEDNv"
     
     @IBAction func reloadStocks(_ sender: Any) {
         loadingStocks()
@@ -43,82 +35,132 @@ class StockViewController: UITableViewController {
     private func loadingStocks(){
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
-            for symbol in self.symbols {
-                if self.presentedViewController as? UIAlertController == nil{
-                    self.fetchStockData(symbol)
-                }
+            if self.presentedViewController as? UIAlertController == nil{
+                //self.fetchStockData()
             }
         }
     }
     
-    func fetchStockData(_ symbol: String) {
+    func fetchStockData() {
+
+        let allSymbolStr = symbols.joined(separator: ",") //Ex: 'MSFT,AAPL,...'
         
-        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(symbol)&interval=1min&apikey=\(AlphaVintageAPIKey)")
+        guard let url = URL(string: "https://api.worldtradingdata.com/api/v1/stock?symbol=\(allSymbolStr),&api_token=\(WorldTradingDataAPIKey)") else { return }
         
-        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
-            if error != nil {
-                print ("ERROR")
-            } else {
-                if let content = data {
-                    do {
-                        
-                        let myJson = try JSONSerialization.jsonObject(with: content, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
-                        
-                        // Warning: if the API has reached its limit
-                        if let limit = myJson["Note"] as? String {
-                            print("\(symbol) didn't get to be called because Warning: `\(limit)`")
-                            
-                            DispatchQueue.main.async {
-                                //Set an alert controller if API has reach its limit
-                                if self.presentedViewController as? UIAlertController == nil{
-                                    let APILimitAlert = UIAlertController(title: "Reach API requests limit", message: nil, preferredStyle: .alert)
-                                    APILimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
-                                    APILimitAlert.message = limit
-                                    
-                                    self.present(APILimitAlert, animated: true, completion: nil)
-                                }
-                            }
-                            
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let dataResponse = data,
+                error == nil else {
+                    print(error?.localizedDescription ?? "Response Error")
+                    return }
+            do{
+                //here dataResponse received from a network request
+                let jsonResponse = try JSONSerialization.jsonObject(with:
+                    dataResponse, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+                guard let dataArray = jsonResponse["data"] as? [[String: Any]] else { return }
+                
+                // creating stock objects
+                self.stocks = dataArray.compactMap{Stock($0)}
+                print(self.stocks)
+               
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+
+                //printing the message that WorldTradingData states:
+                // Ex: 'You requested 6 stocks but your account maximum is 5. Upgrade your account to increase the number of stocks available per request.'
+                
+                if let reachedMaxError = jsonResponse["message"] as? String {
+                    print(reachedMaxError)
+                    DispatchQueue.main.async {
+                        //Set an alert controller if API has reach its limit
+                        if self.presentedViewController as? UIAlertController == nil{
+                            let APILimitAlert = UIAlertController(title: "Reach API requests limit", message: nil, preferredStyle: .alert)
+                            APILimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
+                            APILimitAlert.message = reachedMaxError
+
+                            self.present(APILimitAlert, animated: true, completion: nil)
                         }
-                        
-                        // Get the lastest time refreshed
-                        var lastRefreshedTime = ""
-                        if let metaData = myJson["Meta Data"] as? NSDictionary {
-                            lastRefreshedTime = metaData["3. Last Refreshed"] as! String
-                        }
-                        
-                        // Get the lastest price
-                        if let time = myJson["Time Series (1min)"] as? NSDictionary  {
-                            let timeBlock = time[lastRefreshedTime]! as? NSDictionary
-                            let closedPriceStr = timeBlock!["4. close"] as! String
-                            let closedPrice = (closedPriceStr as NSString).floatValue
-                            for i in 0..<self.stocks.count {
-                                if self.stocks[i].quote == symbol {
-                                    self.stocks[i].currentPrice = closedPrice
-                                    self.stocks[i].percentage = "1.23%"
-                                }
-                            }
-                            DispatchQueue.main.async {
-                                self.tableView.reloadData()
-                            }
-                            print("done fetch \(symbol)")
-                        }
-                        
-                    }  catch  {
-                        print(error.localizedDescription)
                     }
                 }
+                
+            } catch let parsingError {
+                print("Error", parsingError)
             }
         }
         task.resume()
+        
+        
+        
+        
+        
+        
+        
+//        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(symbol)&interval=1min&apikey=\(AlphaVintageAPIKey)")
+//
+//        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+//            if error != nil {
+//                print ("ERROR")
+//            } else {
+//                if let content = data {
+//                    do {
+//
+//                        let myJson = try JSONSerialization.jsonObject(with: content, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+//
+//                        // Warning: if the API has reached its limit
+//                        if let limit = myJson["Note"] as? String {
+//                            print("\(symbol) didn't get to be called because Warning: `\(limit)`")
+//
+//                            DispatchQueue.main.async {
+//                                //Set an alert controller if API has reach its limit
+//                                if self.presentedViewController as? UIAlertController == nil{
+//                                    let APILimitAlert = UIAlertController(title: "Reach API requests limit", message: nil, preferredStyle: .alert)
+//                                    APILimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
+//                                    APILimitAlert.message = limit
+//
+//                                    self.present(APILimitAlert, animated: true, completion: nil)
+//                                }
+//                            }
+//
+//                        }
+//
+//                        // Get the lastest time refreshed
+//                        var lastRefreshedTime = ""
+//                        if let metaData = myJson["Meta Data"] as? NSDictionary {
+//                            lastRefreshedTime = metaData["3. Last Refreshed"] as! String
+//                        }
+//
+//                        // Get the lastest price
+//                        if let time = myJson["Time Series (1min)"] as? NSDictionary  {
+//                            let timeBlock = time[lastRefreshedTime]! as? NSDictionary
+//                            let closedPriceStr = timeBlock!["4. close"] as! String
+//                            let closedPrice = (closedPriceStr as NSString).floatValue
+//                            for i in 0..<self.stocks.count {
+//                                if self.stocks[i].quote == symbol {
+//                                    self.stocks[i].currentPrice = closedPrice
+//                                    self.stocks[i].percentage = "1.23%"
+//                                }
+//                            }
+//                            DispatchQueue.main.async {
+//                                self.tableView.reloadData()
+//                            }
+//                            print("done fetch \(symbol)")
+//                        }
+//
+//                    }  catch  {
+//                        print(error.localizedDescription)
+//                    }
+//                }
+//            }
+//        }
+//        task.resume()
     }
     
     
     
     private func setupView(){
         //TODO: to get user's stock list
-        for i in symbols {
-            stocks.append(Stocks(quote: i, currentPrice: 0.00, percentage: "0%"))
+        for symbol in symbols {
+            stocks.append(Stock(symbol: symbol, price: 0.00, change_pct: "-0.0%"))
         }
         
         // Clear separators of empty rows
@@ -144,7 +186,7 @@ class StockViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "stockCell", for: indexPath) as! StockTableViewCell
         
         let stock = stocks[indexPath.row]
-        cell.setup(quote: stock.quote, price: stock.currentPrice, percentage: stock.percentage)
+        cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct)
         
         
         return cell
@@ -153,9 +195,9 @@ class StockViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = storyboard?.instantiateViewController(withIdentifier: "IndividualStockViewController") as! IndividualStockViewController
         let selectedStock = stocks[indexPath.row]
-        vc.stockName = selectedStock.quote
-        vc.stockPrice = selectedStock.currentPrice
-        vc.stockPercentage = selectedStock.percentage
+        vc.stockName = selectedStock.symbol
+        vc.stockPrice = selectedStock.price
+        vc.stockPercentage = selectedStock.change_pct
         
         self.navigationController?.pushViewController(vc, animated: true)
     }
