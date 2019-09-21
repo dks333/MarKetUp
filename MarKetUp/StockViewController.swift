@@ -20,6 +20,9 @@ class StockViewController: UITableViewController {
     let AlphaVintageAPIKey = "VX24AALA4RTGKL99"
     let WorldTradingDataAPIKey = "fhGOT6U6HafLz2aazzTXti58aetYaJNZAr6cZzkibkcMut0p2MMgbgMLEDNv"
     
+
+    
+    @IBOutlet weak var profileView: UIView!
     @IBAction func reloadStocks(_ sender: Any) {
         loadingStocks()
     }
@@ -36,7 +39,7 @@ class StockViewController: UITableViewController {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
             if self.presentedViewController as? UIAlertController == nil{
-                //self.fetchStockData()
+                self.fetchStockData()
             }
         }
     }
@@ -60,7 +63,7 @@ class StockViewController: UITableViewController {
                 
                 // creating stock objects
                 self.stocks = dataArray.compactMap{Stock($0)}
-                print(self.stocks)
+                
                
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
@@ -160,8 +163,10 @@ class StockViewController: UITableViewController {
     private func setupView(){
         //TODO: to get user's stock list
         for symbol in symbols {
-            stocks.append(Stock(symbol: symbol, price: 0.00, change_pct: "-0.0%"))
+            //default values for each stock if App is not fetching the data
+            stocks.append(Stock(symbol: symbol, price: 0.00, change_pct: "0.0%", name: symbol, day_change: "0.0", volumn: 0))
         }
+        
         
         // Clear separators of empty rows
         tableView.tableFooterView = UIView()
@@ -195,9 +200,7 @@ class StockViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = storyboard?.instantiateViewController(withIdentifier: "IndividualStockViewController") as! IndividualStockViewController
         let selectedStock = stocks[indexPath.row]
-        vc.stockName = selectedStock.symbol
-        vc.stockPrice = selectedStock.price
-        vc.stockPercentage = selectedStock.change_pct
+        vc.currentStock = selectedStock
         
         self.navigationController?.pushViewController(vc, animated: true)
     }
@@ -219,6 +222,5 @@ class StockViewController: UITableViewController {
 
     
 
-    
-
 }
+

@@ -16,7 +16,6 @@ class ProfileViewController: UIViewController{
     override func viewDidLoad() {
         setupView()
     }
-    
     private func setupView(){
         
     }

@@ -15,9 +15,8 @@ class IndividualStockViewController: UIViewController {
     @IBOutlet weak var priceLbl: UILabel!
     @IBOutlet weak var percentageLbl: UILabel!
     
-    var stockName = ""
-    var stockPrice = Float(0.0)
-    var stockPercentage = ""
+    
+    var currentStock: Stock!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,9 +41,9 @@ class IndividualStockViewController: UIViewController {
         self.navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.topItem?.title = ""
         
-        stockNameLbl.text = stockName
-        priceLbl.text = String("\(stockPrice)")
-        percentageLbl.text = stockPercentage
+        stockNameLbl.text = currentStock.symbol
+        priceLbl.text = String("\(currentStock.price)")
+        percentageLbl.text = currentStock.change_pct
         
         if percentageLbl.text?.first == "-" {
             priceLbl.textColor = .red
