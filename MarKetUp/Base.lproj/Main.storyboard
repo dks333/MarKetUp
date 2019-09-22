@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ewp-UJ-zJc">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Ewp-UJ-zJc">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -46,6 +44,11 @@
                                         <action selector="reloadStocks:" destination="eNJ-wr-j0H" eventType="touchUpInside" id="HKF-QJ-Jb0"/>
                                     </connections>
                                 </button>
+                                <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EKo-5e-id3">
+                                    <rect key="frame" x="0.0" y="-1" width="414" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </searchBar>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
@@ -67,7 +70,7 @@
                                 <rect key="frame" x="0.0" y="268" width="414" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="AQr-RB-825" id="F1m-Fi-7Bj">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="99.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="100"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stock" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8W6-P1-rAX">
@@ -77,7 +80,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZNB-aG-cwC">
-                                            <rect key="frame" x="320" y="60.5" width="75" height="31"/>
+                                            <rect key="frame" x="320" y="61" width="75" height="31"/>
                                             <color key="backgroundColor" red="0.0" green="0.74318359369999998" blue="0.11264011209999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="75" id="TfW-nd-lsv"/>
@@ -177,6 +180,9 @@
                                         <state key="normal" title="Sell">
                                             <color key="titleColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="sellingStock:" destination="cob-fv-CR0" eventType="touchUpInside" id="CvX-3G-ZVm"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dow-9X-q7P">
                                         <rect key="frame" x="175.5" y="0.0" width="155.5" height="50"/>
@@ -184,6 +190,9 @@
                                         <state key="normal" title="Buy">
                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <connections>
+                                            <action selector="buyingStock:" destination="cob-fv-CR0" eventType="touchUpInside" id="CT3-wX-hJD"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -207,8 +216,10 @@
                         <viewLayoutGuide key="safeArea" id="Ils-jr-Ad5"/>
                     </view>
                     <connections>
+                        <outlet property="buyStockBtn" destination="dow-9X-q7P" id="IMt-8k-YhW"/>
                         <outlet property="percentageLbl" destination="IGo-nW-AMR" id="WOo-39-a7j"/>
                         <outlet property="priceLbl" destination="5P2-HE-VI2" id="MNP-tn-4xu"/>
+                        <outlet property="sellStockBtn" destination="EzN-ky-u3M" id="bZX-3o-O0D"/>
                         <outlet property="stockNameLbl" destination="cxE-MX-jGB" id="MOR-bq-SGt"/>
                     </connections>
                 </viewController>

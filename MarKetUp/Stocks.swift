@@ -9,7 +9,7 @@
 import Foundation
 
 
-struct Stock{
+struct Stock: Hashable{
 
     var symbol: String            // "AAPL"
     var price: Float              // 210.98
@@ -18,10 +18,12 @@ struct Stock{
     var day_change: String        // “-1.81”
     var volumn: Int            // “20234415”
     
-    init(symbol: String, price: Float, change_pct: String, name: String?, day_change: String?, volumn: Int?){
-        self.symbol = symbol
-        self.price = price
-        self.change_pct = change_pct
+    
+    
+    init(symbol: String? = nil, price: Float? = nil, change_pct: String? = nil, name: String? = nil, day_change: String? = nil, volumn: Int? = nil){
+        self.symbol = symbol ?? ""
+        self.price = price ?? 0.0
+        self.change_pct = change_pct ?? ""
         self.name = name ?? ""
         self.day_change = day_change ?? ""
         self.volumn = volumn ?? -1
@@ -36,7 +38,16 @@ struct Stock{
         self.name = dictionary["name"] as? String ?? ""
         self.day_change = dictionary["day_change"] as? String ?? ""
         let volumnStr = dictionary["volumn"] as? String ?? ""
-        self.volumn = Int(volumnStr)!
+        self.volumn = (Int(volumnStr) ?? 0)
     }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(symbol.hashValue)
+    }
+    
+    static func == (lhs: Stock, rhs: Stock) -> Bool {
+        return lhs.symbol == rhs.symbol
+    }
+    
     
 }

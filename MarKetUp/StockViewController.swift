@@ -16,11 +16,10 @@ class StockViewController: UITableViewController {
     var symbols = ["AAPL", "MSFT", "AMZN"]
     var stocks = [Stock]()
     
+    var user: User!
     
     let AlphaVintageAPIKey = "VX24AALA4RTGKL99"
     let WorldTradingDataAPIKey = "fhGOT6U6HafLz2aazzTXti58aetYaJNZAr6cZzkibkcMut0p2MMgbgMLEDNv"
-    
-
     
     @IBOutlet weak var profileView: UIView!
     @IBAction func reloadStocks(_ sender: Any) {
@@ -36,10 +35,11 @@ class StockViewController: UITableViewController {
     
     
     private func loadingStocks(){
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-            if self.presentedViewController as? UIAlertController == nil{
-                self.fetchStockData()
+        
+        if self.presentedViewController as? UIAlertController == nil{
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                guard let self = self else { return }
+                //self.fetchStockData()
             }
         }
     }
