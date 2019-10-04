@@ -7,31 +7,48 @@
 //
 
 import UIKit
+import AudioToolbox
 
 class StockTableViewCell: UITableViewCell {
     
     @IBOutlet weak var quoteLbl: UILabel!
     @IBOutlet weak var priceLbl: UILabel!
-    @IBOutlet weak var percentageLbl: UILabel!
+    @IBOutlet weak var switchBtn: UIButton!
     
-    func setup(quote: String, price: Float?, percentage: String?){
+    var quote: String!
+    var price: Float!
+    var percentage: String!
+    var dayChange: String!
+    
+    func setup(quote: String, price: Float?, percentage: String?, dayChange: String?){
         quoteLbl.text = quote
         priceLbl.text = String(price!)
-        percentageLbl.text = percentage
+        switchBtn.setTitleWithOutAnimation(title: percentage)
+        
+        self.quote = quote
+        self.price = price
+        self.percentage = percentage
+        self.dayChange = (dayChange!.first == "-") ? "\(dayChange!)" : "+\(dayChange!)"
+        
         
         if percentage?.first == "-" {
-            priceLbl.textColor = .red
-            percentageLbl.backgroundColor = .red
+            priceLbl.textColor = .customRed
+            switchBtn.backgroundColor = .customRed
         } else {
-            priceLbl.textColor = .green
-            percentageLbl.backgroundColor = .green
+            priceLbl.textColor = .custumGreen
+            switchBtn.backgroundColor = .custumGreen
         }
     }
     
     private func setupView(){
         self.selectionStyle = .none
-        self.percentageLbl.layer.cornerRadius = 5
+        self.switchBtn.layer.cornerRadius = 5
         
+    }
+    
+    @IBAction @objc func switchDayChangeAndPercentage(_ sender: Any) {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        switchBtn.setTitleWithOutAnimation(title: (switchBtn.titleLabel?.text == percentage) ? dayChange : percentage)
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

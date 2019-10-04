@@ -11,7 +11,7 @@ import UIKit
 
 class ProfileViewController: UIViewController{
     
-    var user: User?
+    var user: User!
     
     override func viewDidLoad() {
         setupView()

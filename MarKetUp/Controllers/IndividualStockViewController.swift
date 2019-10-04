@@ -61,11 +61,11 @@ class IndividualStockViewController: UIViewController {
         percentageLbl.text = currentStock.change_pct
         
         if percentageLbl.text?.first == "-" {
-            priceLbl.textColor = .red
-            percentageLbl.textColor = .red
+            priceLbl.textColor = .customRed
+            percentageLbl.textColor = .customRed
         } else {
-            priceLbl.textColor = .green
-            percentageLbl.textColor = .green
+            priceLbl.textColor = .custumGreen
+            percentageLbl.textColor = .custumGreen
         }
         
     }

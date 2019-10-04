@@ -80,3 +80,20 @@ extension UIView{
     }
     
 }
+
+extension UIColor{
+    static let custumGreen = UIColor(red: 0.15, green: 0.6, blue: 0.2, alpha: 1)
+    static let customRed = UIColor(red: 1, green: 0.03, blue: 0, alpha: 1)
+
+}
+
+extension UIButton {
+    func setTitleWithOutAnimation(title: String?) {
+        UIView.setAnimationsEnabled(false)
+
+        setTitle(title, for: .normal)
+
+        layoutIfNeeded()
+        UIView.setAnimationsEnabled(true)
+    }
+}

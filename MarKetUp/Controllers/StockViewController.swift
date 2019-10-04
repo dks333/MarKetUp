@@ -9,17 +9,15 @@
 import UIKit
 import Foundation
 
-
+let WorldTradingDataAPIKey = "fhGOT6U6HafLz2aazzTXti58aetYaJNZAr6cZzkibkcMut0p2MMgbgMLEDNv"
 
 class StockViewController: UITableViewController {
     
-    var symbols = ["AAPL", "MSFT", "AMZN"]
+    var symbols = ["AAPL", "MSFT", "TSLA","BABA"]
     var stocks = [Stock]()
     
-    var user: User!
+    var user = User(userId: "testID", cashes: 10000, values: 0, ownedStocks: [Stock(symbol: "AAPL"),Stock(symbol: "MSFT")], watchList: [Stock(symbol: "TSLA"),Stock(symbol: "BABA")], ownedStocksShares: [Stock(symbol: "AAPL"):3,Stock(symbol: "MSFT"):5])
     
-    let AlphaVintageAPIKey = "VX24AALA4RTGKL99"
-    let WorldTradingDataAPIKey = "fhGOT6U6HafLz2aazzTXti58aetYaJNZAr6cZzkibkcMut0p2MMgbgMLEDNv"
     
     @IBOutlet weak var profileView: UIView!
     @IBAction func reloadStocks(_ sender: Any) {
@@ -39,7 +37,7 @@ class StockViewController: UITableViewController {
         if self.presentedViewController as? UIAlertController == nil{
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 guard let self = self else { return }
-                //self.fetchStockData()
+                self.fetchStockData()
             }
         }
     }
@@ -60,9 +58,16 @@ class StockViewController: UITableViewController {
                 let jsonResponse = try JSONSerialization.jsonObject(with:
                     dataResponse, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
                 guard let dataArray = jsonResponse["data"] as? [[String: Any]] else { return }
-                
                 // creating stock objects
                 self.stocks = dataArray.compactMap{Stock($0)}
+                print(self.stocks)
+                for stock in self.stocks {
+                    if self.user.ownedStocks.contains(stock){
+                        self.user.setOwnedStock(stock: stock)
+                    } else if self.user.watchList.contains(stock){
+                        self.user.setWatchList(stock: stock)
+                    }
+                }
                 
                
                 DispatchQueue.main.async {
@@ -92,70 +97,6 @@ class StockViewController: UITableViewController {
         }
         task.resume()
         
-        
-        
-        
-        
-        
-        
-//        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(symbol)&interval=1min&apikey=\(AlphaVintageAPIKey)")
-//
-//        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
-//            if error != nil {
-//                print ("ERROR")
-//            } else {
-//                if let content = data {
-//                    do {
-//
-//                        let myJson = try JSONSerialization.jsonObject(with: content, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
-//
-//                        // Warning: if the API has reached its limit
-//                        if let limit = myJson["Note"] as? String {
-//                            print("\(symbol) didn't get to be called because Warning: `\(limit)`")
-//
-//                            DispatchQueue.main.async {
-//                                //Set an alert controller if API has reach its limit
-//                                if self.presentedViewController as? UIAlertController == nil{
-//                                    let APILimitAlert = UIAlertController(title: "Reach API requests limit", message: nil, preferredStyle: .alert)
-//                                    APILimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
-//                                    APILimitAlert.message = limit
-//
-//                                    self.present(APILimitAlert, animated: true, completion: nil)
-//                                }
-//                            }
-//
-//                        }
-//
-//                        // Get the lastest time refreshed
-//                        var lastRefreshedTime = ""
-//                        if let metaData = myJson["Meta Data"] as? NSDictionary {
-//                            lastRefreshedTime = metaData["3. Last Refreshed"] as! String
-//                        }
-//
-//                        // Get the lastest price
-//                        if let time = myJson["Time Series (1min)"] as? NSDictionary  {
-//                            let timeBlock = time[lastRefreshedTime]! as? NSDictionary
-//                            let closedPriceStr = timeBlock!["4. close"] as! String
-//                            let closedPrice = (closedPriceStr as NSString).floatValue
-//                            for i in 0..<self.stocks.count {
-//                                if self.stocks[i].quote == symbol {
-//                                    self.stocks[i].currentPrice = closedPrice
-//                                    self.stocks[i].percentage = "1.23%"
-//                                }
-//                            }
-//                            DispatchQueue.main.async {
-//                                self.tableView.reloadData()
-//                            }
-//                            print("done fetch \(symbol)")
-//                        }
-//
-//                    }  catch  {
-//                        print(error.localizedDescription)
-//                    }
-//                }
-//            }
-//        }
-//        task.resume()
     }
     
     
@@ -170,53 +111,118 @@ class StockViewController: UITableViewController {
         
         // Clear separators of empty rows
         tableView.tableFooterView = UIView()
-        
 
     }
-
-
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+    @IBAction func presentSearchVC(_ sender: Any) {
+        let vc = storyboard?.instantiateViewController(withIdentifier: "StockSearchVC") as! StockSearchViewController
+        
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if stocks.count > 0 {
-            return stocks.count
-        } else {
-            return 10
-        }
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
     }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 25
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let returnedView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: tableView.sectionHeaderHeight)) //set these values as necessary
+        returnedView.backgroundColor = .clear
+
+        let label = UILabel(frame: CGRect(x: 17, y: 0, width: self.view.frame.width, height: tableView.sectionHeaderHeight))
+        label.textColor = .gray
+        switch section {
+        case 0:
+            label.text = "Stocks"
+            break
+        case 1:
+            label.text = "Watchlist"
+            break
+        default:
+            break
+        }
+        returnedView.addSubview(label)
+
+        return returnedView
+    }
+
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        switch (section) {
+            case 0:
+                return user.ownedStocks.count
+            case 1:
+                return user.watchList.count
+            default:
+               return 0
+         }
+    }
+
+
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "stockCell", for: indexPath) as! StockTableViewCell
         
-        let stock = stocks[indexPath.row]
-        cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct)
         
+        switch (indexPath.section) {
+        case 0:
+            let stock = user.ownedStocks[indexPath.row]
+            cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
+            
+            
+            break
+              
+        case 1:
+            let stock = user.watchList[indexPath.row]
+            cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
+            
+            break
+        default: break
+        }
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = storyboard?.instantiateViewController(withIdentifier: "IndividualStockViewController") as! IndividualStockViewController
-        let selectedStock = stocks[indexPath.row]
-        vc.currentStock = selectedStock
+        switch indexPath.section{
+        case 0:
+            let selectedStock = user.ownedStocks[indexPath.row]
+            vc.currentStock = selectedStock
+            break
+        case 1:
+            let selectedStock = user.watchList[indexPath.row]
+            vc.currentStock = selectedStock
+            break
+        default: break
+        }
+        
         
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 75
+        
     }
     
-//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        tableView.headerView(forSection: section)?.backgroundColor = .black
-//        if section == 0 {
-//            return "Stocks"
-//        } else {
-//            return "Watchlists"
-//        }
-//    }
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete && indexPath.section == 1 {
+
+            editButtonItem.title = "Remove" 
+            print(indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            self.user.watchList.remove(at: indexPath.row)
+            
+      }
+    }
+    
+
     
     
 

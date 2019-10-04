@@ -35,6 +35,24 @@ struct User {
         return self.ownedStocks.contains(stock)
     }
     
+    // fetch data to owned stocks
+    mutating func setOwnedStock(stock: Stock){
+        for i in 0..<self.ownedStocks.count{
+            if ownedStocks[i] == stock {
+                ownedStocks[i] = stock
+            }
+        }
+    }
+    
+    //fetch data to current watchlist
+    mutating func setWatchList(stock: Stock){
+        for i in 0..<self.watchList.count{
+            if watchList[i] == stock {
+                watchList[i] = stock
+            }
+        }
+    }
+    
     func addShareToStock(stock: Stock){
         
     }

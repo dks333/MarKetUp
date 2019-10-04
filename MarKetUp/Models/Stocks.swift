@@ -23,7 +23,7 @@ struct Stock: Hashable{
     init(symbol: String? = nil, price: Float? = nil, change_pct: String? = nil, name: String? = nil, day_change: String? = nil, volumn: Int? = nil){
         self.symbol = symbol ?? ""
         self.price = price ?? 0.0
-        self.change_pct = change_pct ?? ""
+        self.change_pct = change_pct ?? "0.0%"
         self.name = name ?? ""
         self.day_change = day_change ?? ""
         self.volumn = volumn ?? -1
