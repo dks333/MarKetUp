@@ -27,7 +27,7 @@ class StockViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        loadingStocks()
+        //loadingStocks()
     
     }
     
@@ -60,7 +60,7 @@ class StockViewController: UITableViewController {
                 guard let dataArray = jsonResponse["data"] as? [[String: Any]] else { return }
                 // creating stock objects
                 self.stocks = dataArray.compactMap{Stock($0)}
-                print(self.stocks)
+                
                 for stock in self.stocks {
                     if self.user.ownedStocks.contains(stock){
                         self.user.setOwnedStock(stock: stock)
@@ -105,18 +105,23 @@ class StockViewController: UITableViewController {
         //TODO: to get user's stock list
         for symbol in symbols {
             //default values for each stock if App is not fetching the data
-            stocks.append(Stock(symbol: symbol, price: 0.00, change_pct: "0.0%", name: symbol, day_change: "0.0", volumn: 0))
+            stocks.append(Stock(symbol: symbol, price: 0.00, change_pct: "0.0%", name: symbol, day_change: "+0.0", volumn: 0))
         }
-        
         
         // Clear separators of empty rows
         tableView.tableFooterView = UIView()
-
     }
+    
+    @IBAction func switchChanges(_ sender: Any) {
+        let cell  = tableView.dequeueReusableCell(withIdentifier: "stockCell") as! StockTableViewCell
+        print("button tapped")
+    }
+    
+    
     @IBAction func presentSearchVC(_ sender: Any) {
         let vc = storyboard?.instantiateViewController(withIdentifier: "StockSearchVC") as! StockSearchViewController
         
-        self.navigationController?.pushViewController(vc, animated: true)
+        self.navigationController?.present(vc, animated: true)
     }
     
 
@@ -174,7 +179,6 @@ class StockViewController: UITableViewController {
             let stock = user.ownedStocks[indexPath.row]
             cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
             
-            
             break
               
         case 1:
@@ -202,24 +206,12 @@ class StockViewController: UITableViewController {
         default: break
         }
         
-        
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
         
-    }
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete && indexPath.section == 1 {
-
-            editButtonItem.title = "Remove" 
-            print(indexPath.row)
-            self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            self.user.watchList.remove(at: indexPath.row)
-            
-      }
     }
     
 

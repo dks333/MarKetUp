@@ -22,10 +22,7 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-            self.search(input: "AA")
-        }
+        
 
     }
     
@@ -63,17 +60,18 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
         // Set up tableview
         tableview.tableFooterView = UIView()
         tableview.allowsSelection = false
-        tableview.backgroundColor = .black
+        tableview.backgroundColor = .GrayBlack
+        
         
         // Set up navigation bar
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.topItem?.title = "Home"
         self.navigationController?.navigationBar.tintColor = .custumGreen
         
         // Set up Searchbar
         searchBar.tintColor = .custumGreen
+        searchBar.backgroundColor = .GrayBlack
+        
+        // Set up the responder for SearchBar
+        searchBar.becomeFirstResponder()
     }
     
     @IBAction func AddStock(_ sender: Any) {
@@ -81,15 +79,13 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.setTabBarVisible(visible: false, animated: true)
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        //self.setTabBarVisible(visible: false, animated: true)
         super.viewWillAppear(animated)
         
     }
 
     override func viewWillDisappear(_ animated: Bool) {
-        self.setTabBarVisible(visible: true, animated: true)
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        //self.setTabBarVisible(visible: true, animated: true)
         super.viewWillDisappear(animated)
     }
     
@@ -97,11 +93,10 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-
     }
     
     func updateSearchResults(for searchController: UISearchController) {
-        
+        print(searchController.searchBar.text ?? "text not detected")
     }
     
 }
@@ -115,6 +110,7 @@ extension StockSearchViewController: UITableViewDelegate, UITableViewDataSource{
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.tableview.keyboardDismissMode = .onDrag
         self.searchBar.endEditing(true)
+        self.searchBar.setShowsCancelButton(false, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -142,12 +138,25 @@ extension StockSearchViewController: UITableViewDelegate, UITableViewDataSource{
 extension StockSearchViewController: UISearchBarDelegate{
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        //print("searchText \(searchText)")
+        guard !searchText.isEmpty else {
+            stocks = []
+            tableview.reloadData()
+            return
+        }
+       DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            let trimmedInput = searchText.trimmingCharacters(in: CharacterSet.whitespaces)
+            self.search(input: trimmedInput)
+        }
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(true, animated: true)
 
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -159,9 +168,21 @@ extension StockSearchViewController: UISearchBarDelegate{
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.setShowsCancelButton(false, animated: true)
         self.searchBar.endEditing(true)
+        searchBar.text = ""
+        
+        // Clear the table view
+        
+        performSegueToReturnBack()
         
     }
     
+    func performSegueToReturnBack()  {
+        if let nav = self.navigationController {
+            nav.popViewController(animated: true)
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
     
 }
 

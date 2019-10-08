@@ -9,6 +9,8 @@
 import UIKit
 import AudioToolbox
 
+ var switchBtnPressed = false // when false, displaying percentage
+
 class StockTableViewCell: UITableViewCell {
     
     @IBOutlet weak var quoteLbl: UILabel!
@@ -20,10 +22,11 @@ class StockTableViewCell: UITableViewCell {
     var percentage: String!
     var dayChange: String!
     
+    
     func setup(quote: String, price: Float?, percentage: String?, dayChange: String?){
         quoteLbl.text = quote
         priceLbl.text = String(price!)
-        switchBtn.setTitleWithOutAnimation(title: percentage)
+        switchBtn.setTitleWithOutAnimation(title: switchBtnPressed ? dayChange : percentage)
         
         self.quote = quote
         self.price = price
@@ -47,8 +50,19 @@ class StockTableViewCell: UITableViewCell {
     }
     
     @IBAction @objc func switchDayChangeAndPercentage(_ sender: Any) {
+        switchStates(switchBtn: sender as! UIButton)
+    }
+    
+    func switchStates(switchBtn: UIButton){
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        switchBtn.setTitleWithOutAnimation(title: (switchBtn.titleLabel?.text == percentage) ? dayChange : percentage)
+        if switchBtn.currentTitle == percentage {
+            switchBtn.setTitleWithOutAnimation(title: dayChange)
+            switchBtnPressed = true
+        } else {
+            switchBtn.setTitleWithOutAnimation(title: percentage)
+            switchBtnPressed = false
+        }
+        //switchBtn.setTitleWithOutAnimation(title: (switchBtn.titleLabel?.text == percentage) ? dayChange : percentage)
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -67,3 +81,4 @@ class StockTableViewCell: UITableViewCell {
     
 
 }
+
