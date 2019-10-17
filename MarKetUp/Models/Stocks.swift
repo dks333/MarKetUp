@@ -25,18 +25,18 @@ struct Stock: Hashable{
         self.price = price ?? 0.0
         self.change_pct = change_pct ?? "0.0%"
         self.name = name ?? ""
-        self.day_change = day_change ?? ""
-        self.volumn = volumn ?? -1
+        self.day_change = day_change ?? "0.0"
+        self.volumn = volumn ?? 0
     }
     
     init(_ dictionary: [String: Any]) {
         self.symbol = dictionary["symbol"] as? String ?? ""
         let priceStr = dictionary["price"] as? String ?? ""
-        self.price = (Float(priceStr))!
-        self.change_pct = dictionary["change_pct"] as? String ?? ""
+        self.price = Float(priceStr) ?? 0.0
+        self.change_pct = dictionary["change_pct"] as? String ?? "0.0"
         self.change_pct += "%"
         self.name = dictionary["name"] as? String ?? ""
-        self.day_change = dictionary["day_change"] as? String ?? ""
+        self.day_change = dictionary["day_change"] as? String ?? "0.0"
         let volumnStr = dictionary["volumn"] as? String ?? ""
         self.volumn = (Int(volumnStr) ?? 0)
     }

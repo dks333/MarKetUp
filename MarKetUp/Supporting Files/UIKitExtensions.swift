@@ -84,7 +84,8 @@ extension UIView{
 extension UIColor{
     static let custumGreen = UIColor(red: 0.15, green: 0.6, blue: 0.2, alpha: 1)
     static let customRed = UIColor(red: 1, green: 0.03, blue: 0, alpha: 1)
-    static let GrayBlack = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1)
+    static let GrayBlack = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
+    static let lightGreen = UIColor(red: 0.365, green: 0.961, blue: 0.455, alpha: 1)
 }
 
 extension UIButton {

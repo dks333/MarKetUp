@@ -15,51 +15,77 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
     @IBOutlet weak var tableview: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     
+    var searchController = UISearchController(searchResultsController: nil)
     
+    var filteredStocks = [Stock]()
+    var stocks = [Stock]()
     
-    var stocks = [searchedStock]()
+    var addedStocks = [Stock]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        
-
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.loadUpStocks()
+        }
+    }
+    
+    private func loadUpStocks(){
+        if let path = Bundle.main.path(forResource: "StockList2019:10:14", ofType: "json") {
+                   do {
+                         let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
+                         let jsonResponse = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+                         guard let dataArray = jsonResponse as? [[String: Any]] else { return }
+                         //add stock name and symbol into Stocks
+                         self.stocks = dataArray.compactMap{Stock($0)}
+                     } catch {
+                          // handle error
+                     }
+               }
     }
     
     private func search(input: String){
-        guard let url = URL(string: "https://api.worldtradingdata.com/api/v1/stock_search?search_term=\(input)&stock_exchange=NASDAQ,NYSE&currency=USD&search_by=symbol,name&limit=50&page=1&api_token=\(WorldTradingDataAPIKey)") else { return }
+//        guard let url = URL(string: "https://api.worldtradingdata.com/api/v1/stock_search?search_term=\(input)&stock_exchange=NASDAQ,NYSE&currency=USD&search_by=symbol,name&limit=50&page=1&api_token=\(WorldTradingDataAPIKey)") else { return }
+//
+//        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+//            guard let dataResponse = data,
+//                error == nil else {
+//                    print(error?.localizedDescription ?? "Response Error")
+//                    return }
+//            do{
+//                //here dataResponse received from a network request
+//                let jsonResponse = try JSONSerialization.jsonObject(with:
+//                    dataResponse, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+//                guard let dataArray = jsonResponse["data"] as? [[String: Any]] else { return }
+//
+//                //add stock name and symbol into Stock
+//                self.stocks = dataArray.compactMap{Stock($0)}
+//
+//                DispatchQueue.main.async {
+//                    self.tableview.reloadData()
+//                }
+//
+//            } catch let parsingError {
+//                print("Error", parsingError)
+//            }
+//        }
+//        task.resume()
         
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let dataResponse = data,
-                error == nil else {
-                    print(error?.localizedDescription ?? "Response Error")
-                    return }
-            do{
-                //here dataResponse received from a network request
-                let jsonResponse = try JSONSerialization.jsonObject(with:
-                    dataResponse, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
-               
-                guard let dataArray = jsonResponse["data"] as? [[String: Any]] else { return }
-                
-                //add stock name and symbol into searchedStock
-                self.stocks = dataArray.compactMap{searchedStock($0)}
-
-                DispatchQueue.main.async {
-                    self.tableview.reloadData()
-                }
-                
-            } catch let parsingError {
-                print("Error", parsingError)
-            }
-        }
-        task.resume()
+        
+        filteredStocks = stocks.filter({$0.symbol.contains(input.uppercased()) || $0.name.lowercased().contains(input.lowercased())})
+        filteredStocks = Array(filteredStocks.prefix(15))  // Getting the first 15 searched stocks
+        
+            
+        tableview.reloadData()
+        tableview.layoutIfNeeded()
         
     }
     
     private func setupView(){
         // Set up tableview
         tableview.tableFooterView = UIView()
-        tableview.allowsSelection = false
+        tableview.allowsSelection = true
+        
         tableview.backgroundColor = .GrayBlack
         
         
@@ -72,11 +98,38 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
         
         // Set up the responder for SearchBar
         searchBar.becomeFirstResponder()
+        
+        // Set up search controller
+        searchController.searchResultsUpdater = self
+        searchController.delegate = self
+        searchBar = searchController.searchBar
     }
     
-    @IBAction func AddStock(_ sender: Any) {
-        print("Added Stock to Watchlist")
+    // Add stocks to watchlist
+    @IBAction func AddStock(_ button: UIButton) {
+        let selectedStock = filteredStocks[button.tag]
+
+        if button.tintColor != .black && !user.watchList.contains(selectedStock){
+            button.tintColor = .black
+            if !user.watchList.contains(selectedStock) {
+                user.watchList.append(selectedStock)
+            }
+        } else {
+            button.tintColor = .custumGreen
+            if let index = user.watchList.firstIndex(of: selectedStock) {
+                user.watchList.remove(at: index)
+            }
+            
+        }
+        
+        if let vc = self.presentingViewController?.children[0].children[0] as? StockViewController {
+            vc.tableview.reloadData()
+
+        }
+       
     }
+    
+    
     
     override func viewWillAppear(_ animated: Bool) {
         //self.setTabBarVisible(visible: false, animated: true)
@@ -89,6 +142,10 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
         super.viewWillDisappear(animated)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
+    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -96,7 +153,8 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
     }
     
     func updateSearchResults(for searchController: UISearchController) {
-        print(searchController.searchBar.text ?? "text not detected")
+        let trimmedInput = String((searchController.searchBar.text!.filter { !" \n\t\r".contains($0) }))
+        self.search(input: trimmedInput)
     }
     
 }
@@ -119,17 +177,27 @@ extension StockSearchViewController: UITableViewDelegate, UITableViewDataSource{
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return stocks.count
+        return filteredStocks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "searchResultCell", for: indexPath) as! searchResultTableViewCell
         
-        cell.nameLbl.text = stocks[indexPath.row].name
-        cell.symbolLbl.text = stocks[indexPath.row].symbol
+        let currentStock = filteredStocks[indexPath.row]
         
+        cell.nameLbl.text = currentStock.name
+        cell.symbolLbl.text = currentStock.symbol
+        
+        if user.watchList.contains(currentStock) {
+            cell.addBtn.tintColor = .black
+        } else {
+            cell.addBtn.tintColor = .custumGreen
+        }
+        
+        cell.addBtn.tag = indexPath.row
         return cell
     }
+    
     
     
 }
@@ -139,15 +207,13 @@ extension StockSearchViewController: UISearchBarDelegate{
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         guard !searchText.isEmpty else {
-            stocks = []
+            filteredStocks = []
             tableview.reloadData()
             return
         }
-       DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-            let trimmedInput = searchText.trimmingCharacters(in: CharacterSet.whitespaces)
-            self.search(input: trimmedInput)
-        }
+        
+        let trimmedInput = String(searchText.filter { !" \n\t\r".contains($0) })
+        self.search(input: trimmedInput)
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -187,18 +253,3 @@ extension StockSearchViewController: UISearchBarDelegate{
 }
 
 
-struct searchedStock{
-    
-    let name: String
-    let symbol: String
-    
-    init(name: String, symbol: String){
-        self.name = name
-        self.symbol = symbol
-    }
-    
-    init(_ dictionary: [String: Any]) {
-        self.symbol = dictionary["symbol"] as? String ?? ""
-        self.name = dictionary["name"] as? String ?? ""
-    }
-}

@@ -11,13 +11,21 @@ import Foundation
 
 let WorldTradingDataAPIKey = "fhGOT6U6HafLz2aazzTXti58aetYaJNZAr6cZzkibkcMut0p2MMgbgMLEDNv"
 
-class StockViewController: UITableViewController {
+var user = User(userId: "testID", cashes: 10000, values: 0, ownedStocks: [Stock(symbol: "AAPL")], watchList: [Stock(symbol: "TSLA")], ownedStocksShares: [Stock(symbol: "AAPL"):3])
+
+class StockViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var symbols = ["AAPL", "MSFT", "TSLA","BABA"]
+    @IBOutlet var tableview: UITableView!
+    var symbols : [String] {
+        get {
+            let s1 = user.watchList.map({$0.symbol})
+            let s2 = user.ownedStocks.map({$0.symbol})
+            return s1+s2
+        }
+    }
     var stocks = [Stock]()
     
-    var user = User(userId: "testID", cashes: 10000, values: 0, ownedStocks: [Stock(symbol: "AAPL"),Stock(symbol: "MSFT")], watchList: [Stock(symbol: "TSLA"),Stock(symbol: "BABA")], ownedStocksShares: [Stock(symbol: "AAPL"):3,Stock(symbol: "MSFT"):5])
-    
+    static let APIRequestLimit = 5
     
     @IBOutlet weak var profileView: UIView!
     @IBAction func reloadStocks(_ sender: Any) {
@@ -27,12 +35,16 @@ class StockViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        //loadingStocks()
+    }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableview.reloadData()
     }
     
     
-    private func loadingStocks(){
+    
+    func loadingStocks(){
         
         if self.presentedViewController as? UIAlertController == nil{
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -43,7 +55,6 @@ class StockViewController: UITableViewController {
     }
     
     func fetchStockData() {
-
         let allSymbolStr = symbols.joined(separator: ",") //Ex: 'MSFT,AAPL,...'
         
         guard let url = URL(string: "https://api.worldtradingdata.com/api/v1/stock?symbol=\(allSymbolStr),&api_token=\(WorldTradingDataAPIKey)") else { return }
@@ -62,16 +73,16 @@ class StockViewController: UITableViewController {
                 self.stocks = dataArray.compactMap{Stock($0)}
                 
                 for stock in self.stocks {
-                    if self.user.ownedStocks.contains(stock){
-                        self.user.setOwnedStock(stock: stock)
-                    } else if self.user.watchList.contains(stock){
-                        self.user.setWatchList(stock: stock)
+                    if user.ownedStocks.contains(stock){
+                        user.setOwnedStock(stock: stock)
+                    } else if user.watchList.contains(stock){
+                        user.setWatchList(stock: stock)
                     }
                 }
                 
                
                 DispatchQueue.main.async {
-                    self.tableView.reloadData()
+                    self.tableview.reloadData()
                 }
 
                 //printing the message that WorldTradingData states:
@@ -109,31 +120,37 @@ class StockViewController: UITableViewController {
         }
         
         // Clear separators of empty rows
-        tableView.tableFooterView = UIView()
+        tableview.tableFooterView = UIView()
+        
+        // Set up status bar
+//        let statusBarFrame = UIApplication.shared.statusBarFrame
+//        let statusBarView = UIView(frame: statusBarFrame)
+//        self.view.addSubview(statusBarView)
+//        statusBarView.backgroundColor = .black
     }
     
     @IBAction func switchChanges(_ sender: Any) {
-        let cell  = tableView.dequeueReusableCell(withIdentifier: "stockCell") as! StockTableViewCell
-        print("button tapped")
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        if switchBtnPressed {
+            switchBtnPressed = false
+        } else {
+            switchBtnPressed = true
+        }
+        tableview.reloadData()
     }
     
     
-    @IBAction func presentSearchVC(_ sender: Any) {
-        let vc = storyboard?.instantiateViewController(withIdentifier: "StockSearchVC") as! StockSearchViewController
-        
-        self.navigationController?.present(vc, animated: true)
-    }
     
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 25
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let returnedView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: tableView.sectionHeaderHeight)) //set these values as necessary
         returnedView.backgroundColor = .clear
 
@@ -155,7 +172,7 @@ class StockViewController: UITableViewController {
     }
 
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         switch (section) {
             case 0:
@@ -163,14 +180,14 @@ class StockViewController: UITableViewController {
             case 1:
                 return user.watchList.count
             default:
-               return 0
+               return 1
          }
     }
 
 
     
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "stockCell", for: indexPath) as! StockTableViewCell
         
         
@@ -192,7 +209,7 @@ class StockViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = storyboard?.instantiateViewController(withIdentifier: "IndividualStockViewController") as! IndividualStockViewController
         switch indexPath.section{
         case 0:
@@ -209,7 +226,7 @@ class StockViewController: UITableViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
         
     }

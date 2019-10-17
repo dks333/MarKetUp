@@ -26,7 +26,11 @@ class StockTableViewCell: UITableViewCell {
     func setup(quote: String, price: Float?, percentage: String?, dayChange: String?){
         quoteLbl.text = quote
         priceLbl.text = String(price!)
-        switchBtn.setTitleWithOutAnimation(title: switchBtnPressed ? dayChange : percentage)
+        if dayChange?.first == "-"{
+            switchBtn.setTitleWithOutAnimation(title: switchBtnPressed ? dayChange! : percentage!)
+        } else {
+            switchBtn.setTitleWithOutAnimation(title: switchBtnPressed ? "+" + dayChange! : percentage!)
+        }
         
         self.quote = quote
         self.price = price
@@ -47,22 +51,6 @@ class StockTableViewCell: UITableViewCell {
         self.selectionStyle = .none
         self.switchBtn.layer.cornerRadius = 5
         
-    }
-    
-    @IBAction @objc func switchDayChangeAndPercentage(_ sender: Any) {
-        switchStates(switchBtn: sender as! UIButton)
-    }
-    
-    func switchStates(switchBtn: UIButton){
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        if switchBtn.currentTitle == percentage {
-            switchBtn.setTitleWithOutAnimation(title: dayChange)
-            switchBtnPressed = true
-        } else {
-            switchBtn.setTitleWithOutAnimation(title: percentage)
-            switchBtnPressed = false
-        }
-        //switchBtn.setTitleWithOutAnimation(title: (switchBtn.titleLabel?.text == percentage) ? dayChange : percentage)
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

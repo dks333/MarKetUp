@@ -12,11 +12,12 @@ import Foundation
 class IndividualStockViewController: UIViewController {
     
     var currentStock = Stock()
-    var user = User(userId: "test", cashes: 10000.0, values: 0.0, ownedStocks: [], watchList: [], ownedStocksShares: [:])
+    var user = User(userId: "test", cashes: 10000.0, values: 0.0, ownedStocks: [Stock(symbol: "AAPL"),Stock(symbol: "MSFT")], watchList: [], ownedStocksShares: [:])
 
     @IBOutlet weak var stockNameLbl: UILabel!
     @IBOutlet weak var priceLbl: UILabel!
     @IBOutlet weak var percentageLbl: UILabel!
+    @IBOutlet weak var companyNameLbl: UILabel!
     
     @IBOutlet weak var sellStockBtn: UIButton!{
         didSet{
@@ -51,6 +52,7 @@ class IndividualStockViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.topItem?.title = ""
+        navigationController?.navigationBar.tintColor = .custumGreen
         
         //UI
         sellStockBtn.layer.cornerRadius = 5
@@ -59,6 +61,7 @@ class IndividualStockViewController: UIViewController {
         stockNameLbl.text = currentStock.symbol
         priceLbl.text = String("\(currentStock.price)")
         percentageLbl.text = currentStock.change_pct
+        companyNameLbl.text = currentStock.name
         
         if percentageLbl.text?.first == "-" {
             priceLbl.textColor = .customRed
@@ -68,13 +71,15 @@ class IndividualStockViewController: UIViewController {
             percentageLbl.textColor = .custumGreen
         }
         
+        
+        
     }
     
     
     
     @IBAction func sellingStock(_ sender: Any) {
         sellStockBtn.isEnabled = true
-        sellStockBtn.backgroundColor = .green
+        sellStockBtn.backgroundColor = .lightGreen
         
     }
     
