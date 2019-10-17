@@ -43,7 +43,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     
-    
+    // Loading Data which called fetchStockData()
     func loadingStocks(){
         
         if self.presentedViewController as? UIAlertController == nil{
@@ -54,6 +54,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    //fetch data from API
     func fetchStockData() {
         let allSymbolStr = symbols.joined(separator: ",") //Ex: 'MSFT,AAPL,...'
         
@@ -122,11 +123,6 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Clear separators of empty rows
         tableview.tableFooterView = UIView()
         
-        // Set up status bar
-//        let statusBarFrame = UIApplication.shared.statusBarFrame
-//        let statusBarView = UIView(frame: statusBarFrame)
-//        self.view.addSubview(statusBarView)
-//        statusBarView.backgroundColor = .black
     }
     
     @IBAction func switchChanges(_ sender: Any) {

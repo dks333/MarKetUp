@@ -1,0 +1,6 @@
+framework module Pods_MarKetUpTests {
+  umbrella header "Pods-MarKetUpTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

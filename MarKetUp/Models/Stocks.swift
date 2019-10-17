@@ -39,6 +39,11 @@ struct Stock: Hashable{
         self.day_change = dictionary["day_change"] as? String ?? "0.0"
         let volumnStr = dictionary["volumn"] as? String ?? ""
         self.volumn = (Int(volumnStr) ?? 0)
+        
+        if day_change.contains("N/A") || change_pct.contains("N/A"){
+            day_change = "0.0"
+            change_pct = "0.0%"
+        }
     }
     
     func hash(into hasher: inout Hasher) {
