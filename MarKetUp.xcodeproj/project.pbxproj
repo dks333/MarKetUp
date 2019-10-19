@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		1803F63A2358E91700176D1F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1803F6392358E91700176D1F /* Default-568h@2x.png */; };
+		1803F63C2358F96B00176D1F /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803F63B2358F96B00176D1F /* SettingViewController.swift */; };
+		1803F63E2358F97E00176D1F /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803F63D2358F97E00176D1F /* HistoryViewController.swift */; };
+		1803F6402358F98B00176D1F /* SupportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803F63F2358F98B00176D1F /* SupportViewController.swift */; };
+		1803F6422358FED400176D1F /* SubProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803F6412358FED400176D1F /* SubProfileViewController.swift */; };
+		1803F6442359092900176D1F /* TradingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803F6432359092900176D1F /* TradingViewController.swift */; };
 		182600212338468E00E9A85E /* StockSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182600202338468E00E9A85E /* StockSearchViewController.swift */; };
 		182EDA09231D9B25003D1B2A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182EDA08231D9B25003D1B2A /* AppDelegate.swift */; };
 		182EDA0B231D9B25003D1B2A /* StockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182EDA0A231D9B25003D1B2A /* StockViewController.swift */; };
@@ -52,6 +57,11 @@
 		06FA679A82975C2CC28B9502 /* Pods_MarKetUp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MarKetUp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F7814514394AC87E521EC97 /* Pods_MarKetUpUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MarKetUpUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1803F6392358E91700176D1F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		1803F63B2358F96B00176D1F /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
+		1803F63D2358F97E00176D1F /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
+		1803F63F2358F98B00176D1F /* SupportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportViewController.swift; sourceTree = "<group>"; };
+		1803F6412358FED400176D1F /* SubProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubProfileViewController.swift; sourceTree = "<group>"; };
+		1803F6432359092900176D1F /* TradingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradingViewController.swift; sourceTree = "<group>"; };
 		182600202338468E00E9A85E /* StockSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockSearchViewController.swift; sourceTree = "<group>"; };
 		182EDA05231D9B25003D1B2A /* MarKetUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MarKetUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		182EDA08231D9B25003D1B2A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -113,6 +123,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1821DD0C235ACEC7005D0371 /* Stocks */ = {
+			isa = PBXGroup;
+			children = (
+				182600202338468E00E9A85E /* StockSearchViewController.swift */,
+				182EDA0A231D9B25003D1B2A /* StockViewController.swift */,
+				18A0F39A233065B100BCBE50 /* IndividualStockViewController.swift */,
+				1803F6432359092900176D1F /* TradingViewController.swift */,
+			);
+			path = Stocks;
+			sourceTree = "<group>";
+		};
+		1821DD0D235ACED5005D0371 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				18A0F396233048A500BCBE50 /* ProfileViewController.swift */,
+				1803F6412358FED400176D1F /* SubProfileViewController.swift */,
+				1803F63D2358F97E00176D1F /* HistoryViewController.swift */,
+				1803F63B2358F96B00176D1F /* SettingViewController.swift */,
+				1803F63F2358F98B00176D1F /* SupportViewController.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		18260022233846A200E9A85E /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,10 +158,8 @@
 		18260023233846B400E9A85E /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				182600202338468E00E9A85E /* StockSearchViewController.swift */,
-				182EDA0A231D9B25003D1B2A /* StockViewController.swift */,
-				18A0F39A233065B100BCBE50 /* IndividualStockViewController.swift */,
-				18A0F396233048A500BCBE50 /* ProfileViewController.swift */,
+				1821DD0C235ACEC7005D0371 /* Stocks */,
+				1821DD0D235ACED5005D0371 /* Profile */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -136,7 +167,6 @@
 		182ED9FC231D9B25003D1B2A = {
 			isa = PBXGroup;
 			children = (
-				1803F6392358E91700176D1F /* Default-568h@2x.png */,
 				182EDA07231D9B25003D1B2A /* MarKetUp */,
 				182EDA1E231D9B28003D1B2A /* MarKetUpTests */,
 				182EDA29231D9B28003D1B2A /* MarKetUpUITests */,
@@ -194,6 +224,7 @@
 				18BF41A92355316C0071D1A8 /* StockList2019:10:14.json */,
 				182EDA08231D9B25003D1B2A /* AppDelegate.swift */,
 				182EDA11231D9B28003D1B2A /* Assets.xcassets */,
+				1803F6392358E91700176D1F /* Default-568h@2x.png */,
 				182EDA13231D9B28003D1B2A /* LaunchScreen.storyboard */,
 				18A0F39C233095DB00BCBE50 /* UIKitExtensions.swift */,
 			);
@@ -459,9 +490,14 @@
 				18A0F397233048A500BCBE50 /* ProfileViewController.swift in Sources */,
 				182EDA09231D9B25003D1B2A /* AppDelegate.swift in Sources */,
 				18A0F39D233095DB00BCBE50 /* UIKitExtensions.swift in Sources */,
+				1803F6422358FED400176D1F /* SubProfileViewController.swift in Sources */,
+				1803F63C2358F96B00176D1F /* SettingViewController.swift in Sources */,
+				1803F6442359092900176D1F /* TradingViewController.swift in Sources */,
 				18A0F39B233065B100BCBE50 /* IndividualStockViewController.swift in Sources */,
+				1803F63E2358F97E00176D1F /* HistoryViewController.swift in Sources */,
 				18BF4183234D223C0071D1A8 /* PurchaseCollectionViewCell.swift in Sources */,
 				187BF5D92345631D000DFD7F /* searchResultTableViewCell.swift in Sources */,
+				1803F6402358F98B00176D1F /* SupportViewController.swift in Sources */,
 				182600212338468E00E9A85E /* StockSearchViewController.swift in Sources */,
 				18A13F03231F8E7200710999 /* StockTableViewCell.swift in Sources */,
 				18A0F371232DA29A00BCBE50 /* Model.xcdatamodeld in Sources */,

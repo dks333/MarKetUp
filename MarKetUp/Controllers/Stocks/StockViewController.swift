@@ -35,6 +35,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        //loadingStocks()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -139,6 +140,10 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
 
     func numberOfSections(in tableView: UITableView) -> Int {
+        if user.ownedStocks == [] || user.watchList == []{
+            return 1
+        }
+        
         return 2
     }
     
@@ -150,17 +155,30 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let returnedView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: tableView.sectionHeaderHeight)) //set these values as necessary
         returnedView.backgroundColor = .clear
 
+
         let label = UILabel(frame: CGRect(x: 17, y: 0, width: self.view.frame.width, height: tableView.sectionHeaderHeight))
         label.textColor = .gray
-        switch section {
-        case 0:
+        
+        if user.ownedStocks == []{
+            // If no stocks purchased
+            label.text = "WatchList"
+            if user.watchList == [] {
+                label.textAlignment = .center
+                label.text = "Search to add stocks"
+            }
+        } else if user.watchList == [] && user.ownedStocks != []{
             label.text = "Stocks"
-            break
-        case 1:
-            label.text = "Watchlist"
-            break
-        default:
-            break
+        } else {
+            switch section {
+            case 0:
+                label.text = "Stocks"
+                break
+            case 1:
+                label.text = "Watchlist"
+                break
+            default:
+                break
+            }
         }
         returnedView.addSubview(label)
 
@@ -169,6 +187,13 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if user.ownedStocks == [] {
+            // If no stocks purchased
+            return user.watchList.count
+        } else if user.watchList == [] {
+            return user.ownedStocks.count
+        }
         
         switch (section) {
             case 0:
@@ -186,20 +211,28 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "stockCell", for: indexPath) as! StockTableViewCell
         
-        
-        switch (indexPath.section) {
-        case 0:
-            let stock = user.ownedStocks[indexPath.row]
-            cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
-            
-            break
-              
-        case 1:
+        if user.ownedStocks == [] {
+            // If no stocks purchased
             let stock = user.watchList[indexPath.row]
             cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
-            
-            break
-        default: break
+        }else if user.watchList == []{
+            let stock = user.ownedStocks[indexPath.row]
+            cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
+        } else {
+            switch (indexPath.section) {
+            case 0:
+                let stock = user.ownedStocks[indexPath.row]
+                cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
+                
+                break
+                  
+            case 1:
+                let stock = user.watchList[indexPath.row]
+                cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
+                
+                break
+            default: break
+            }
         }
         
         return cell
@@ -207,16 +240,27 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = storyboard?.instantiateViewController(withIdentifier: "IndividualStockViewController") as! IndividualStockViewController
-        switch indexPath.section{
-        case 0:
-            let selectedStock = user.ownedStocks[indexPath.row]
-            vc.currentStock = selectedStock
-            break
-        case 1:
+        if user.ownedStocks == [] {
+            // If no stocks purchased
             let selectedStock = user.watchList[indexPath.row]
             vc.currentStock = selectedStock
-            break
-        default: break
+            
+        }else if user.watchList == []{
+            let selectedStock = user.ownedStocks[indexPath.row]
+            vc.currentStock = selectedStock
+            
+        } else {
+            switch indexPath.section{
+            case 0:
+                let selectedStock = user.ownedStocks[indexPath.row]
+                vc.currentStock = selectedStock
+                break
+            case 1:
+                let selectedStock = user.watchList[indexPath.row]
+                vc.currentStock = selectedStock
+                break
+            default: break
+            }
         }
         
         self.navigationController?.pushViewController(vc, animated: true)

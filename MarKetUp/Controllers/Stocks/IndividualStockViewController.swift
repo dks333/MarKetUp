@@ -12,7 +12,6 @@ import Foundation
 class IndividualStockViewController: UIViewController {
     
     var currentStock = Stock()
-    var user = User(userId: "test", cashes: 10000.0, values: 0.0, ownedStocks: [Stock(symbol: "AAPL"),Stock(symbol: "MSFT")], watchList: [], ownedStocksShares: [:])
 
     @IBOutlet weak var stockNameLbl: UILabel!
     @IBOutlet weak var priceLbl: UILabel!
@@ -75,11 +74,24 @@ class IndividualStockViewController: UIViewController {
         
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? TradingViewController {
+            if segue.identifier == "SellingSegue" {
+                vc.selling = false
+            } else {
+                vc.selling = true
+            }
+        } else {
+            print("Error when seguing from IndividualStockVC to TradingVC")
+        }
+    }
+    
+    
     
     
     @IBAction func sellingStock(_ sender: Any) {
         sellStockBtn.isEnabled = true
-        sellStockBtn.backgroundColor = .lightGreen
+        
         
     }
     
@@ -87,6 +99,7 @@ class IndividualStockViewController: UIViewController {
         
     }
     
+
     
 
 
