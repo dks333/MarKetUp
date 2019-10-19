@@ -12,6 +12,8 @@ class TradingViewController: UIViewController {
 
     @IBOutlet weak var vcTitleLbl: UILabel!
     @IBOutlet weak var resultLbl: UILabel!
+    @IBOutlet weak var availableValuesLbl: UILabel!
+    @IBOutlet weak var tradingBtn: UIButton!
     
     private var inputTrackerStr = ""
     private var hasClickedAnOperand = false
@@ -30,8 +32,11 @@ class TradingViewController: UIViewController {
     private func setupView(){
         if !selling {
             vcTitleLbl.text = "Sell"
+            tradingBtn.setTitle("Sell", for: .normal)
+            
         } else {
             vcTitleLbl.text = "Buy"
+            tradingBtn.setTitle("Buy", for: .normal)
         }
     }
     
