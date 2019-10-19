@@ -28,13 +28,19 @@ class TradingViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
+    
     private func setupView(){
+        // Set up trading button
+        tradingBtn.layer.cornerRadius = 10
+        tradingBtn.alpha = 0
+        
         if !selling {
+            // Sell
             vcTitleLbl.text = "Sell"
             tradingBtn.setTitle("Sell", for: .normal)
             
         } else {
+            // Buy
             vcTitleLbl.text = "Buy"
             tradingBtn.setTitle("Buy", for: .normal)
         }
@@ -45,6 +51,7 @@ class TradingViewController: UIViewController {
         resultLbl.textColor = .white
         let digit = button.titleLabel?.text ?? ""
         performInputTracking(digit)
+        
     }
     
     @IBAction func backspace(_ sender: Any) {
@@ -52,10 +59,13 @@ class TradingViewController: UIViewController {
         performInputTracking("")
     }
     
+    // tracking numbers
     private func performInputTracking(_ digit: String) {
         if hasClickedAnOperand {
-            inputTrackerStr += digit
-            resultLbl.text = "\(inputTrackerStr)"
+            if inputTrackerStr.count < 15 {
+                inputTrackerStr += digit
+                resultLbl.text = "\(inputTrackerStr)"
+            }
         } else {
             inputTrackerStr = String(inputTrackerStr.dropLast())
             resultLbl.text = "\(inputTrackerStr)"
@@ -64,6 +74,10 @@ class TradingViewController: UIViewController {
                 resultLbl.text = "0"
             }
         }
+        
+        UIView.animate(withDuration: (self.inputTrackerStr == "") ? 0.2 : 0.3, animations: {
+            self.tradingBtn.alpha = (self.inputTrackerStr != "") ? 1.0 : 0.0
+        })
     }
     
 
