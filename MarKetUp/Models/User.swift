@@ -57,6 +57,26 @@ struct User {
         
     }
     
+    mutating func addStocks(stock: Stock, type: String, index: Int){
+        if !self.watchList.contains(stock) && !self.ownedStocks.contains(stock) {
+            if type == "watchList" {
+                // watchlist
+                self.watchList.insert(stock, at: index)
+            } else {
+                //ownedStock
+                self.ownedStocks.append(stock)
+            }
+        }
+    }
+    
+    mutating func cancelFollowingStock(stock: Stock){
+        if self.watchList.contains(stock){
+            if let index = self.watchList.firstIndex(of: stock) {
+                watchList.remove(at: index)
+            }
+        }
+    }
+    
     
     
     

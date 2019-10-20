@@ -15,6 +15,7 @@ var user = User(userId: "testID", cashes: 10000, values: 0, ownedStocks: [Stock(
 
 class StockViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    
     @IBOutlet var tableview: UITableView!
     var symbols : [String] {
         get {
@@ -25,7 +26,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     var stocks = [Stock]()
     
-    static let APIRequestLimit = 5
+    let APIRequestLimit = 5
     
     @IBOutlet weak var profileView: UIView!
     @IBAction func reloadStocks(_ sender: Any) {
@@ -57,58 +58,63 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     //fetch data from API
     func fetchStockData() {
-        let allSymbolStr = symbols.joined(separator: ",") //Ex: 'MSFT,AAPL,...'
         
-        guard let url = URL(string: "https://api.worldtradingdata.com/api/v1/stock?symbol=\(allSymbolStr),&api_token=\(WorldTradingDataAPIKey)") else { return }
-        
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let dataResponse = data,
-                error == nil else {
-                    print(error?.localizedDescription ?? "Response Error")
-                    return }
-            do{
-                //here dataResponse received from a network request
-                let jsonResponse = try JSONSerialization.jsonObject(with:
-                    dataResponse, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
-                guard let dataArray = jsonResponse["data"] as? [[String: Any]] else { return }
-                // creating stock objects
-                self.stocks = dataArray.compactMap{Stock($0)}
-                
-                for stock in self.stocks {
-                    if user.ownedStocks.contains(stock){
-                        user.setOwnedStock(stock: stock)
-                    } else if user.watchList.contains(stock){
-                        user.setWatchList(stock: stock)
-                    }
-                }
-                
-               
-                DispatchQueue.main.async {
-                    self.tableview.reloadData()
-                }
+        let cycle = Int((Float(symbols.count)/Float(APIRequestLimit)).rounded(.up))
+        var tempSymbols = symbols
+        for _ in 0..<cycle {
+            let allSymbllStr = tempSymbols.prefix(self.APIRequestLimit).joined(separator: ",")
+            tempSymbols = Array(tempSymbols.dropFirst(self.APIRequestLimit))
+            
+            guard let url = URL(string: "https://api.worldtradingdata.com/api/v1/stock?symbol=\(allSymbllStr),&api_token=\(WorldTradingDataAPIKey)") else { return }
+                   
+                   let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                       guard let dataResponse = data,
+                           error == nil else {
+                               print(error?.localizedDescription ?? "Response Error")
+                               return }
+                       do{
+                           //here dataResponse received from a network request
+                           let jsonResponse = try JSONSerialization.jsonObject(with:
+                               dataResponse, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+                           guard let dataArray = jsonResponse["data"] as? [[String: Any]] else { return }
+                           // creating stock objects
+                           self.stocks += dataArray.compactMap{Stock($0)}
+                           
+                           for stock in self.stocks {
+                               if user.ownedStocks.contains(stock){
+                                   user.setOwnedStock(stock: stock)
+                               } else if user.watchList.contains(stock){
+                                   user.setWatchList(stock: stock)
+                               }
+                           }
+                            
+                            DispatchQueue.main.async {
+                                self.tableview.reloadData()
+                            }
+                           //printing the message that WorldTradingData states:
+                           // Ex: 'You requested 6 stocks but your account maximum is 5. Upgrade your account to increase the number of stocks available per request.'
+                           
+                           if let reachedMaxError = jsonResponse["message"] as? String {
+                               print(reachedMaxError)
+                               DispatchQueue.main.async {
+                                   //Set an alert controller if API has reach its limit
+                                   if self.presentedViewController as? UIAlertController == nil{
+                                       let APILimitAlert = UIAlertController(title: "Reach API requests limit", message: nil, preferredStyle: .alert)
+                                       APILimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
+                                       APILimitAlert.message = reachedMaxError
 
-                //printing the message that WorldTradingData states:
-                // Ex: 'You requested 6 stocks but your account maximum is 5. Upgrade your account to increase the number of stocks available per request.'
-                
-                if let reachedMaxError = jsonResponse["message"] as? String {
-                    print(reachedMaxError)
-                    DispatchQueue.main.async {
-                        //Set an alert controller if API has reach its limit
-                        if self.presentedViewController as? UIAlertController == nil{
-                            let APILimitAlert = UIAlertController(title: "Reach API requests limit", message: nil, preferredStyle: .alert)
-                            APILimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
-                            APILimitAlert.message = reachedMaxError
-
-                            self.present(APILimitAlert, animated: true, completion: nil)
-                        }
-                    }
-                }
-                
-            } catch let parsingError {
-                print("Error", parsingError)
-            }
+                                       //self.present(APILimitAlert, animated: true, completion: nil)
+                                   }
+                               }
+                           }
+                           
+                       } catch let parsingError {
+                           print("Error", parsingError)
+                       }
+                   }
+                   task.resume()
+            
         }
-        task.resume()
         
     }
     

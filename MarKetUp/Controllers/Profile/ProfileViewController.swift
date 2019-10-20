@@ -22,6 +22,9 @@ class ProfileViewController: UIViewController{
     @IBOutlet weak var purchaseCollectionView: UICollectionView!
     @IBOutlet weak var bannerView: GADBannerView!
     
+    private var listOfPurchase = ["2.99", "0.99", "1.99", "5.99", "9.99", "49.99"]
+    private var purchaseItems = ["Remove ads", "1000", "2000", "10000", "50000", "300000"]
+    
     override func viewDidLoad() {
         setupView()
     }
@@ -34,6 +37,11 @@ class ProfileViewController: UIViewController{
         
         bannerView.delegate = self
         
+        // Navigation Bar
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+        
         
     }
     
@@ -41,12 +49,18 @@ class ProfileViewController: UIViewController{
 
 extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return listOfPurchase.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "purchaseCell", for: indexPath) as! PurchaseCollectionViewCell
         
+        if indexPath.item != 0{
+            cell.purchaseBtn.setTitle("$" + purchaseItems[indexPath.item], for: .normal)
+        } else {
+            cell.purchaseBtn.setTitle(purchaseItems[indexPath.item], for: .normal)
+        }
+        cell.itemLbl.text = "$" + listOfPurchase[indexPath.item]
         return cell
     }
     

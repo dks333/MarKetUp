@@ -14,10 +14,15 @@ class TradingViewController: UIViewController {
     @IBOutlet weak var resultLbl: UILabel!
     @IBOutlet weak var availableValuesLbl: UILabel!
     @IBOutlet weak var tradingBtn: UIButton!
+    @IBOutlet weak var priceLbl: UILabel!
+    @IBOutlet weak var totalCostValueLbl: UILabel!
+    @IBOutlet var stackViews: UIStackView!
     
     private var inputTrackerStr = ""
     private var hasClickedAnOperand = false
     var selling = false   // sell = false  && buy = true
+    
+    var currentStock = Stock()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,24 +36,45 @@ class TradingViewController: UIViewController {
     
     private func setupView(){
         // Set up trading button
-        tradingBtn.layer.cornerRadius = 10
+        tradingBtn.layer.cornerRadius = 13
         tradingBtn.alpha = 0
         
         if !selling {
             // Sell
             vcTitleLbl.text = "Sell"
             tradingBtn.setTitle("Sell", for: .normal)
-            
+            print(user.ownedStocksShares[currentStock]!)
+            availableValuesLbl.text = "\(user.ownedStocksShares[currentStock]!) shares"
         } else {
             // Buy
             vcTitleLbl.text = "Buy"
             tradingBtn.setTitle("Buy", for: .normal)
+            availableValuesLbl.text = "$\(user.cashes) available"
         }
+        
+        // Market Price set up
+        priceLbl.text = "$\(currentStock.price)"
+        
+        // UI for stackView
+        stackViews.addBottomBorder(with: .black, andWidth: 1.3)
+    }
+    
+    
+    @IBAction func tradingAction(_ sender: Any) {
+        if !selling {
+            // sell
+            
+        } else {
+            // buy
+            
+        }
+        dismiss(animated: true)
     }
     
     @IBAction func performNumTracking(_ button: UIButton) {
         hasClickedAnOperand = true
         resultLbl.textColor = .white
+        totalCostValueLbl.textColor = .white
         let digit = button.titleLabel?.text ?? ""
         performInputTracking(digit)
         
@@ -62,6 +88,7 @@ class TradingViewController: UIViewController {
     // tracking numbers
     private func performInputTracking(_ digit: String) {
         if hasClickedAnOperand {
+            //Typing numbers
             if inputTrackerStr.count < 15 {
                 inputTrackerStr += digit
                 resultLbl.text = "\(inputTrackerStr)"
@@ -70,10 +97,18 @@ class TradingViewController: UIViewController {
             inputTrackerStr = String(inputTrackerStr.dropLast())
             resultLbl.text = "\(inputTrackerStr)"
             if inputTrackerStr == "" {
+                // when there is no number entered
                 resultLbl.textColor = .lightGray
                 resultLbl.text = "0"
+                totalCostValueLbl.textColor = .darkGray
+                totalCostValueLbl.text = "0"
             }
         }
+        
+        let numOfShares = Float(resultLbl.text!)
+        totalCostValueLbl.text = "\(numOfShares! * currentStock.price)"
+        
+        
         
         UIView.animate(withDuration: (self.inputTrackerStr == "") ? 0.2 : 0.3, animations: {
             self.tradingBtn.alpha = (self.inputTrackerStr != "") ? 1.0 : 0.0

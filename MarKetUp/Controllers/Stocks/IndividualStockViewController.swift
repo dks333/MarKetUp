@@ -17,6 +17,7 @@ class IndividualStockViewController: UIViewController {
     @IBOutlet weak var priceLbl: UILabel!
     @IBOutlet weak var percentageLbl: UILabel!
     @IBOutlet weak var companyNameLbl: UILabel!
+    @IBOutlet weak var cancelFollowingBtn: UIButton!
     
     @IBOutlet weak var sellStockBtn: UIButton!{
         didSet{
@@ -70,12 +71,18 @@ class IndividualStockViewController: UIViewController {
             percentageLbl.textColor = .custumGreen
         }
         
+        cancelFollowingBtn.tintColor = .darkGray
         
+        // CancelFollowingBtn should not present in ownedStock VC
+        if user.isHeldStock(stock: currentStock) {
+            cancelFollowingBtn.isHidden = true
+        }
         
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? TradingViewController {
+            vc.currentStock = currentStock
             if segue.identifier == "SellingSegue" {
                 vc.selling = false
             } else {
@@ -87,17 +94,21 @@ class IndividualStockViewController: UIViewController {
     }
     
     
+    var index = 0
     
-    
-    @IBAction func sellingStock(_ sender: Any) {
-        sellStockBtn.isEnabled = true
+    @IBAction func cancelFollowing(_ sender: Any) {
+        if user.watchList.contains(currentStock) {
+            index = user.watchList.firstIndex(of: self.currentStock)!
+            user.cancelFollowingStock(stock: currentStock)
+            cancelFollowingBtn.tintColor = .custumGreen
+        } else {
+            cancelFollowingBtn.tintColor = .darkGray
+            user.addStocks(stock: currentStock, type: "watchList", index: index)
+        }
         
         
     }
     
-    @IBAction func buyingStock(_ sender: Any) {
-        
-    }
     
 
     
