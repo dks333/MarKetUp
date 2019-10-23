@@ -1,5 +1,5 @@
 PODS:
-  - Google-Mobile-Ads-SDK (7.50.0):
+  - Google-Mobile-Ads-SDK (7.51.0):
     - GoogleAppMeasurement (~> 6.0)
   - GoogleAppMeasurement (6.1.3):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
@@ -28,9 +28,11 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
+  - SwiftChart (1.0.1)
 
 DEPENDENCIES:
   - Google-Mobile-Ads-SDK
+  - SwiftChart
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -38,13 +40,15 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleUtilities
     - nanopb
+    - SwiftChart
 
 SPEC CHECKSUMS:
-  Google-Mobile-Ads-SDK: d48dbaf5bae1ab7a94a9786f493c26c454bc6f16
+  Google-Mobile-Ads-SDK: 5c625884f0788d22b48e3bb641e1d65c673dc7a5
   GoogleAppMeasurement: 434cc7be25e71dc04b8d0e3079125127b330e84a
   GoogleUtilities: f895fde57977df4e0233edda0dbeac490e3703b6
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  SwiftChart: ba767a678d568a5ee22d419e146a0582865e1aff
 
-PODFILE CHECKSUM: 7e6e5698752a0cccb19e75e2b8808df9f3557178
+PODFILE CHECKSUM: 5ee364d752602922f6b29ce208817460b34bc551
 
 COCOAPODS: 1.7.5

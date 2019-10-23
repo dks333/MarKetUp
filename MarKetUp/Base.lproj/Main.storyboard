@@ -332,18 +332,28 @@
                                     <action selector="cancelFollowing:" destination="cob-fv-CR0" eventType="touchUpInside" id="wDk-YU-qRD"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z7x-1P-cIG" customClass="Chart" customModule="SwiftChart">
+                                <rect key="frame" x="0.0" y="267.5" width="414" height="371"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="371" id="drF-Cf-CHv"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="9ui-O4-ECL" firstAttribute="width" secondItem="lm2-Ez-oPy" secondAttribute="width" multiplier="0.8" id="0SH-mx-Ahg"/>
                             <constraint firstItem="cxE-MX-jGB" firstAttribute="centerX" secondItem="Ils-jr-Ad5" secondAttribute="centerX" multiplier="0.5" id="56C-gR-Fd6"/>
                             <constraint firstItem="IGo-nW-AMR" firstAttribute="centerY" secondItem="Ils-jr-Ad5" secondAttribute="centerY" multiplier="0.39" constant="-1.6700000000000159" id="8Kj-1d-Do9"/>
+                            <constraint firstItem="Z7x-1P-cIG" firstAttribute="trailing" secondItem="Ils-jr-Ad5" secondAttribute="trailing" id="DYs-Rw-zJE"/>
                             <constraint firstItem="cxE-MX-jGB" firstAttribute="centerY" secondItem="Ils-jr-Ad5" secondAttribute="centerY" multiplier="0.2" id="Fxg-TI-Gef"/>
                             <constraint firstItem="5P2-HE-VI2" firstAttribute="centerY" secondItem="Ils-jr-Ad5" secondAttribute="centerY" multiplier="0.37" id="GME-xf-bWX"/>
+                            <constraint firstItem="Z7x-1P-cIG" firstAttribute="centerY" secondItem="Ils-jr-Ad5" secondAttribute="centerY" id="IK1-qq-PnU"/>
                             <constraint firstItem="cxE-MX-jGB" firstAttribute="width" secondItem="lm2-Ez-oPy" secondAttribute="width" multiplier="0.3" id="KOF-5S-Ro4"/>
                             <constraint firstItem="H23-Q9-4li" firstAttribute="leading" secondItem="Ils-jr-Ad5" secondAttribute="leading" constant="65" id="LQJ-wa-BtW"/>
                             <constraint firstItem="H23-Q9-4li" firstAttribute="trailing" secondItem="lm2-Ez-oPy" secondAttribute="trailingMargin" id="OXv-F6-FLv"/>
                             <constraint firstItem="H23-Q9-4li" firstAttribute="top" secondItem="cxE-MX-jGB" secondAttribute="bottom" constant="5" id="XVN-LP-mLJ"/>
+                            <constraint firstItem="Z7x-1P-cIG" firstAttribute="leading" secondItem="Ils-jr-Ad5" secondAttribute="leading" id="YxM-6B-1FI"/>
                             <constraint firstItem="IGo-nW-AMR" firstAttribute="centerX" secondItem="Ils-jr-Ad5" secondAttribute="centerX" constant="93" id="aBQ-Mq-1y2"/>
                             <constraint firstItem="Ils-jr-Ad5" firstAttribute="bottom" secondItem="9ui-O4-ECL" secondAttribute="bottom" constant="30" id="jxo-Ub-iCU"/>
                             <constraint firstItem="9ui-O4-ECL" firstAttribute="centerX" secondItem="Ils-jr-Ad5" secondAttribute="centerX" id="nea-BR-RIe"/>
@@ -354,6 +364,7 @@
                     <connections>
                         <outlet property="buyStockBtn" destination="dow-9X-q7P" id="IMt-8k-YhW"/>
                         <outlet property="cancelFollowingBtn" destination="Ja8-pT-adE" id="1pT-Aj-edi"/>
+                        <outlet property="chart" destination="Z7x-1P-cIG" id="tDo-PJ-ZiV"/>
                         <outlet property="companyNameLbl" destination="H23-Q9-4li" id="7K4-jX-R5c"/>
                         <outlet property="percentageLbl" destination="IGo-nW-AMR" id="WOo-39-a7j"/>
                         <outlet property="priceLbl" destination="5P2-HE-VI2" id="MNP-tn-4xu"/>

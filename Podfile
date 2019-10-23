@@ -7,6 +7,7 @@ target 'MarKetUp' do
   
   # Pods for MarKetUp
   pod 'Google-Mobile-Ads-SDK'
+  pod 'SwiftChart'
 
   target 'MarKetUpTests' do
     inherit! :search_paths

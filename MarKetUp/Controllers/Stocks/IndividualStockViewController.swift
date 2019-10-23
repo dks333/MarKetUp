@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import SwiftChart
 
 class IndividualStockViewController: UIViewController {
     
@@ -18,6 +19,7 @@ class IndividualStockViewController: UIViewController {
     @IBOutlet weak var percentageLbl: UILabel!
     @IBOutlet weak var companyNameLbl: UILabel!
     @IBOutlet weak var cancelFollowingBtn: UIButton!
+    @IBOutlet weak var chart: Chart!
     
     @IBOutlet weak var sellStockBtn: UIButton!{
         didSet{
@@ -33,6 +35,7 @@ class IndividualStockViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        initializeChart()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -78,6 +81,10 @@ class IndividualStockViewController: UIViewController {
             cancelFollowingBtn.isHidden = true
         }
         
+        // Chart
+        chart.delegate = self
+        chart.hideHighlightLineOnTouchEnd = true
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -109,9 +116,113 @@ class IndividualStockViewController: UIViewController {
         
     }
     
+
+}
+
+extension IndividualStockViewController: ChartDelegate{
     
 
     
+    
+    
+    func initializeChart() {
+        
+        let symbolStr = currentStock.symbol
+        
+        var seriesData: [Double] = []
+        var labels: [Double] = []
+        var labelsAsString: Array<String> = []
+        
+        let url = URL(string: "https://intraday.worldtradingdata.com/api/v1/intraday?symbol=\(symbolStr)&range=1&interval=5&sort=asc&api_token=\(WorldTradingDataAPIKey)")
 
+        let task = URLSession.shared.dataTask(with: (url)!) { (data, response, error) in
+           guard let dataResponse = data,
+               error == nil else {
+                   print(error?.localizedDescription ?? "Response Error")
+                   return }
+           do{
+               //here dataResponse received from a network request
+            let jsonResponse = try JSONSerialization.jsonObject(with:
+                   dataResponse, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+            guard let dataArray = jsonResponse["intraday"] as? Dictionary<String, AnyObject> else { return }
+            
+            var enumeratedNum = 0
+            
+            for (key, value) in dataArray{
+                seriesData.append(Double(Float(value["close"] as? String ?? "") ?? 0.0))
+                labels.append(Double(enumeratedNum))
+                labelsAsString.append(key)
+                enumeratedNum += 1
+            }
 
+            DispatchQueue.main.async {
+                let series = ChartSeries(seriesData)
+                series.area = false
+
+                // Configure chart layout
+
+                self.chart.lineWidth = 1
+//                self.chart.labelFont = UIFont.systemFont(ofSize: 12)
+//                self.chart.xLabels = labels
+//                self.chart.xLabelsFormatter = { (labelIndex: Int, labelValue: Double) -> String in
+//                   return labelsAsString[labelIndex]
+//                }
+//                self.chart.xLabelsTextAlignment = .center
+                self.chart.showYLabelsAndGrid = false
+                self.chart.showXLabelsAndGrid = false
+                if self.currentStock.change_pct.starts(with: "-"){
+                    series.color = .customRed
+                } else {
+                    series.color = .custumGreen
+                }
+                self.chart.gridColor = .clear
+
+                self.chart.labelColor = .white
+                self.chart.highlightLineColor = .white
+                
+                self.chart.add(series)
+                self.chart.setNeedsDisplay()
+            }
+              
+           } catch let parsingError {
+               print("Error", parsingError)
+           }
+        }
+        task.resume()
+           
+        
+           
+    }
+    
+    func didTouchChart(_ chart: Chart, indexes: [Int?], x: Double, left: CGFloat) {
+         
+        if let value = chart.valueForSeries(0, atIndex: indexes[0]) {
+            
+            let numberFormatter = NumberFormatter()
+            numberFormatter.minimumFractionDigits = 2
+            numberFormatter.maximumFractionDigits = 2
+            priceLbl.text = numberFormatter.string(from: NSNumber(value: value))
+            
+        }
+    }
+    
+    func didFinishTouchingChart(_ chart: Chart) {
+        priceLbl.text = "\(currentStock.price)"
+    }
+    
+    func didEndTouchingChart(_ chart: Chart) {
+        priceLbl.text = "\(currentStock.price)"
+        
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        // Redraw chart on rotation
+        chart.setNeedsDisplay()
+        
+    }
+    
+    
 }
