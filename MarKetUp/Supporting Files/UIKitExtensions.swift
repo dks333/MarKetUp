@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+var vSpinner = UIView()
+
 extension UIViewController {
     
     func setTabBarVisible(visible: Bool, animated: Bool) {
@@ -37,7 +39,28 @@ extension UIViewController {
         return (self.tabBarController?.tabBar.frame.origin.y ?? 0) < self.view.frame.maxY
     }
     
+    // Show Loading Spinner
+    func showSpinner(onView : UIView) {
+        let spinnerView = UIView.init(frame: onView.bounds)
+        spinnerView.backgroundColor = .black
+        let ai = UIActivityIndicatorView.init(style: .white)
+        ai.startAnimating()
+        ai.center = spinnerView.center
+        
+        DispatchQueue.main.async {
+            spinnerView.addSubview(ai)
+            onView.addSubview(spinnerView)
+        }
+        
+        vSpinner = spinnerView
+    }
     
+    func removeSpinner() {
+        DispatchQueue.main.async {
+            vSpinner.removeFromSuperview()
+            vSpinner = UIView()
+        }
+    }
     
 }
 
@@ -105,4 +128,27 @@ extension UIButton {
         layoutIfNeeded()
         UIView.setAnimationsEnabled(true)
     }
+}
+
+extension NSLayoutConstraint {
+    func setMultiplier(_ multiplier:CGFloat) -> NSLayoutConstraint {
+
+         NSLayoutConstraint.deactivate([self])
+
+         let newConstraint = NSLayoutConstraint(
+             item: firstItem!,
+             attribute: firstAttribute,
+             relatedBy: relation,
+             toItem: secondItem,
+             attribute: secondAttribute,
+             multiplier: multiplier,
+             constant: constant)
+
+         newConstraint.priority = priority
+         newConstraint.shouldBeArchived = shouldBeArchived
+         newConstraint.identifier = identifier
+
+         NSLayoutConstraint.activate([newConstraint])
+         return newConstraint
+     }
 }

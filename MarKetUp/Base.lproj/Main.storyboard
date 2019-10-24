@@ -277,7 +277,7 @@
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="154" id="KWb-Tg-0Zl"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="35"/>
-                                <color key="textColor" red="0.0" green="0.74318359369999998" blue="0.11264011209999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1.33%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IGo-nW-AMR">
@@ -291,7 +291,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="9ui-O4-ECL">
-                                <rect key="frame" x="41.5" y="782" width="331" height="50"/>
+                                <rect key="frame" x="41.5" y="728" width="331" height="50"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EzN-ky-u3M">
                                         <rect key="frame" x="0.0" y="0.0" width="155.5" height="50"/>
@@ -333,31 +333,42 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z7x-1P-cIG" customClass="Chart" customModule="SwiftChart">
-                                <rect key="frame" x="0.0" y="267.5" width="414" height="371"/>
+                                <rect key="frame" x="0.0" y="228" width="414" height="450"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="371" id="drF-Cf-CHv"/>
+                                    <constraint firstAttribute="height" constant="450" id="drF-Cf-CHv"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bLk-my-NTa">
+                                <rect key="frame" x="0.0" y="199" width="0.0" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="wLS-75-RHm"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="9ui-O4-ECL" firstAttribute="width" secondItem="lm2-Ez-oPy" secondAttribute="width" multiplier="0.8" id="0SH-mx-Ahg"/>
                             <constraint firstItem="cxE-MX-jGB" firstAttribute="centerX" secondItem="Ils-jr-Ad5" secondAttribute="centerX" multiplier="0.5" id="56C-gR-Fd6"/>
                             <constraint firstItem="IGo-nW-AMR" firstAttribute="centerY" secondItem="Ils-jr-Ad5" secondAttribute="centerY" multiplier="0.39" constant="-1.6700000000000159" id="8Kj-1d-Do9"/>
-                            <constraint firstItem="Z7x-1P-cIG" firstAttribute="trailing" secondItem="Ils-jr-Ad5" secondAttribute="trailing" id="DYs-Rw-zJE"/>
                             <constraint firstItem="cxE-MX-jGB" firstAttribute="centerY" secondItem="Ils-jr-Ad5" secondAttribute="centerY" multiplier="0.2" id="Fxg-TI-Gef"/>
                             <constraint firstItem="5P2-HE-VI2" firstAttribute="centerY" secondItem="Ils-jr-Ad5" secondAttribute="centerY" multiplier="0.37" id="GME-xf-bWX"/>
                             <constraint firstItem="Z7x-1P-cIG" firstAttribute="centerY" secondItem="Ils-jr-Ad5" secondAttribute="centerY" id="IK1-qq-PnU"/>
                             <constraint firstItem="cxE-MX-jGB" firstAttribute="width" secondItem="lm2-Ez-oPy" secondAttribute="width" multiplier="0.3" id="KOF-5S-Ro4"/>
                             <constraint firstItem="H23-Q9-4li" firstAttribute="leading" secondItem="Ils-jr-Ad5" secondAttribute="leading" constant="65" id="LQJ-wa-BtW"/>
                             <constraint firstItem="H23-Q9-4li" firstAttribute="trailing" secondItem="lm2-Ez-oPy" secondAttribute="trailingMargin" id="OXv-F6-FLv"/>
+                            <constraint firstItem="bLk-my-NTa" firstAttribute="leading" secondItem="Ils-jr-Ad5" secondAttribute="leading" id="Qmh-YW-LvC"/>
+                            <constraint firstItem="9ui-O4-ECL" firstAttribute="top" secondItem="Z7x-1P-cIG" secondAttribute="bottom" constant="50" id="Tjy-iR-Ixb"/>
                             <constraint firstItem="H23-Q9-4li" firstAttribute="top" secondItem="cxE-MX-jGB" secondAttribute="bottom" constant="5" id="XVN-LP-mLJ"/>
                             <constraint firstItem="Z7x-1P-cIG" firstAttribute="leading" secondItem="Ils-jr-Ad5" secondAttribute="leading" id="YxM-6B-1FI"/>
                             <constraint firstItem="IGo-nW-AMR" firstAttribute="centerX" secondItem="Ils-jr-Ad5" secondAttribute="centerX" constant="93" id="aBQ-Mq-1y2"/>
-                            <constraint firstItem="Ils-jr-Ad5" firstAttribute="bottom" secondItem="9ui-O4-ECL" secondAttribute="bottom" constant="30" id="jxo-Ub-iCU"/>
+                            <constraint firstItem="Z7x-1P-cIG" firstAttribute="top" secondItem="bLk-my-NTa" secondAttribute="bottom" constant="8" id="awN-yk-h9w"/>
                             <constraint firstItem="9ui-O4-ECL" firstAttribute="centerX" secondItem="Ils-jr-Ad5" secondAttribute="centerX" id="nea-BR-RIe"/>
                             <constraint firstItem="5P2-HE-VI2" firstAttribute="centerX" secondItem="Ils-jr-Ad5" secondAttribute="centerX" multiplier="0.7" constant="3.1000000000000227" id="w7f-i3-tgX"/>
+                            <constraint firstItem="Z7x-1P-cIG" firstAttribute="width" secondItem="Ils-jr-Ad5" secondAttribute="width" id="xpP-vs-uSP"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Ils-jr-Ad5"/>
                     </view>
@@ -365,11 +376,14 @@
                         <outlet property="buyStockBtn" destination="dow-9X-q7P" id="IMt-8k-YhW"/>
                         <outlet property="cancelFollowingBtn" destination="Ja8-pT-adE" id="1pT-Aj-edi"/>
                         <outlet property="chart" destination="Z7x-1P-cIG" id="tDo-PJ-ZiV"/>
+                        <outlet property="chartWidthConstraint" destination="xpP-vs-uSP" id="csH-OZ-ihS"/>
                         <outlet property="companyNameLbl" destination="H23-Q9-4li" id="7K4-jX-R5c"/>
+                        <outlet property="labelLeadingMarginConstraint" destination="Qmh-YW-LvC" id="1so-x2-IA3"/>
                         <outlet property="percentageLbl" destination="IGo-nW-AMR" id="WOo-39-a7j"/>
                         <outlet property="priceLbl" destination="5P2-HE-VI2" id="MNP-tn-4xu"/>
                         <outlet property="sellStockBtn" destination="EzN-ky-u3M" id="bZX-3o-O0D"/>
                         <outlet property="stockNameLbl" destination="cxE-MX-jGB" id="MOR-bq-SGt"/>
+                        <outlet property="timeLbl" destination="bLk-my-NTa" id="igX-FV-8rR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vfu-gr-F1r" userLabel="First Responder" sceneMemberID="firstResponder"/>

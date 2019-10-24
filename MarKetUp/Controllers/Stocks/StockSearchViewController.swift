@@ -124,10 +124,6 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
             
         }
         
-        if let vc = self.presentingViewController?.children[0].children[0] as? StockViewController {
-            vc.tableview.reloadData()
-            vc.view.layoutIfNeeded()
-        }
        
     }
     
@@ -137,11 +133,17 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
         //self.setTabBarVisible(visible: false, animated: true)
         super.viewWillAppear(animated)
         
+        
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         //self.setTabBarVisible(visible: true, animated: true)
         super.viewWillDisappear(animated)
+        if let vc = self.presentingViewController?.children[0].children[0] as? StockViewController {
+            vc.loadingStocks()
+            vc.tableview.reloadData()
+            vc.view.layoutIfNeeded()
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -151,6 +153,7 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        self.view.layoutIfNeeded()
 
     }
     

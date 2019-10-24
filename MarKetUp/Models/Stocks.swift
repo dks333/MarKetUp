@@ -17,16 +17,18 @@ struct Stock: Hashable{
     var change_pct: String        // "-0.81"
     var day_change: String        // “-1.81”
     var volumn: Int            // “20234415”
+    var close_yesterday: Float  // "221.03"
     
     
     
-    init(symbol: String? = nil, price: Float? = nil, change_pct: String? = nil, name: String? = nil, day_change: String? = nil, volumn: Int? = nil){
+    init(symbol: String? = nil, price: Float? = nil, change_pct: String? = nil, name: String? = nil, day_change: String? = nil, volumn: Int? = nil, close_yesterday: Float? = nil){
         self.symbol = symbol ?? ""
         self.price = price ?? 0.0
         self.change_pct = change_pct ?? "0.0%"
         self.name = name ?? ""
         self.day_change = day_change ?? "0.0"
         self.volumn = volumn ?? 0
+        self.close_yesterday = close_yesterday ?? 0.0
     }
     
     init(_ dictionary: [String: Any]) {
@@ -39,6 +41,9 @@ struct Stock: Hashable{
         self.day_change = dictionary["day_change"] as? String ?? "0.0"
         let volumnStr = dictionary["volumn"] as? String ?? ""
         self.volumn = (Int(volumnStr) ?? 0)
+        let close_yesterdayStr = dictionary["close_yesterday"] as? String ?? "0.0"
+        self.close_yesterday = Float(close_yesterdayStr) ?? 0.0
+        
         
         if day_change.contains("N/A") || change_pct.contains("N/A"){
             day_change = "0.0"

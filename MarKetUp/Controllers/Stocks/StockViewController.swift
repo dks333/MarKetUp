@@ -36,7 +36,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        //loadingStocks()
+        loadingStocks()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -129,6 +129,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         // Clear separators of empty rows
         tableview.tableFooterView = UIView()
+        
         
     }
     
