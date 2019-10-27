@@ -15,18 +15,31 @@ import UIKit
 import StoreKit
 import GoogleMobileAds
 
-class ProfileViewController: UIViewController{
+protocol UserInfoUpdateResponder : class {
+    func updateValues()
+}
+
+
+class ProfileViewController: UIViewController, UserInfoUpdateResponder{
+    
     
     var user: User!
     
     @IBOutlet weak var purchaseCollectionView: UICollectionView!
     @IBOutlet weak var bannerView: GADBannerView!
     
-    private var listOfPurchase = ["2.99", "0.99", "1.99", "5.99", "9.99", "49.99"]
-    private var purchaseItems = ["Remove ads", "1000", "2000", "10000", "50000", "300000"]
+    @IBOutlet weak var totalValueLbl: UILabel!
+    
+    private var listOfPurchase = ["2.99", "0.99", "1.99", "9.99", "49.99"]
+    private var purchaseItems = ["Remove ads", "5000", "20000", "300000", "3000000"]
     
     override func viewDidLoad() {
         setupView()
+        setUpIAPProducts()
+    }
+    
+    private func setUpIAPProducts(){
+        IAPService.shared.getProducts()
     }
     
     private func setupView(){
@@ -45,6 +58,15 @@ class ProfileViewController: UIViewController{
         
     }
     
+    @IBAction func restorePurchaseOfRemoveAds(_ sender: Any) {
+        IAPService.shared.restorePurchases()
+    }
+    
+    // protocol
+    func updateValues() {
+        self.totalValueLbl.text = "\(User.shared.getTotalValues())"
+        self.totalValueLbl.setNeedsDisplay()
+    }
 }
 
 extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -62,6 +84,30 @@ extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataS
         }
         cell.itemLbl.text = "$" + listOfPurchase[indexPath.item]
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch  indexPath.item {
+        case 0:
+            // Removing Ads
+            IAPService.shared.purchase(product: .RemoveAds)
+        case 1:
+            // $5000 added (0.99)
+            IAPService.shared.purchase(product: .LevelOneCredit)
+        case 2:
+            // $20000 added (1.99)
+            IAPService.shared.purchase(product: .LevelTwoCredit)
+        case 3:
+            // $300000 added (9.99)
+            IAPService.shared.purchase(product: .LevelThreeCredit)
+        case 4:
+            // $1000000 added (49.99)
+            IAPService.shared.purchase(product: .LevelFourCredit)
+        default:
+            print("More incoming")
+        }
+        
+        
     }
     
     

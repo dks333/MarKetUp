@@ -31,6 +31,29 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
     }
     
     private func loadUpStocks(){
+        
+//        guard let url = URL(string: "https://api.worldtradingdata.com/api/v1/ticker_list?type=stocks&api_token=\(WorldTradingDataAPIKey)") else { return }
+//
+//        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+//            guard let dataResponse = data,
+//                error == nil else {
+//                    print(error?.localizedDescription ?? "Response Error")
+//                    return }
+//            do{
+//                //here dataResponse received from a network request
+//                let jsonResponse = try JSONSerialization.jsonObject(with:
+//                    dataResponse, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+//                guard let dataArray = jsonResponse["data"] as? [[String: Any]] else { return }
+//
+//                //add stock name and symbol into Stock
+//                self.stocks = dataArray.compactMap{Stock($0)}
+//
+//            } catch let parsingError {
+//                print("Error", parsingError)
+//            }
+//        }
+//        task.resume()
+        
         if let path = Bundle.main.path(forResource: "StockList2019:10:14", ofType: "json") {
                    do {
                          let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
@@ -111,15 +134,15 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
     @IBAction func AddStock(_ button: UIButton) {
         let selectedStock = filteredStocks[button.tag]
 
-        if button.tintColor != .black && !user.watchList.contains(selectedStock){
+        if button.tintColor != .black && !User.shared.watchList.contains(selectedStock){
             button.tintColor = .black
-            if !user.watchList.contains(selectedStock) {
-                user.watchList.append(selectedStock)
+            if !User.shared.watchList.contains(selectedStock) {
+                User.shared.watchList.append(selectedStock)
             }
         } else {
             button.tintColor = .custumGreen
-            if let index = user.watchList.firstIndex(of: selectedStock) {
-                user.watchList.remove(at: index)
+            if let index = User.shared.watchList.firstIndex(of: selectedStock) {
+                User.shared.watchList.remove(at: index)
             }
             
         }
@@ -193,7 +216,7 @@ extension StockSearchViewController: UITableViewDelegate, UITableViewDataSource{
         cell.nameLbl.text = currentStock.name
         cell.symbolLbl.text = currentStock.symbol
         
-        if user.watchList.contains(currentStock) {
+        if User.shared.watchList.contains(currentStock) {
             cell.addBtn.tintColor = .black
         } else {
             cell.addBtn.tintColor = .custumGreen

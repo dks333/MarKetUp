@@ -33,7 +33,7 @@ class IndividualStockViewController: UIViewController {
     
     @IBOutlet weak var sellStockBtn: UIButton!{
         didSet{
-            if !user.isHeldStock(stock: currentStock) {
+            if !User.shared.isHeldStock(stock: currentStock) {
                 sellStockBtn.isEnabled = false
                 sellStockBtn.backgroundColor = .gray
             }
@@ -51,20 +51,19 @@ class IndividualStockViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
-        self.setTabBarVisible(visible: false, animated: true)
-        self.tabBarController?.tabBar.isHidden = true
+       // self.setTabBarVisible(visible: false, animated: true)
+        //self.tabBarController?.tabBar.isHidden = true
         super.viewWillAppear(animated)
     }
     override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        self.setTabBarVisible(visible: true, animated: true)
-        self.tabBarController?.tabBar.isHidden = false
+        //self.setTabBarVisible(visible: true, animated: true)
+        //self.tabBarController?.tabBar.isHidden = false
         super.viewWillDisappear(animated)
     }
     
     fileprivate func setupView(){
         
-        self.tabBarController?.tabBar.isHidden = true
         
         // Make navigation bar transparent
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -84,12 +83,12 @@ class IndividualStockViewController: UIViewController {
         
         checkIncOrDec()
         
-        cancelFollowingBtn.tintColor = .darkGray
+        cancelFollowingBtn.tintColor = (User.shared.watchList.contains(currentStock)) ? .darkGray : .custumGreen
         
         // CancelFollowingBtn should not present in ownedStock VC
-        if user.isHeldStock(stock: currentStock) {
-            cancelFollowingBtn.isHidden = true
-        }
+//        if User.shared.isHeldStock(stock: currentStock) && !User.shared.watchList.contains(currentStock){
+//            cancelFollowingBtn.isHidden = true
+//        }
         
         // Chart
         chart.delegate = self
@@ -123,16 +122,16 @@ class IndividualStockViewController: UIViewController {
     }
     
     
-    var index = 0
+    private var index = 0
     
     @IBAction func cancelFollowing(_ sender: Any) {
-        if user.watchList.contains(currentStock) {
-            index = user.watchList.firstIndex(of: self.currentStock)!
-            user.cancelFollowingStock(stock: currentStock)
-            cancelFollowingBtn.tintColor = .custumGreen
-        } else {
+        if !User.shared.watchList.contains(currentStock) && User.shared.isHeldStock(stock: currentStock){
             cancelFollowingBtn.tintColor = .darkGray
-            user.addStocks(stock: currentStock, type: "watchList", index: index)
+            User.shared.addStocks(stock: currentStock, type: "watchList", index: index)
+        } else {
+            index = User.shared.watchList.firstIndex(of: self.currentStock)!
+            User.shared.cancelFollowingStock(stock: currentStock)
+            cancelFollowingBtn.tintColor = .custumGreen
         }
         
         
@@ -190,12 +189,15 @@ extension IndividualStockViewController: ChartDelegate{
                
                 // Configure chart layout
                 self.chart.lineWidth = 1
-                self.chart.areaAlphaComponent = 0.14
+                self.chart.areaAlphaComponent = 0.07
                 
                 self.chart.showYLabelsAndGrid = false
                 self.chart.showXLabelsAndGrid = false
-
-                self.chartWidthConstraint = self.chartWidthConstraint.setMultiplier(1 / 78 * CGFloat(self.labels.count))
+                
+                
+                // TODO: Some stocks may have different number of <labelAsString>
+                // 拿一个现实的时间，然后divide by 5， if 时间 == key, get(value), else : get(lastValue)
+                self.chartWidthConstraint = self.chartWidthConstraint.setMultiplier(1 / 78 * CGFloat(self.labelsAsString.count))
                 
                 self.chart.gridColor = .white
                 self.chart.maxY = self.seriesData.max()! * 1.001
@@ -224,8 +226,7 @@ extension IndividualStockViewController: ChartDelegate{
     }
     
     func didTouchChart(_ chart: Chart, indexes: [Int?], x: Double, left: CGFloat) {
-         
-
+        
         if let value = chart.valueForSeries(0, atIndex: indexes[0]) {
             
             let numberFormatter = NumberFormatter()

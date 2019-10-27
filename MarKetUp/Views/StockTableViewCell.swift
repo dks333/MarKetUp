@@ -16,11 +16,13 @@ class StockTableViewCell: UITableViewCell {
     @IBOutlet weak var quoteLbl: UILabel!
     @IBOutlet weak var priceLbl: UILabel!
     @IBOutlet weak var switchBtn: UIButton!
+    @IBOutlet weak var numOfShareLbl: UILabel!
     
     var quote: String!
     var price: Float!
     var percentage: String!
     var dayChange: String!
+    var numOfShare: String!
     
     
     func setup(quote: String, price: Float?, percentage: String?, dayChange: String?){
@@ -45,6 +47,11 @@ class StockTableViewCell: UITableViewCell {
             priceLbl.textColor = .custumGreen
             switchBtn.backgroundColor = .custumGreen
         }
+    }
+    
+    func setUpNumOfShares(numOfShare: String?){
+        numOfShareLbl.text = numOfShare
+        self.numOfShare = numOfShare
     }
     
     private func setupView(){

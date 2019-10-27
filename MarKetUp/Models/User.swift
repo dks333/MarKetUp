@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct User {
+class User {
     var userId: String
     var cashes: Float
     var values: Float
@@ -16,6 +16,7 @@ struct User {
     var ownedStocksShares: [Stock:Int]
     var watchList: [Stock]
     
+    static let shared = User(userId: "testID", cashes: 10000, values: 0, ownedStocks: [], watchList: [], ownedStocksShares: [:])
 
     init(userId: String, cashes: Float, values: Float, ownedStocks: [Stock], watchList: [Stock], ownedStocksShares: [Stock:Int]){
         self.userId = userId
@@ -36,16 +37,16 @@ struct User {
     }
     
     // fetch data to owned stocks
-    mutating func setOwnedStock(stock: Stock){
+    func setOwnedStock(stock: Stock){
         for i in 0..<self.ownedStocks.count{
             if ownedStocks[i] == stock {
                 ownedStocks[i] = stock
             }
         }
     }
-    
+       
     //fetch data to current watchlist
-    mutating func setWatchList(stock: Stock){
+    func setWatchList(stock: Stock){
         for i in 0..<self.watchList.count{
             if watchList[i] == stock {
                 watchList[i] = stock
@@ -53,12 +54,25 @@ struct User {
         }
     }
     
-    func addShareToStock(stock: Stock){
+    // Adding shares to a specific stock
+    func addShareToStock(stock: Stock, numOfShares: Int){
+        if !ownedStocks.contains(stock) {
+            self.ownedStocks.append(stock)
+            self.ownedStocksShares[stock] = 0
+            self.ownedStocksShares[stock]! += numOfShares
+        } else {
+            self.ownedStocksShares[stock]! += numOfShares
+        }
         
     }
     
-    mutating func addStocks(stock: Stock, type: String, index: Int){
-        if !self.watchList.contains(stock) && !self.ownedStocks.contains(stock) {
+    // Selling number of shares from a specific stock
+    func sellShareFromStock(stock: Stock, numberOfShares: Int){
+        self.ownedStocksShares[stock]! -= numberOfShares
+    }
+    
+    func addStocks(stock: Stock, type: String, index: Int){
+        if !self.watchList.contains(stock) || !self.ownedStocks.contains(stock) {
             if type == "watchList" {
                 // watchlist
                 self.watchList.insert(stock, at: index)
@@ -69,7 +83,7 @@ struct User {
         }
     }
     
-    mutating func cancelFollowingStock(stock: Stock){
+    func cancelFollowingStock(stock: Stock){
         if self.watchList.contains(stock){
             if let index = self.watchList.firstIndex(of: stock) {
                 watchList.remove(at: index)

@@ -34,6 +34,10 @@ class TradingViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
+    @IBAction func dismissTradingVC(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     private func setupView(){
         // Set up trading button
         tradingBtn.layer.cornerRadius = 13
@@ -43,13 +47,13 @@ class TradingViewController: UIViewController {
             // Sell
             vcTitleLbl.text = "Sell"
             tradingBtn.setTitle("Sell", for: .normal)
-            print(user.ownedStocksShares[currentStock]!)
-            availableValuesLbl.text = "\(user.ownedStocksShares[currentStock]!) shares"
+            
+            availableValuesLbl.text = "\(User.shared.ownedStocksShares[currentStock]!) shares"
         } else {
             // Buy
             vcTitleLbl.text = "Buy"
             tradingBtn.setTitle("Buy", for: .normal)
-            availableValuesLbl.text = "$\(user.cashes) available"
+            availableValuesLbl.text = "$\(User.shared.cashes) available"
         }
         
         // Market Price set up
@@ -66,7 +70,7 @@ class TradingViewController: UIViewController {
             
         } else {
             // buy
-            
+            User.shared.addShareToStock(stock: currentStock, numOfShares: Int(inputTrackerStr)!)
         }
         dismiss(animated: true)
     }

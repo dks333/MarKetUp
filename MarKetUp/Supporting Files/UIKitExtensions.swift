@@ -42,7 +42,7 @@ extension UIViewController {
     // Show Loading Spinner
     func showSpinner(onView : UIView) {
         let spinnerView = UIView.init(frame: onView.bounds)
-        spinnerView.backgroundColor = .black
+        spinnerView.backgroundColor = .clear
         let ai = UIActivityIndicatorView.init(style: .white)
         ai.startAnimating()
         ai.center = spinnerView.center

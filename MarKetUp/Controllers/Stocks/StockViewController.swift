@@ -11,22 +11,25 @@ import Foundation
 
 let WorldTradingDataAPIKey = "fhGOT6U6HafLz2aazzTXti58aetYaJNZAr6cZzkibkcMut0p2MMgbgMLEDNv"
 
-var user = User(userId: "testID", cashes: 10000, values: 0, ownedStocks: [Stock(symbol: "AAPL")], watchList: [Stock(symbol: "TSLA")], ownedStocksShares: [Stock(symbol: "AAPL"):3])
+//var user = User(userId: "testID", cashes: 10000, values: 0, ownedStocks: [Stock(symbol: "AAPL")], watchList: [Stock(symbol: "TSLA")], ownedStocksShares: [Stock(symbol: "AAPL"):3])
 
 class StockViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
     @IBOutlet var tableview: UITableView!
+    
+    @IBOutlet weak var totalValueLbl: UILabel!
+    
     var symbols : [String] {
         get {
-            let s1 = user.watchList.map({$0.symbol})
-            let s2 = user.ownedStocks.map({$0.symbol})
+            let s1 = User.shared.watchList.map({$0.symbol})
+            let s2 = User.shared.ownedStocks.map({$0.symbol})
             return s1+s2
         }
     }
     var stocks = [Stock]()
     
-    let APIRequestLimit = 5
+    let APIRequestLimit = 20
     
     @IBOutlet weak var profileView: UIView!
     @IBAction func reloadStocks(_ sender: Any) {
@@ -41,7 +44,14 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        updateDataBeforeViewLoad()
+    }
+    
+    // Helper method for viewWillAppear
+    private func updateDataBeforeViewLoad(){
+        totalValueLbl.text = "\(User.shared.getTotalValues())"
         tableview.reloadData()
+        self.view.layoutIfNeeded()
     }
     
     
@@ -81,10 +91,10 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                            self.stocks += dataArray.compactMap{Stock($0)}
                            
                            for stock in self.stocks {
-                               if user.ownedStocks.contains(stock){
-                                   user.setOwnedStock(stock: stock)
-                               } else if user.watchList.contains(stock){
-                                   user.setWatchList(stock: stock)
+                            if User.shared.ownedStocks.contains(stock){
+                                   User.shared.setOwnedStock(stock: stock)
+                               } else if User.shared.watchList.contains(stock){
+                                   User.shared.setWatchList(stock: stock)
                                }
                            }
                             
@@ -130,6 +140,8 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Clear separators of empty rows
         tableview.tableFooterView = UIView()
         
+        // Set up User info
+        totalValueLbl.text = "\(User.shared.getTotalValues())"
         
     }
     
@@ -147,7 +159,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        if user.ownedStocks == [] || user.watchList == []{
+        if User.shared.ownedStocks == [] || User.shared.watchList == []{
             return 1
         }
         
@@ -166,14 +178,14 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let label = UILabel(frame: CGRect(x: 17, y: 0, width: self.view.frame.width, height: tableView.sectionHeaderHeight))
         label.textColor = .gray
         
-        if user.ownedStocks == []{
+        if User.shared.ownedStocks == []{
             // If no stocks purchased
             label.text = "WatchList"
-            if user.watchList == [] {
+            if User.shared.watchList == [] {
                 label.textAlignment = .center
                 label.text = "Search to add stocks"
             }
-        } else if user.watchList == [] && user.ownedStocks != []{
+        } else if User.shared.watchList == [] && User.shared.ownedStocks != []{
             label.text = "Stocks"
         } else {
             switch section {
@@ -195,18 +207,18 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if user.ownedStocks == [] {
+        if User.shared.ownedStocks == [] {
             // If no stocks purchased
-            return user.watchList.count
-        } else if user.watchList == [] {
-            return user.ownedStocks.count
+            return User.shared.watchList.count
+        } else if User.shared.watchList == [] {
+            return User.shared.ownedStocks.count
         }
         
         switch (section) {
             case 0:
-                return user.ownedStocks.count
+                return User.shared.ownedStocks.count
             case 1:
-                return user.watchList.count
+                return User.shared.watchList.count
             default:
                return 1
          }
@@ -218,23 +230,40 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "stockCell", for: indexPath) as! StockTableViewCell
         
-        if user.ownedStocks == [] {
+        if User.shared.ownedStocks == [] {
             // If no stocks purchased
-            let stock = user.watchList[indexPath.row]
+            let stock = User.shared.watchList[indexPath.row]
             cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
-        }else if user.watchList == []{
-            let stock = user.ownedStocks[indexPath.row]
+        }else if User.shared.watchList == []{
+            let stock = User.shared.ownedStocks[indexPath.row]
             cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
+            if let shares = User.shared.ownedStocksShares[stock] {
+                // Set up stock share lbl
+                if shares == 1 {
+                    cell.setUpNumOfShares(numOfShare: "\(String(describing: User.shared.ownedStocksShares[stock]!)) share")
+                } else {
+                    cell.setUpNumOfShares(numOfShare: "\(String(describing: User.shared.ownedStocksShares[stock]!)) shares")
+                }
+            }
         } else {
             switch (indexPath.section) {
             case 0:
-                let stock = user.ownedStocks[indexPath.row]
+                // Stocks
+                let stock = User.shared.ownedStocks[indexPath.row]
                 cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
-                
+                if let shares = User.shared.ownedStocksShares[stock] {
+                    // Set up stock share lbl
+                    if shares == 1 {
+                        cell.setUpNumOfShares(numOfShare: "\(String(describing: User.shared.ownedStocksShares[stock]!)) share")
+                    } else {
+                        cell.setUpNumOfShares(numOfShare: "\(String(describing: User.shared.ownedStocksShares[stock]!)) shares")
+                    }
+                }
                 break
                   
             case 1:
-                let stock = user.watchList[indexPath.row]
+                // watchList
+                let stock = User.shared.watchList[indexPath.row]
                 cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
                 
                 break
@@ -247,23 +276,23 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = storyboard?.instantiateViewController(withIdentifier: "IndividualStockViewController") as! IndividualStockViewController
-        if user.ownedStocks == [] {
+        if User.shared.ownedStocks == [] {
             // If no stocks purchased
-            let selectedStock = user.watchList[indexPath.row]
+            let selectedStock = User.shared.watchList[indexPath.row]
             vc.currentStock = selectedStock
             
-        }else if user.watchList == []{
-            let selectedStock = user.ownedStocks[indexPath.row]
+        }else if User.shared.watchList == []{
+            let selectedStock = User.shared.ownedStocks[indexPath.row]
             vc.currentStock = selectedStock
             
         } else {
             switch indexPath.section{
             case 0:
-                let selectedStock = user.ownedStocks[indexPath.row]
+                let selectedStock = User.shared.ownedStocks[indexPath.row]
                 vc.currentStock = selectedStock
                 break
             case 1:
-                let selectedStock = user.watchList[indexPath.row]
+                let selectedStock = User.shared.watchList[indexPath.row]
                 vc.currentStock = selectedStock
                 break
             default: break
