@@ -32,6 +32,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     let APIRequestLimit = 20
     
     @IBOutlet weak var profileView: UIView!
+    
     @IBAction func reloadStocks(_ sender: Any) {
         loadingStocks()
     }
@@ -143,6 +144,8 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Set up User info
         totalValueLbl.text = "\(User.shared.getTotalValues())"
         
+        
+        
     }
     
     @IBAction func switchChanges(_ sender: Any) {
@@ -172,7 +175,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let returnedView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: tableView.sectionHeaderHeight)) //set these values as necessary
-        returnedView.backgroundColor = .clear
+        returnedView.backgroundColor = .black
 
 
         let label = UILabel(frame: CGRect(x: 17, y: 0, width: self.view.frame.width, height: tableView.sectionHeaderHeight))
@@ -234,6 +237,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
             // If no stocks purchased
             let stock = User.shared.watchList[indexPath.row]
             cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
+            cell.setUpNumOfShares(numOfShare: "")
         }else if User.shared.watchList == []{
             let stock = User.shared.ownedStocks[indexPath.row]
             cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
@@ -265,6 +269,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 // watchList
                 let stock = User.shared.watchList[indexPath.row]
                 cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
+                cell.setUpNumOfShares(numOfShare: "")
                 
                 break
             default: break
