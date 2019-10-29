@@ -33,7 +33,7 @@ class IndividualStockViewController: UIViewController {
     
     @IBOutlet weak var sellStockBtn: UIButton!{
         didSet{
-            if !User.shared.isHeldStock(stock: currentStock) {
+            if !User.shared.isHeldStock(stock: currentStock){
                 sellStockBtn.isEnabled = false
                 sellStockBtn.backgroundColor = .gray
             }
@@ -106,6 +106,8 @@ class IndividualStockViewController: UIViewController {
         timeLbl.text = "00:00"
         timeLbl.textColor = .black
         
+    }
+    @IBAction func sellingStocks(_ sender: Any) {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

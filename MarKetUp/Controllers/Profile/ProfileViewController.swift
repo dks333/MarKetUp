@@ -23,12 +23,17 @@ protocol UserInfoUpdateResponder : class {
 class ProfileViewController: UIViewController, UserInfoUpdateResponder{
     
     
-    var user: User!
-    
     @IBOutlet weak var purchaseCollectionView: UICollectionView!
     @IBOutlet weak var bannerView: GADBannerView!
     
-    @IBOutlet weak var totalValueLbl: UILabel!
+    @IBOutlet weak var totalValueLbl: UILabel!{
+        didSet{
+            totalValueLbl.text = "$\(User.shared.getTotalValues())"
+        }
+    }
+    
+    @IBOutlet weak var valueTextView: UITextView!
+    @IBOutlet weak var cashTextView: UITextView!
     
     private var listOfPurchase = ["2.99", "0.99", "1.99", "9.99", "49.99"]
     private var purchaseItems = ["Remove ads", "5000", "20000", "300000", "3000000"]
@@ -36,6 +41,11 @@ class ProfileViewController: UIViewController, UserInfoUpdateResponder{
     override func viewDidLoad() {
         setupView()
         setUpIAPProducts()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupUI()
     }
     
     private func setUpIAPProducts(){
@@ -55,6 +65,13 @@ class ProfileViewController: UIViewController, UserInfoUpdateResponder{
         navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
         
+        setupUI()
+    }
+    
+    private func setupUI(){
+        // Set up UI
+        cashTextView.text = "Cash: $\(User.shared.cashes)"
+        valueTextView.text = "Stocks: $\(User.shared.values)"
         
     }
     

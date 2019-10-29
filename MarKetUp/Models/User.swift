@@ -16,7 +16,8 @@ class User {
     var ownedStocksShares: [Stock:Int]
     var watchList: [Stock]
     
-    static let shared = User(userId: "testID", cashes: 10000, values: 0, ownedStocks: [], watchList: [], ownedStocksShares: [:])
+    
+    static let shared = User(userId: "testID", cashes: 10000, values: 0, ownedStocks: [], watchList: [Stock(symbol:"AAPL")], ownedStocksShares: [:])
 
     init(userId: String, cashes: Float, values: Float, ownedStocks: [Stock], watchList: [Stock], ownedStocksShares: [Stock:Int]){
         self.userId = userId
@@ -59,16 +60,25 @@ class User {
         if !ownedStocks.contains(stock) {
             self.ownedStocks.append(stock)
             self.ownedStocksShares[stock] = 0
-            self.ownedStocksShares[stock]! += numOfShares
-        } else {
-            self.ownedStocksShares[stock]! += numOfShares
         }
+        self.ownedStocksShares[stock]! += numOfShares
+        let totalCost = stock.price * Float(numOfShares)
+        self.cashes -= totalCost
+        self.values += totalCost
         
     }
     
     // Selling number of shares from a specific stock
-    func sellShareFromStock(stock: Stock, numberOfShares: Int){
-        self.ownedStocksShares[stock]! -= numberOfShares
+    func sellShareFromStock(stock: Stock, numOfShares: Int){
+        self.ownedStocksShares[stock]! -= numOfShares
+        let totalValue = stock.price * Float(numOfShares)
+        self.cashes += totalValue
+        self.values -= totalValue
+        
+        if self.ownedStocksShares[stock] == 0, let index = self.ownedStocks.firstIndex(of: stock){
+            self.ownedStocks.remove(at: index)
+            self.ownedStocksShares.removeValue(forKey: stock)
+        }
     }
     
     func addStocks(stock: Stock, type: String, index: Int){
@@ -90,8 +100,6 @@ class User {
             }
         }
     }
-    
-    
     
     
     

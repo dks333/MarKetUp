@@ -339,6 +339,7 @@
                                             <color key="titleColor" red="0.1215686275" green="0.12941176469999999" blue="0.14117647059999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
+                                            <action selector="sellingStocks:" destination="cob-fv-CR0" eventType="touchUpInside" id="BLY-jD-a4F"/>
                                             <segue destination="fni-bA-7KZ" kind="presentation" identifier="SellingSegue" id="nqC-Oz-xuI"/>
                                         </connections>
                                     </button>
@@ -412,6 +413,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Ils-jr-Ad5"/>
                     </view>
+                    <navigationItem key="navigationItem" id="fNA-t5-tUZ"/>
                     <connections>
                         <outlet property="buyStockBtn" destination="dow-9X-q7P" id="IMt-8k-YhW"/>
                         <outlet property="cancelFollowingBtn" destination="Ja8-pT-adE" id="1pT-Aj-edi"/>
@@ -776,7 +778,7 @@
                         <color key="selectedImageTintColor" red="0.0" green="0.58509765619999998" blue="0.1844837178" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
-                                <color key="value" red="0.0" green="0.58509765619999998" blue="0.1844837178" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="value" red="0.0" green="0.80197265620000002" blue="0.25286530489999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="color" keyPath="unselectedItemTintColor">
                                 <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -810,14 +812,8 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Good Morning" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YDr-2x-tej">
-                                        <rect key="frame" x="20" y="20" width="115.5" height="21.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$10000" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8yb-5L-7Gt">
-                                        <rect key="frame" x="0.0" y="91" width="414" height="24"/>
+                                        <rect key="frame" x="0.0" y="39.5" width="414" height="24"/>
                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -837,13 +833,10 @@
                                     <constraint firstItem="gFN-iQ-fd4" firstAttribute="height" secondItem="F5J-2Q-HPR" secondAttribute="height" multiplier="0.3" id="BsB-s2-zrQ"/>
                                     <constraint firstItem="YM5-Kf-iVd" firstAttribute="centerX" secondItem="F5J-2Q-HPR" secondAttribute="centerX" multiplier="1.5" id="EmT-Pm-Xoz"/>
                                     <constraint firstItem="8yb-5L-7Gt" firstAttribute="leading" secondItem="F5J-2Q-HPR" secondAttribute="leading" id="M0P-wC-pf5"/>
-                                    <constraint firstItem="8yb-5L-7Gt" firstAttribute="centerY" secondItem="F5J-2Q-HPR" secondAttribute="centerY" id="Odc-mQ-lCr"/>
+                                    <constraint firstItem="8yb-5L-7Gt" firstAttribute="centerY" secondItem="F5J-2Q-HPR" secondAttribute="centerY" multiplier="0.5" id="Odc-mQ-lCr"/>
                                     <constraint firstItem="YM5-Kf-iVd" firstAttribute="width" secondItem="F5J-2Q-HPR" secondAttribute="width" multiplier="0.5" id="Qyb-Kd-9Sw"/>
                                     <constraint firstItem="YM5-Kf-iVd" firstAttribute="height" secondItem="F5J-2Q-HPR" secondAttribute="height" multiplier="0.3" id="UWU-08-nsW"/>
                                     <constraint firstItem="gFN-iQ-fd4" firstAttribute="width" secondItem="F5J-2Q-HPR" secondAttribute="width" multiplier="0.5" id="Wtk-gX-byx"/>
-                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="YDr-2x-tej" secondAttribute="trailing" constant="20" symbolic="YES" id="fQ7-4h-QdI"/>
-                                    <constraint firstItem="YDr-2x-tej" firstAttribute="top" secondItem="F5J-2Q-HPR" secondAttribute="top" constant="20" id="jab-3i-Ia4"/>
-                                    <constraint firstItem="YDr-2x-tej" firstAttribute="leading" secondItem="F5J-2Q-HPR" secondAttribute="leading" constant="20" id="lUY-NW-tkt"/>
                                     <constraint firstItem="gFN-iQ-fd4" firstAttribute="centerX" secondItem="F5J-2Q-HPR" secondAttribute="centerX" multiplier="0.5" id="nQC-uh-xCX"/>
                                     <constraint firstItem="YM5-Kf-iVd" firstAttribute="centerY" secondItem="F5J-2Q-HPR" secondAttribute="centerY" multiplier="1.75" id="qax-5N-qRP"/>
                                 </constraints>
@@ -976,8 +969,10 @@
                     </navigationItem>
                     <connections>
                         <outlet property="bannerView" destination="83L-tN-haf" id="UZj-R8-hW6"/>
+                        <outlet property="cashTextView" destination="YM5-Kf-iVd" id="v3F-NR-YHa"/>
                         <outlet property="purchaseCollectionView" destination="qFH-26-FvK" id="PLZ-b7-EGO"/>
                         <outlet property="totalValueLbl" destination="8yb-5L-7Gt" id="BlP-lp-bID"/>
+                        <outlet property="valueTextView" destination="gFN-iQ-fd4" id="8ei-kW-oZN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yA8-xU-7cU" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1036,7 +1031,7 @@
         <scene sceneID="FCK-HF-6Ud">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="s5Z-dj-72Y" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Stocks" image="first" id="WHY-Id-Z2i"/>
+                    <tabBarItem key="tabBarItem" title="Stocks" image="arrow.up.right.square" catalog="system" id="WHY-Id-Z2i"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="uvi-Nl-NWG">
                         <autoresizingMask key="autoresizingMask"/>
@@ -1054,7 +1049,7 @@
         <scene sceneID="6kq-cI-Xqr">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7QK-Ms-Jjs" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" image="second" id="aSk-ry-mnB"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="person.crop.circle" catalog="system" id="aSk-ry-mnB"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="OYS-P6-QWg">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -1075,10 +1070,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="first" width="30" height="30"/>
-        <image name="second" width="30" height="30"/>
+        <image name="arrow.up.right.square" catalog="system" width="64" height="56"/>
+        <image name="person.crop.circle" catalog="system" width="64" height="62"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="E3S-eA-X91"/>
+        <segue reference="nqC-Oz-xuI"/>
     </inferredMetricsTieBreakers>
 </document>

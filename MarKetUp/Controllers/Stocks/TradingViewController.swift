@@ -30,6 +30,12 @@ class TradingViewController: UIViewController {
         
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
+    
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -65,14 +71,40 @@ class TradingViewController: UIViewController {
     
     
     @IBAction func tradingAction(_ sender: Any) {
+        if #available(iOS 13.0, *) {
+            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
+        } else {
+            // Fallback on earlier versions
+        }
+        
+
+        let inputNumOfShares = Int(inputTrackerStr)!
         if !selling {
             // sell
-            
+            if User.shared.ownedStocksShares[currentStock]! >=  inputNumOfShares{
+                // Check if user has this number of current stock
+                User.shared.sellShareFromStock(stock: currentStock, numOfShares: inputNumOfShares)
+                dismiss(animated: true)
+            } else {
+                let SellingLimitAlert = UIAlertController(title: "Insufficient Shares", message: nil, preferredStyle: .alert)
+                SellingLimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
+                SellingLimitAlert.message = "The max number of \(currentStock.symbol) stock you are able to sell is \(User.shared.ownedStocksShares[currentStock]!)"
+                self.present(SellingLimitAlert, animated: true, completion: nil)
+            }
         } else {
             // buy
-            User.shared.addShareToStock(stock: currentStock, numOfShares: Int(inputTrackerStr)!)
+            let totalCost = Float(inputTrackerStr)! * currentStock.price
+            if User.shared.cashes >= totalCost{
+                // Check if user has such cashes
+               User.shared.addShareToStock(stock: currentStock, numOfShares: inputNumOfShares)
+                dismiss(animated: true)
+            } else {
+               let BuyingLimitAlert = UIAlertController(title: "Insufficient Cashes", message: nil, preferredStyle: .alert)
+                BuyingLimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
+                BuyingLimitAlert.message = "Your available cashes are $\(User.shared.cashes)"
+               self.present(BuyingLimitAlert, animated: true, completion: nil)
+            }
         }
-        dismiss(animated: true)
     }
     
     @IBAction func performNumTracking(_ button: UIButton) {

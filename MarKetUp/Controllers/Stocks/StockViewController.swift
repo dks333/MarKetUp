@@ -51,6 +51,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     // Helper method for viewWillAppear
     private func updateDataBeforeViewLoad(){
         totalValueLbl.text = "\(User.shared.getTotalValues())"
+        
         tableview.reloadData()
         self.view.layoutIfNeeded()
     }
