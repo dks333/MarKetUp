@@ -134,12 +134,34 @@ class TradingViewController: UIViewController {
                 if User.shared.cashes >= totalCost{
                     // Check if user has such cashes
                    User.shared.addShareToStock(stock: currentStock, numOfShares: inputNumOfShares)
+
                     
-                    let stockWithSymbolOnly = StoredStock(context: PersistenceServce.context)
-                    stockWithSymbolOnly.symbol = currentStock.symbol
-                    stockWithSymbolOnly.buyingPrice = currentStock.price
-                    stockWithSymbolOnly.shares = Int32(inputNumOfShares)
-                    PersistenceServce.saveContext()
+                    let managedContext = PersistenceServce.context
+                    let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "StoredStock")
+                     fetchRequest.predicate = NSPredicate(format: "symbol == %@" ,currentStock.symbol)
+
+                    do {
+                         let results = try managedContext.fetch(fetchRequest)
+                         if results.count != 0{
+                             let shares = User.shared.ownedStocksShares[currentStock]
+                             let stock = results[0]
+                             stock.setValue(Int32(shares!), forKey: "shares")
+                             
+                         } else {
+                             let stockWithSymbolOnly = StoredStock(context: PersistenceServce.context)
+                             stockWithSymbolOnly.symbol = currentStock.symbol
+                             stockWithSymbolOnly.buyingPrice = currentStock.price
+                             stockWithSymbolOnly.shares = Int32(inputNumOfShares)
+                         }
+                         PersistenceServce.saveContext()
+                     
+                        
+                        
+                    }catch let error as NSError {
+                        print("Could not fetch. \(error), \(error.userInfo)")
+                        
+                    }
+                    
                     
                     dismiss(animated: true)
                 

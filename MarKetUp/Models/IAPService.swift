@@ -10,8 +10,7 @@ import Foundation
 import StoreKit
 
 class IAPService: NSObject {
-    
-    weak var responder : UserInfoUpdateResponder?
+
     
     private override init() {
         
@@ -122,7 +121,7 @@ extension IAPService: SKPaymentTransactionObserver{
         } else if productId == IAPProducts.RemoveAds.rawValue {
             
         }
-        responder?.updateValues()
+
     }
     
 }

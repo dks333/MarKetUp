@@ -15,26 +15,17 @@ import UIKit
 import StoreKit
 import GoogleMobileAds
 
-protocol UserInfoUpdateResponder : class {
-    func updateValues()
-}
 
 
-class ProfileViewController: UIViewController, UserInfoUpdateResponder{
+class ProfileViewController: UIViewController{
     
     
     @IBOutlet weak var purchaseCollectionView: UICollectionView!
     @IBOutlet weak var bannerView: GADBannerView!
     
-    @IBOutlet weak var totalValueLbl: UILabel!{
-        didSet{
-            totalValueLbl.text = "$\(User.shared.getTotalValues())"
-        }
-    }
+    @IBOutlet weak var selectionTableView: UITableView!
     
-    @IBOutlet weak var valueTextView: UITextView!
-    @IBOutlet weak var cashTextView: UITextView!
-    
+
     private var listOfPurchase = ["2.99", "0.99", "1.99", "9.99", "49.99"]
     private var purchaseItems = ["Remove ads", "5000", "20000", "300000", "3000000"]
     
@@ -45,7 +36,7 @@ class ProfileViewController: UIViewController, UserInfoUpdateResponder{
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupUI()
+
     }
     
     private func setUpIAPProducts(){
@@ -65,27 +56,52 @@ class ProfileViewController: UIViewController, UserInfoUpdateResponder{
         navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
         
-        setupUI()
-    }
-    
-    private func setupUI(){
-        // Set up UI
-        cashTextView.text = "Cash: $\(User.shared.cashes)"
-        valueTextView.text = "Stocks: $\(User.shared.values)"
         
     }
     
+
     @IBAction func restorePurchaseOfRemoveAds(_ sender: Any) {
         IAPService.shared.restorePurchases()
     }
     
-    // protocol
-    func updateValues() {
-        self.totalValueLbl.text = "\(User.shared.getTotalValues())"
-        self.totalValueLbl.setNeedsDisplay()
-    }
 }
 
+
+extension ProfileViewController: UITableViewDelegate, UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch indexPath.row {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "accountCell") as! ProfileSelectionOneTableViewCell
+
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "stockHistoryCell") as! ProfileSelectionTwoTableViewCell
+
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "settingCell") as! ProfileSelectionThreeTableViewCell
+            
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "accountCell")!
+            return cell
+        }
+        
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return selectionTableView.frame.height/3
+    }
+    
+    
+}
+
+
+// IAP Product Collection
 extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return listOfPurchase.count
@@ -123,14 +139,13 @@ extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataS
         default:
             print("More incoming")
         }
-        
-        
+    
     }
     
     
 }
 
-
+// Google Banner View
 extension ProfileViewController: GADBannerViewDelegate{
 
     // Tells the delegate an ad request loaded an ad.
