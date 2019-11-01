@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 import SwiftChart
+import CoreData
 
 class IndividualStockViewController: UIViewController {
     
@@ -128,12 +129,37 @@ class IndividualStockViewController: UIViewController {
     
     @IBAction func cancelFollowing(_ sender: Any) {
         if !User.shared.watchList.contains(currentStock) && User.shared.isHeldStock(stock: currentStock){
+            // Storing
             cancelFollowingBtn.tintColor = .darkGray
             User.shared.addStocks(stock: currentStock, type: "watchList", index: index)
+            
+            // Add to database
+            if !currentStock.checkIfItemExist(symbol: currentStock.symbol){
+               let stockWithSymbolOnly = WatchList(context: PersistenceServce.context)
+               stockWithSymbolOnly.symbol = currentStock.symbol
+               PersistenceServce.saveContext()
+            }
+            
         } else {
+            // Deleting
             index = User.shared.watchList.firstIndex(of: self.currentStock)!
             User.shared.cancelFollowingStock(stock: currentStock)
             cancelFollowingBtn.tintColor = .custumGreen
+            
+            // Delete from Core Data
+            let managedContext = PersistenceServce.context
+            let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "WatchList")
+            fetchRequest.predicate = NSPredicate(format: "symbol == %@" ,currentStock.symbol)
+            do {
+                let objects = try managedContext.fetch(fetchRequest)
+                for object in objects {
+                    managedContext.delete(object)
+                }
+                try managedContext.save()
+            } catch _ {
+                // error handling
+                print("Cannot Delete \(currentStock.symbol)")
+            }
         }
         
         

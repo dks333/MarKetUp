@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class TradingViewController: UIViewController {
 
@@ -17,6 +18,7 @@ class TradingViewController: UIViewController {
     @IBOutlet weak var priceLbl: UILabel!
     @IBOutlet weak var totalCostValueLbl: UILabel!
     @IBOutlet var stackViews: UIStackView!
+    @IBOutlet weak var backspaceBtn: UIButton!
     
     private var inputTrackerStr = ""
     private var hasClickedAnOperand = false
@@ -65,44 +67,89 @@ class TradingViewController: UIViewController {
         // Market Price set up
         priceLbl.text = "$\(currentStock.price)"
         
-        // UI for stackView
+        // UI
         stackViews.addBottomBorder(with: .black, andWidth: 1.3)
+        //backspaceBtn.imageEdgeInsets = UIEdgeInsets(top: 10, left: 5, bottom: 5, right: 5)
     }
     
     
     @IBAction func tradingAction(_ sender: Any) {
-        if #available(iOS 13.0, *) {
-            UIImpactFeedbackGenerator(style: .rigid).impactOccurred()
-        } else {
-            // Fallback on earlier versions
-        }
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         
 
         let inputNumOfShares = Int(inputTrackerStr)!
-        if !selling {
-            // sell
-            if User.shared.ownedStocksShares[currentStock]! >=  inputNumOfShares{
-                // Check if user has this number of current stock
-                User.shared.sellShareFromStock(stock: currentStock, numOfShares: inputNumOfShares)
-                dismiss(animated: true)
-            } else {
-                let SellingLimitAlert = UIAlertController(title: "Insufficient Shares", message: nil, preferredStyle: .alert)
-                SellingLimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
-                SellingLimitAlert.message = "The max number of \(currentStock.symbol) stock you are able to sell is \(User.shared.ownedStocksShares[currentStock]!)"
-                self.present(SellingLimitAlert, animated: true, completion: nil)
-            }
+        
+        if inputNumOfShares == 0 {
+            let ZeroLimitAlert = UIAlertController(title: "Zero Share", message: nil, preferredStyle: .alert)
+                ZeroLimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
+                ZeroLimitAlert.message = "Number of Shares cannot be 0"
+                self.present(ZeroLimitAlert, animated: true, completion: nil)
         } else {
-            // buy
-            let totalCost = Float(inputTrackerStr)! * currentStock.price
-            if User.shared.cashes >= totalCost{
-                // Check if user has such cashes
-               User.shared.addShareToStock(stock: currentStock, numOfShares: inputNumOfShares)
-                dismiss(animated: true)
+        
+            if !selling {
+                // sell
+                if User.shared.ownedStocksShares[currentStock]! >=  inputNumOfShares{
+                    // Check if user has this number of current stock
+                    User.shared.sellShareFromStock(stock: currentStock, numOfShares: inputNumOfShares)
+                    
+                    // Delete shares in DB
+                    
+                    let managedContext = PersistenceServce.context
+                    let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "StoredStock")
+                    fetchRequest.predicate = NSPredicate(format: "symbol == %@" ,currentStock.symbol)
+
+                   do {
+                        let results = try managedContext.fetch(fetchRequest)
+                        if User.shared.ownedStocks.contains(currentStock) {
+                            let shares = User.shared.ownedStocksShares[currentStock]
+                            if results.count != 0 {
+                                let stock = results[0]
+                                stock.setValue(shares, forKey: "shares")
+                            }
+                        } else {
+                            for object in results {
+                                managedContext.delete(object)
+                            }
+                        }
+                        PersistenceServce.saveContext()
+                    
+                       
+                       
+                   }catch let error as NSError {
+                       print("Could not fetch. \(error), \(error.userInfo)")
+                       
+                   }
+                    
+                    dismiss(animated: true)
+                    
+                } else {
+                    let SellingLimitAlert = UIAlertController(title: "Insufficient Shares", message: nil, preferredStyle: .alert)
+                    SellingLimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
+                    SellingLimitAlert.message = "The max number of \(currentStock.symbol) stock you are able to sell is \(User.shared.ownedStocksShares[currentStock]!)"
+                    self.present(SellingLimitAlert, animated: true, completion: nil)
+                }
             } else {
-               let BuyingLimitAlert = UIAlertController(title: "Insufficient Cashes", message: nil, preferredStyle: .alert)
-                BuyingLimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
-                BuyingLimitAlert.message = "Your available cashes are $\(User.shared.cashes)"
-               self.present(BuyingLimitAlert, animated: true, completion: nil)
+                // buy
+                let totalCost = Float(inputTrackerStr)! * currentStock.price
+                if User.shared.cashes >= totalCost{
+                    // Check if user has such cashes
+                   User.shared.addShareToStock(stock: currentStock, numOfShares: inputNumOfShares)
+                    
+                    let stockWithSymbolOnly = StoredStock(context: PersistenceServce.context)
+                    stockWithSymbolOnly.symbol = currentStock.symbol
+                    stockWithSymbolOnly.buyingPrice = currentStock.price
+                    stockWithSymbolOnly.shares = Int32(inputNumOfShares)
+                    PersistenceServce.saveContext()
+                    
+                    dismiss(animated: true)
+                
+                    
+                } else {
+                   let BuyingLimitAlert = UIAlertController(title: "Insufficient Cashes", message: nil, preferredStyle: .alert)
+                    BuyingLimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
+                    BuyingLimitAlert.message = "Your available cashes are $\(User.shared.cashes)"
+                   self.present(BuyingLimitAlert, animated: true, completion: nil)
+                }
             }
         }
     }

@@ -8,10 +8,10 @@
 
 import UIKit
 import Foundation
+import CoreData
 
 let WorldTradingDataAPIKey = "fhGOT6U6HafLz2aazzTXti58aetYaJNZAr6cZzkibkcMut0p2MMgbgMLEDNv"
 
-//var user = User(userId: "testID", cashes: 10000, values: 0, ownedStocks: [Stock(symbol: "AAPL")], watchList: [Stock(symbol: "TSLA")], ownedStocksShares: [Stock(symbol: "AAPL"):3])
 
 class StockViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -20,14 +20,18 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet weak var totalValueLbl: UILabel!
     
-    var symbols : [String] {
-        get {
-            let s1 = User.shared.watchList.map({$0.symbol})
-            let s2 = User.shared.ownedStocks.map({$0.symbol})
-            return s1+s2
-        }
+    
+    func getSymbols() -> [String]{
+        let s1 = User.shared.watchList.map({$0.symbol})
+        let s2 = User.shared.ownedStocks.map({$0.symbol})
+        // Getting Unique symbols
+        let uniqueSymbols = Array(Set(s1 + s2))
+        return uniqueSymbols
     }
+    
     var stocks = [Stock]()
+    var watchList = [WatchList]()
+    var storedStock = [StoredStock]()
     
     let APIRequestLimit = 20
     
@@ -40,7 +44,69 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        loadingStocks()
+        // DElete
+//        let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "StoredStock")
+//        let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
+//        do
+//        {
+//            try PersistenceServce.context.execute(deleteRequest)
+//            try PersistenceServce.context.save()
+//        }
+//        catch
+//        {
+//            print ("There was an error")
+//        }
+        
+        fetchWatchList()
+        fetchStockList()
+        
+        if getSymbols().count != 0{
+            loadingStocks()
+        }
+        
+    }
+    
+    // Fetching WatchList from Core Data
+    private func fetchWatchList(){
+        let fetchRequest: NSFetchRequest<WatchList> = WatchList.fetchRequest()
+        
+        do {
+            let watchList = try PersistenceServce.context.fetch(fetchRequest)
+            self.watchList = watchList
+        } catch {}
+        
+        
+        for stock in watchList {
+            User.shared.watchList.append(Stock(symbol: stock.symbol))
+            print("------------------")
+            print("\(watchList)")
+        }
+    }
+    
+    // Fetching Stock List from Core Data
+    private func fetchStockList(){
+        let fetchRequest: NSFetchRequest<StoredStock> = StoredStock.fetchRequest()
+        
+        do {
+            let storedStock = try PersistenceServce.context.fetch(fetchRequest)
+            self.storedStock = storedStock
+        } catch {}
+        
+        
+        for stock in storedStock {
+            let addedStock = Stock(symbol: stock.symbol)
+            User.shared.ownedStocks.append(addedStock)
+            User.shared.ownedStocksShares[addedStock] = Int(stock.shares)
+            print("------------------")
+            print("\(storedStock)")
+        }
+    }
+    
+    func getStoredStocks(stock: Stock){
+        let stockWithSymbolOnly = WatchList(context: PersistenceServce.context)
+        stockWithSymbolOnly.symbol = stock.symbol
+        PersistenceServce.saveContext()
+        self.watchList.append(stockWithSymbolOnly)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,9 +117,8 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     // Helper method for viewWillAppear
     private func updateDataBeforeViewLoad(){
         totalValueLbl.text = "\(User.shared.getTotalValues())"
-        
         tableview.reloadData()
-        self.view.layoutIfNeeded()
+        
     }
     
     
@@ -70,9 +135,12 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     //fetch data from API
     func fetchStockData() {
-        
-        let cycle = Int((Float(symbols.count)/Float(APIRequestLimit)).rounded(.up))
-        var tempSymbols = symbols
+        let Symbols = getSymbols()
+        print(Symbols)
+        let cycle = Int((Float(Symbols.count)/Float(APIRequestLimit)).rounded(.up))
+        var tempSymbols = Symbols
+        print("-----tempsyombols---------")
+        print(tempSymbols)
         for _ in 0..<cycle {
             let allSymbllStr = tempSymbols.prefix(self.APIRequestLimit).joined(separator: ",")
             tempSymbols = Array(tempSymbols.dropFirst(self.APIRequestLimit))
@@ -93,11 +161,15 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                            self.stocks += dataArray.compactMap{Stock($0)}
                            
                            for stock in self.stocks {
-                            if User.shared.ownedStocks.contains(stock){
+                               
+                               //self.getStoredStocks(stock: stock)
+                               if User.shared.ownedStocks.contains(stock){
                                    User.shared.setOwnedStock(stock: stock)
-                               } else if User.shared.watchList.contains(stock){
+                               }
+                               if User.shared.watchList.contains(stock){
                                    User.shared.setWatchList(stock: stock)
                                }
+                               
                            }
                             
                             DispatchQueue.main.async {
@@ -134,7 +206,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     private func setupView(){
         //TODO: to get user's stock list
-        for symbol in symbols {
+        for symbol in getSymbols() {
             //default values for each stock if App is not fetching the data
             stocks.append(Stock(symbol: symbol, price: 0.00, change_pct: "0.0%", name: symbol, day_change: "+0.0", volumn: 0))
         }
@@ -150,7 +222,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @IBAction func switchChanges(_ sender: Any) {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+
         if switchBtnPressed {
             switchBtnPressed = false
         } else {

@@ -44,7 +44,7 @@
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+0.0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UDT-Fb-xmb">
                                                             <rect key="frame" x="86" y="0.0" width="35" height="20.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <color key="textColor" red="0.0" green="0.80197265620000002" blue="0.25286530489999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                            <color key="textColor" red="0.36528759420000001" green="0.96235281230000003" blue="0.45681262519999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yesterday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W98-iB-Lj2">
@@ -61,7 +61,7 @@
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dca-Tr-dwo">
                                                             <rect key="frame" x="84.5" y="0.0" width="38" height="20.5"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <color key="textColor" red="0.0" green="0.80197265620000002" blue="0.25286530489999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                            <color key="textColor" red="0.36528759420000001" green="0.96235281230000003" blue="0.45681262519999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yesterday" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Yf-eX-cRw">
@@ -597,10 +597,11 @@
                                                     <action selector="performNumTracking:" destination="fni-bA-7KZ" eventType="touchUpInside" id="9tH-eg-9i5"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mth-RM-QV1">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mth-RM-QV1">
                                                 <rect key="frame" x="276" y="0.0" width="138" height="70.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
-                                                <state key="normal" title="X">
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <color key="tintColor" red="0.0" green="0.80197265620000002" blue="0.25286530489999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <state key="normal" image="delete.left.fill" catalog="system">
                                                     <color key="titleColor" red="0.36528759420000001" green="0.96235281230000003" blue="0.45681262519999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 </state>
                                                 <connections>
@@ -754,6 +755,7 @@
                     </view>
                     <connections>
                         <outlet property="availableValuesLbl" destination="CVe-U5-bcT" id="Ysg-r9-i64"/>
+                        <outlet property="backspaceBtn" destination="mth-RM-QV1" id="Vse-nl-cpX"/>
                         <outlet property="priceLbl" destination="RRp-1g-YHy" id="dvm-fU-wua"/>
                         <outlet property="resultLbl" destination="05z-un-PdW" id="5IG-44-d6B"/>
                         <outlet property="stackViews" destination="qWX-ws-VPA" id="oTZ-3o-Gc0"/>
@@ -1071,6 +1073,7 @@
     </scenes>
     <resources>
         <image name="arrow.up.right.square" catalog="system" width="64" height="56"/>
+        <image name="delete.left.fill" catalog="system" width="64" height="52"/>
         <image name="person.crop.circle" catalog="system" width="64" height="62"/>
     </resources>
     <inferredMetricsTieBreakers>

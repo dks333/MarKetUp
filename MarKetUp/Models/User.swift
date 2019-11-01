@@ -17,7 +17,7 @@ class User {
     var watchList: [Stock]
     
     
-    static let shared = User(userId: "testID", cashes: 10000, values: 0, ownedStocks: [], watchList: [Stock(symbol:"AAPL")], ownedStocksShares: [:])
+    static let shared = User(userId: "testID", cashes: 10000, values: 0, ownedStocks: [], watchList: [], ownedStocksShares: [:])
 
     init(userId: String, cashes: Float, values: Float, ownedStocks: [Stock], watchList: [Stock], ownedStocksShares: [Stock:Int]){
         self.userId = userId
@@ -27,6 +27,8 @@ class User {
         self.watchList = watchList
         self.ownedStocksShares = ownedStocksShares
     }
+
+    
     
     //Getting the toatal values that the user has in his/her account
     func getTotalValues() -> Float {
@@ -53,6 +55,7 @@ class User {
                 watchList[i] = stock
             }
         }
+
     }
     
     // Adding shares to a specific stock
@@ -98,6 +101,9 @@ class User {
             if let index = self.watchList.firstIndex(of: stock) {
                 watchList.remove(at: index)
             }
+        } else {
+            // Error Catching
+            print("There is no such stock stored in WatchList")
         }
     }
     

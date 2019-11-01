@@ -10,6 +10,9 @@
 		1803E3FC23622374007AAF06 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1803E3FB23622374007AAF06 /* StoreKit.framework */; };
 		1803E3FE2362264A007AAF06 /* IAPProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803E3FD2362264A007AAF06 /* IAPProducts.swift */; };
 		1803E400236226B7007AAF06 /* IAPService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803E3FF236226B7007AAF06 /* IAPService.swift */; };
+		1803E425236AB2AC007AAF06 /* StoredStocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803E424236AB2AC007AAF06 /* StoredStocks.swift */; };
+		1803E427236AB4B6007AAF06 /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803E426236AB4B6007AAF06 /* PersistenceService.swift */; };
+		1803E429236B630C007AAF06 /* WatchList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803E428236B630C007AAF06 /* WatchList.swift */; };
 		1803F63A2358E91700176D1F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1803F6392358E91700176D1F /* Default-568h@2x.png */; };
 		1803F63C2358F96B00176D1F /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803F63B2358F96B00176D1F /* SettingViewController.swift */; };
 		1803F63E2358F97E00176D1F /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803F63D2358F97E00176D1F /* HistoryViewController.swift */; };
@@ -62,6 +65,9 @@
 		1803E3FB23622374007AAF06 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		1803E3FD2362264A007AAF06 /* IAPProducts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPProducts.swift; sourceTree = "<group>"; };
 		1803E3FF236226B7007AAF06 /* IAPService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPService.swift; sourceTree = "<group>"; };
+		1803E424236AB2AC007AAF06 /* StoredStocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredStocks.swift; sourceTree = "<group>"; };
+		1803E426236AB4B6007AAF06 /* PersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceService.swift; sourceTree = "<group>"; };
+		1803E428236B630C007AAF06 /* WatchList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WatchList.swift; path = "MarKetUp/Supporting Files/WatchList.swift"; sourceTree = SOURCE_ROOT; };
 		1803F6392358E91700176D1F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		1803F63B2358F96B00176D1F /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		1803F63D2358F97E00176D1F /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
@@ -160,6 +166,8 @@
 				18A0F398233048BC00BCBE50 /* User.swift */,
 				1803E3FF236226B7007AAF06 /* IAPService.swift */,
 				1803E3FD2362264A007AAF06 /* IAPProducts.swift */,
+				1803E424236AB2AC007AAF06 /* StoredStocks.swift */,
+				1803E428236B630C007AAF06 /* WatchList.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -236,6 +244,7 @@
 				1803F6392358E91700176D1F /* Default-568h@2x.png */,
 				182EDA13231D9B28003D1B2A /* LaunchScreen.storyboard */,
 				18A0F39C233095DB00BCBE50 /* UIKitExtensions.swift */,
+				1803E426236AB4B6007AAF06 /* PersistenceService.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -500,10 +509,12 @@
 				18A0F397233048A500BCBE50 /* ProfileViewController.swift in Sources */,
 				182EDA09231D9B25003D1B2A /* AppDelegate.swift in Sources */,
 				18A0F39D233095DB00BCBE50 /* UIKitExtensions.swift in Sources */,
+				1803E429236B630C007AAF06 /* WatchList.swift in Sources */,
 				1803F6422358FED400176D1F /* SubProfileViewController.swift in Sources */,
 				1803E3FE2362264A007AAF06 /* IAPProducts.swift in Sources */,
 				1803E400236226B7007AAF06 /* IAPService.swift in Sources */,
 				1803F63C2358F96B00176D1F /* SettingViewController.swift in Sources */,
+				1803E427236AB4B6007AAF06 /* PersistenceService.swift in Sources */,
 				1803F6442359092900176D1F /* TradingViewController.swift in Sources */,
 				18A0F39B233065B100BCBE50 /* IndividualStockViewController.swift in Sources */,
 				1803F63E2358F97E00176D1F /* HistoryViewController.swift in Sources */,
@@ -514,6 +525,7 @@
 				18A13F03231F8E7200710999 /* StockTableViewCell.swift in Sources */,
 				18A0F371232DA29A00BCBE50 /* Model.xcdatamodeld in Sources */,
 				18A13F01231F8DFB00710999 /* Stocks.swift in Sources */,
+				1803E425236AB2AC007AAF06 /* StoredStocks.swift in Sources */,
 				182EDA0B231D9B25003D1B2A /* StockViewController.swift in Sources */,
 				18A0F399233048BC00BCBE50 /* User.swift in Sources */,
 			);
