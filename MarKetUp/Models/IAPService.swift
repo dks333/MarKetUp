@@ -121,6 +121,7 @@ extension IAPService: SKPaymentTransactionObserver{
         } else if productId == IAPProducts.RemoveAds.rawValue {
             
         }
+        UserDefaults.standard.setValue(User.shared.cashes, forKey: "cash")
 
     }
     

@@ -21,6 +21,7 @@ class ProfileSelectionThreeTableViewCell: UITableViewCell {
     private func setUpView(){
         backgroundContentView.layer.cornerRadius = 8
         self.selectedBackgroundView = UIView()
+         backgroundContentView.addDropShadow(scale: true, cornerRadius: 8)
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

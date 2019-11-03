@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14903" systemVersion="18E2035" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="StockHistory" representedClassName=".StockHistory" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="String"/>
+        <attribute name="price" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="shares" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="symbol" optional="YES" attributeType="String"/>
+        <attribute name="time" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+    </entity>
     <entity name="StoredStock" representedClassName=".StoredStock" syncable="YES">
         <attribute name="buyingPrice" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="shares" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -10,6 +18,7 @@
     </entity>
     <elements>
         <element name="StoredStock" positionX="-36" positionY="9" width="128" height="88"/>
-        <element name="WatchList" positionX="0" positionY="72" width="128" height="58"/>
+        <element name="WatchList" positionX="-4.2265625" positionY="115.2109375" width="128" height="58"/>
+        <element name="StockHistory" positionX="-18" positionY="72" width="128" height="133"/>
     </elements>
 </model>

@@ -39,13 +39,20 @@ class StockTableViewCell: UITableViewCell {
         self.percentage = percentage
         self.dayChange = (dayChange!.first == "-") ? "\(dayChange!)" : "+\(dayChange!)"
         
-        
-        if percentage?.first == "-" {
-            priceLbl.textColor = .customRed
-            switchBtn.backgroundColor = .customRed
+        if price != 0.0 {
+            self.isUserInteractionEnabled = true
+            if percentage?.first == "-" {
+                priceLbl.textColor = .customRed
+                switchBtn.backgroundColor = .customRed
+            } else {
+                priceLbl.textColor = .custumGreen
+                switchBtn.backgroundColor = .custumGreen
+            }
         } else {
-            priceLbl.textColor = .custumGreen
-            switchBtn.backgroundColor = .custumGreen
+            // If the Network is not working, block the user interaction
+            priceLbl.textColor = .darkGray
+            switchBtn.backgroundColor = .darkGray
+            self.isUserInteractionEnabled = false
         }
     }
     
@@ -57,7 +64,6 @@ class StockTableViewCell: UITableViewCell {
     private func setupView(){
         self.selectionStyle = .none
         self.switchBtn.layer.cornerRadius = 5
-        
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

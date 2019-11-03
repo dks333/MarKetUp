@@ -97,8 +97,8 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
         
         // TODO: Optimize the searching function
         // Filter by symbol, name, ascending, inclusive
-        if filteredStocks.count < 15 {
-            filteredStocks = stocks.filter({$0.symbol.starts(with: input.uppercased()) || $0.name.lowercased().contains(input.lowercased())})
+        if filteredStocks.count < 10 && !filteredStocks.isEmpty{
+            filteredStocks = stocks.filter({$0.symbol.contains(input.uppercased()) || $0.name.lowercased().contains(input.lowercased())})
         } else {
             // Priority Search
             filteredStocks = stocks.filter({$0.symbol.starts(with: input.uppercased())})
@@ -142,6 +142,7 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
         let selectedStock = filteredStocks[button.tag]
 
         if button.tintColor != .black && !User.shared.watchList.contains(selectedStock){
+            // following
             button.tintColor = .black
             if !User.shared.watchList.contains(selectedStock) {
                 User.shared.watchList.append(selectedStock)

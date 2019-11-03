@@ -70,7 +70,7 @@ extension UIView{
     func addDropShadow(scale: Bool = true, cornerRadius: CGFloat ) {
         layer.cornerRadius = cornerRadius
         layer.masksToBounds = false
-        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowColor = UIColor.white.cgColor
         layer.shadowOpacity = 0.5
         layer.shadowOffset = .zero
         layer.shadowRadius = 1.5
@@ -113,7 +113,7 @@ extension UIView{
 }
 
 extension UIColor{
-    static let custumGreen = UIColor(red: 0.15, green: 0.6, blue: 0.2, alpha: 1)
+    static let custumGreen = UIColor(red: 0.25, green: 0.75, blue: 0.3, alpha: 1)
     static let customRed = UIColor(red: 1, green: 0.03, blue: 0, alpha: 1)
     static let GrayBlack = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1)
     static let lightGreen = UIColor(red: 0.365, green: 0.961, blue: 0.455, alpha: 1)

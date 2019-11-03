@@ -36,6 +36,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     let APIRequestLimit = 20
     
     @IBOutlet weak var profileView: UIView!
+     var refreshControl = UIRefreshControl()
     
     @IBAction func reloadStocks(_ sender: Any) {
         loadingStocks()
@@ -44,6 +45,13 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        
+        let firstRun = UserDefaults.standard.bool(forKey: "firstRun") as Bool
+        if !firstRun {
+            User.shared.setCash()
+            UserDefaults.standard.set(true, forKey: "firstRun")
+        }
+        
         // DElete
 //        let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "StoredStock")
 //        let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
@@ -64,6 +72,23 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
             loadingStocks()
         }
         
+        pullToRefresh()
+        
+    }
+    
+    private var timer = Timer(timeInterval: 60.0, repeats: false) { _ in print("Done!") }
+    
+    fileprivate func pullToRefresh(){
+        refreshControl.tintColor = .lightGray
+        refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
+        tableview.addSubview(refreshControl) // not required when using UITableViewController
+
+    }
+    
+    @objc private func refresh(sender:AnyObject) {
+       // Code to refresh table view
+
+        loadingStocks()
     }
     
     // Fetching WatchList from Core Data
@@ -78,9 +103,9 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         for stock in watchList {
             User.shared.watchList.append(Stock(symbol: stock.symbol))
-            print("------------------")
-            print("\(watchList)")
         }
+        print("------------------")
+        print("\(watchList)")
     }
     
     // Fetching Stock List from Core Data
@@ -92,14 +117,25 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.storedStock = storedStock
         } catch {}
         
-        
+        var totalValues : Float = 0.0
+
         for stock in storedStock {
             let addedStock = Stock(symbol: stock.symbol)
             User.shared.ownedStocks.append(addedStock)
             User.shared.ownedStocksShares[addedStock] = Int(stock.shares)
+            totalValues += Float(User.shared.ownedStocksShares[addedStock]!) * stock.buyingPrice
+            
             print("------------------")
             print("\(storedStock)")
         }
+        
+        // Set up User info
+        User.shared.values = totalValues
+        User.shared.cashes = UserDefaults.standard.value(forKey: "cash") as! Float
+        print(User.shared.cashes)
+        totalValueLbl.text = "\(totalValues + User.shared.cashes)"
+        
+        
     }
     
     func getStoredStocks(stock: Stock){
@@ -151,6 +187,19 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                        guard let dataResponse = data,
                            error == nil else {
                                print(error?.localizedDescription ?? "Response Error")
+                            // Cannot Access the network
+                            DispatchQueue.main.async {
+                                if self.refreshControl.isRefreshing {
+                                    self.refreshControl.endRefreshing()
+                                }
+                                if self.presentedViewController as? UIAlertController == nil{
+                                    let NetworkAlert = UIAlertController(title: "Network Error", message: nil, preferredStyle: .alert)
+                                    NetworkAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
+                                    NetworkAlert.message = "Please check you network connection"
+
+                                    self.present(NetworkAlert, animated: true, completion: nil)
+                                }
+                            }
                                return }
                        do{
                            //here dataResponse received from a network request
@@ -173,6 +222,9 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                            }
                             
                             DispatchQueue.main.async {
+                                if self.refreshControl.isRefreshing {
+                                    self.refreshControl.endRefreshing()
+                                }
                                 self.tableview.reloadData()
                             }
                            //printing the message that WorldTradingData states:
@@ -194,6 +246,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                            
                        } catch let parsingError {
                            print("Error", parsingError)
+                    
                        }
                    }
                    task.resume()
@@ -214,8 +267,8 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Clear separators of empty rows
         tableview.tableFooterView = UIView()
         
-        // Set up User info
-        totalValueLbl.text = "\(User.shared.getTotalValues())"
+        // Set button to be gray when loading data
+        
         
         
         
@@ -309,10 +362,14 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if User.shared.ownedStocks == [] {
             // If no stocks purchased
             let stock = User.shared.watchList[indexPath.row]
+        
+            
             cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
             cell.setUpNumOfShares(numOfShare: "")
+            
         }else if User.shared.watchList == []{
             let stock = User.shared.ownedStocks[indexPath.row]
+            
             cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
             if let shares = User.shared.ownedStocksShares[stock] {
                 // Set up stock share lbl
@@ -322,11 +379,13 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.setUpNumOfShares(numOfShare: "\(String(describing: User.shared.ownedStocksShares[stock]!)) shares")
                 }
             }
+    
         } else {
             switch (indexPath.section) {
             case 0:
                 // Stocks
                 let stock = User.shared.ownedStocks[indexPath.row]
+                
                 cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
                 if let shares = User.shared.ownedStocksShares[stock] {
                     // Set up stock share lbl
@@ -336,13 +395,18 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         cell.setUpNumOfShares(numOfShare: "\(String(describing: User.shared.ownedStocksShares[stock]!)) shares")
                     }
                 }
+
                 break
                   
             case 1:
                 // watchList
                 let stock = User.shared.watchList[indexPath.row]
+
+                
                 cell.setup(quote: stock.symbol, price: stock.price, percentage: stock.change_pct, dayChange: stock.day_change)
                 cell.setUpNumOfShares(numOfShare: "")
+                
+
                 
                 break
             default: break

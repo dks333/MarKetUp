@@ -17,7 +17,7 @@ class User {
     var watchList: [Stock]
     
     
-    static let shared = User(userId: "testID", cashes: 10000, values: 0, ownedStocks: [], watchList: [], ownedStocksShares: [:])
+    static let shared = User(userId: "testID", cashes: 10000.0, values: 0, ownedStocks: [], watchList: [], ownedStocksShares: [:])
 
     init(userId: String, cashes: Float, values: Float, ownedStocks: [Stock], watchList: [Stock], ownedStocksShares: [Stock:Int]){
         self.userId = userId
@@ -32,8 +32,16 @@ class User {
     
     //Getting the toatal values that the user has in his/her account
     func getTotalValues() -> Float {
+        
         return cashes + values
     }
+    
+    func setCash(){
+        let defaults = UserDefaults.standard
+        defaults.setValue(Float(10000), forKey: "cash")
+        self.cashes = Float(10000)
+    }
+    
     
     func isHeldStock(stock: Stock) -> Bool{
         return self.ownedStocks.contains(stock)

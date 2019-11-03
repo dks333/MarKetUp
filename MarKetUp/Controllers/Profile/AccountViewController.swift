@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SupportViewController: SubProfileViewController {
+class AccountViewController: SubProfileViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

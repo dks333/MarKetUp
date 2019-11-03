@@ -111,6 +111,28 @@ class TradingViewController: UIViewController {
                                 managedContext.delete(object)
                             }
                         }
+                    
+                    // Stock Purchased History Storing
+                     let stockHistory = StockHistory(context: PersistenceServce.context)
+                     stockHistory.symbol = currentStock.symbol
+                     stockHistory.type = "Sell"
+                     stockHistory.price = currentStock.price
+                     stockHistory.shares = Int32(inputNumOfShares)
+                    
+                        let date = Date()
+                        let calendar = NSCalendar.current
+                        let hour = calendar.component(.hour, from: date)
+                        let minutes = calendar.component(.minute, from: date)
+                        let day = calendar.component(.day, from: date)
+                        let month = calendar.component(.month, from: date)
+                        let year = calendar.component(.year, from: date)
+                        let dateStr = "\(month)/\(day)/\(year)"
+                        let timeStr = "\(hour):\(minutes)"
+
+                    stockHistory.date = dateStr
+                    stockHistory.time = timeStr
+                    
+                        UserDefaults.standard.setValue(User.shared.cashes, forKey: "cash")
                         PersistenceServce.saveContext()
                     
                        
@@ -143,9 +165,18 @@ class TradingViewController: UIViewController {
                     do {
                          let results = try managedContext.fetch(fetchRequest)
                          if results.count != 0{
-                             let shares = User.shared.ownedStocksShares[currentStock]
+                             let shares = User.shared.ownedStocksShares[currentStock]   // Updated
                              let stock = results[0]
+                            let previousBuyingPrice = stock.value(forKey: "buyingPrice") as! Float
+                            
+                            // Calculating the
+                            let previousTotalValues = previousBuyingPrice * Float(User.shared.ownedStocksShares[currentStock]! - inputNumOfShares)
+                            let adjustedBuyingPriceAverage: Float = (previousTotalValues + currentStock.price * Float(inputNumOfShares)) / Float(User.shared.ownedStocksShares[currentStock]!)
+                            
+                            
+                             
                              stock.setValue(Int32(shares!), forKey: "shares")
+                            stock.setValue(adjustedBuyingPriceAverage, forKey: "buyingPrice")
                              
                          } else {
                              let stockWithSymbolOnly = StoredStock(context: PersistenceServce.context)
@@ -153,6 +184,28 @@ class TradingViewController: UIViewController {
                              stockWithSymbolOnly.buyingPrice = currentStock.price
                              stockWithSymbolOnly.shares = Int32(inputNumOfShares)
                          }
+                        
+                        // Stock Purchased History Storing
+                         let stockHistory = StockHistory(context: PersistenceServce.context)
+                         stockHistory.symbol = currentStock.symbol
+                         stockHistory.type = "Buy"
+                         stockHistory.price = currentStock.price
+                         stockHistory.shares = Int32(inputNumOfShares)
+                        
+                            let date = Date()
+                            let calendar = NSCalendar.current
+                            let hour = calendar.component(.hour, from: date)
+                            let minutes = calendar.component(.minute, from: date)
+                            let day = calendar.component(.day, from: date)
+                            let month = calendar.component(.month, from: date)
+                            let year = calendar.component(.year, from: date)
+                            let dateStr = "\(month)/\(day)/\(year)"
+                            let timeStr = "\(hour):\(minutes)"
+
+                        stockHistory.date = dateStr
+                        stockHistory.time = timeStr
+                        
+                         UserDefaults.standard.setValue(User.shared.cashes, forKey: "cash")
                          PersistenceServce.saveContext()
                      
                         
