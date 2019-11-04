@@ -226,6 +226,19 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     self.refreshControl.endRefreshing()
                                 }
                                 self.tableview.reloadData()
+                                
+                                var totalValues : Float = 0.0
+
+                                for stock in self.storedStock {
+                                   let addedStock = Stock(symbol: stock.symbol)
+                                    let index = User.shared.ownedStocks.firstIndex(of: addedStock)
+                                    totalValues += Float(User.shared.ownedStocksShares[addedStock]!) * User.shared.ownedStocks[index!].price
+                               }
+                               
+                               // Set up User info
+                               User.shared.values = totalValues
+                               User.shared.cashes = UserDefaults.standard.value(forKey: "cash") as! Float
+                                self.totalValueLbl.text = "\(totalValues + User.shared.cashes)"
                             }
                            //printing the message that WorldTradingData states:
                            // Ex: 'You requested 6 stocks but your account maximum is 5. Upgrade your account to increase the number of stocks available per request.'

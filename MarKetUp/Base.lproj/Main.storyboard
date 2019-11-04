@@ -1041,7 +1041,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3lX-8M-cFj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2028" y="534"/>
+            <point key="canvasLocation" x="2116" y="551"/>
         </scene>
         <!--Setting View Controller-->
         <scene sceneID="tFJ-e9-sqU">
@@ -1156,7 +1156,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nnu-9W-hKO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2027.5362318840582" y="1232.8125"/>
+            <point key="canvasLocation" x="2116" y="1233"/>
         </scene>
         <!--Detail Stock History View Controller-->
         <scene sceneID="KT4-hb-M9L">

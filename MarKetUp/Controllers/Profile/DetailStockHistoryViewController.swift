@@ -10,7 +10,7 @@ import UIKit
 
 class DetailStockHistoryViewController: SubProfileViewController {
 
-    var currentStockHistory = StockHistory()
+    var currentStockHistory : StockHistory?
     
     override func viewDidLoad() {
         super.viewDidLoad()
