@@ -44,6 +44,7 @@ class IAPService: NSObject {
     func restorePurchases(){
         print("restore purchases")
         paymentQueue.restoreCompletedTransactions()
+        UserDefaults.standard.set(true, forKey: "RemovedAds")
     }
     
 }
@@ -112,15 +113,22 @@ extension IAPService: SKPaymentTransactionObserver{
     private func addCreditToAccount(productId: String){
         if productId == IAPProducts.LevelOneCredit.rawValue {
             User.shared.cashes += 5000
+            User.shared.chargedCash += 5000
         } else if productId == IAPProducts.LevelTwoCredit.rawValue {
             User.shared.cashes += 20000
+            User.shared.chargedCash += 20000
         } else if productId == IAPProducts.LevelThreeCredit.rawValue {
             User.shared.cashes += 300000
+            User.shared.chargedCash += 300000
         } else if productId == IAPProducts.LevelFourCredit.rawValue {
             User.shared.cashes += 3000000
+            User.shared.chargedCash += 3000000
         } else if productId == IAPProducts.RemoveAds.rawValue {
+            //TODO: remove ads
+            UserDefaults.standard.set(true, forKey: "RemovedAds")
             
         }
+        UserDefaults.standard.setValue(User.shared.chargedCash, forKey: "chargedCash")
         UserDefaults.standard.setValue(User.shared.cashes, forKey: "cash")
 
     }

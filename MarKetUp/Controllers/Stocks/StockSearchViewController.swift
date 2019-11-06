@@ -95,7 +95,7 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
 //        }
 //        task.resume()
         
-        // TODO: Optimize the searching function
+
         // Filter by symbol, name, ascending, inclusive
         if filteredStocks.count < 10 && !filteredStocks.isEmpty{
             filteredStocks = stocks.filter({$0.symbol.contains(input.uppercased()) || $0.name.lowercased().contains(input.lowercased())})

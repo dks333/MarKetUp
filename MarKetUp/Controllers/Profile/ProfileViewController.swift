@@ -15,7 +15,10 @@ import UIKit
 import StoreKit
 import GoogleMobileAds
 
-
+struct AdUnit{
+    static let AdUnit = "ca-app-pub-3091350439303516/2331430931"
+    static let TestID = "ca-app-pub-3940256099942544/2934735716"
+}
 
 class ProfileViewController: UIViewController{
     
@@ -34,9 +37,21 @@ class ProfileViewController: UIViewController{
         setUpIAPProducts()
     }
     
+    private func loadBannerView(){
+        // Set up Google Ad Banner View
+        bannerView.adUnitID = AdUnit.TestID  //TODO: Change this Unit Ad back when got to production
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        if !UserDefaults.standard.bool(forKey: "RemovedAds") {
+            
+        } else {
+            bannerView.isHidden = true
+        }
+        
     }
     
     private func setUpIAPProducts(){
@@ -44,10 +59,7 @@ class ProfileViewController: UIViewController{
     }
     
     private func setupView(){
-        // Set up Google Ad Banner View
-        bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"  //TODO: Change this Unit Ad back when got to production
-        bannerView.rootViewController = self
-        bannerView.load(GADRequest())
+        loadBannerView()
         
         bannerView.delegate = self
         
@@ -111,7 +123,7 @@ extension ProfileViewController: UICollectionViewDelegate, UICollectionViewDataS
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "purchaseCell", for: indexPath) as! PurchaseCollectionViewCell
         
         if indexPath.item != 0{
-            cell.purchaseBtn.setTitle("$" + purchaseItems[indexPath.item], for: .normal)
+            cell.purchaseBtn.setTitle("+$" + purchaseItems[indexPath.item], for: .normal)
         } else {
             cell.purchaseBtn.setTitle(purchaseItems[indexPath.item], for: .normal)
         }
@@ -151,7 +163,7 @@ extension ProfileViewController: GADBannerViewDelegate{
     // Tells the delegate an ad request loaded an ad.
     func adViewDidReceiveAd(_ bannerView: GADBannerView) {
         bannerView.alpha = 0
-        UIView.animate(withDuration: 1, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
           bannerView.alpha = 1
         })
         print("adViewDidReceiveAd")

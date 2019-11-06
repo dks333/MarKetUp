@@ -133,6 +133,7 @@ class TradingViewController: UIViewController {
                     stockHistory.time = timeStr
                     
                         UserDefaults.standard.setValue(User.shared.cashes, forKey: "cash")
+
                         PersistenceServce.saveContext()
                     
                        
@@ -206,6 +207,7 @@ class TradingViewController: UIViewController {
                         stockHistory.time = timeStr
                         
                          UserDefaults.standard.setValue(User.shared.cashes, forKey: "cash")
+
                          PersistenceServce.saveContext()
                      
                         

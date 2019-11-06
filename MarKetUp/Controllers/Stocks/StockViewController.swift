@@ -12,13 +12,14 @@ import CoreData
 
 let WorldTradingDataAPIKey = "fhGOT6U6HafLz2aazzTXti58aetYaJNZAr6cZzkibkcMut0p2MMgbgMLEDNv"
 
-
 class StockViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
     @IBOutlet var tableview: UITableView!
     
     @IBOutlet weak var totalValueLbl: UILabel!
+    @IBOutlet weak var valueChangedLbl: UILabel!
+    @IBOutlet weak var percentChangedLbl: UILabel!
     
     
     func getSymbols() -> [String]{
@@ -37,33 +38,22 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet weak var profileView: UIView!
      var refreshControl = UIRefreshControl()
-    
-    @IBAction func reloadStocks(_ sender: Any) {
-        loadingStocks()
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
         
         let firstRun = UserDefaults.standard.bool(forKey: "firstRun") as Bool
         if !firstRun {
             User.shared.setCash()
+            setUpDefault()
             UserDefaults.standard.set(true, forKey: "firstRun")
         }
+
         
-        // DElete
-//        let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "StoredStock")
-//        let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
-//        do
-//        {
-//            try PersistenceServce.context.execute(deleteRequest)
-//            try PersistenceServce.context.save()
-//        }
-//        catch
-//        {
-//            print ("There was an error")
-//        }
+        
+        setupView()
+
         
         fetchWatchList()
         fetchStockList()
@@ -76,6 +66,11 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
+    private func setUpDefault(){
+        UserDefaults.standard.setValue(0.0, forKey: "valueChanged")
+        UserDefaults.standard.setValue(0.0, forKey: "chargedCash")
+    }
+    
     private var timer = Timer(timeInterval: 60.0, repeats: false) { _ in print("Done!") }
     
     fileprivate func pullToRefresh(){
@@ -86,8 +81,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @objc private func refresh(sender:AnyObject) {
-       // Code to refresh table view
-
+       // refresh table view
         loadingStocks()
     }
     
@@ -132,7 +126,6 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Set up User info
         User.shared.values = totalValues
         User.shared.cashes = UserDefaults.standard.value(forKey: "cash") as! Float
-        print(User.shared.cashes)
         totalValueLbl.text = "\(totalValues + User.shared.cashes)"
         
         
@@ -192,6 +185,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 if self.refreshControl.isRefreshing {
                                     self.refreshControl.endRefreshing()
                                 }
+                                
                                 if self.presentedViewController as? UIAlertController == nil{
                                     let NetworkAlert = UIAlertController(title: "Network Error", message: nil, preferredStyle: .alert)
                                     NetworkAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
@@ -206,39 +200,38 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                            let jsonResponse = try JSONSerialization.jsonObject(with:
                                dataResponse, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
                            guard let dataArray = jsonResponse["data"] as? [[String: Any]] else { return }
+                        
                            // creating stock objects
-                           self.stocks += dataArray.compactMap{Stock($0)}
+                           self.stocks = dataArray.compactMap{Stock($0)}
                            
+                           var totalValues : Float = 0.0
+
                            for stock in self.stocks {
                                
                                //self.getStoredStocks(stock: stock)
                                if User.shared.ownedStocks.contains(stock){
                                    User.shared.setOwnedStock(stock: stock)
+                                   let index = User.shared.ownedStocks.firstIndex(of: stock)
+                                   totalValues += Float(User.shared.ownedStocksShares[stock]!) * User.shared.ownedStocks[index!].price
+                                
                                }
                                if User.shared.watchList.contains(stock){
                                    User.shared.setWatchList(stock: stock)
                                }
                                
                            }
-                            
+                           User.shared.values = totalValues
+
                             DispatchQueue.main.async {
                                 if self.refreshControl.isRefreshing {
                                     self.refreshControl.endRefreshing()
+                                    
                                 }
                                 self.tableview.reloadData()
                                 
-                                var totalValues : Float = 0.0
-
-                                for stock in self.storedStock {
-                                   let addedStock = Stock(symbol: stock.symbol)
-                                    let index = User.shared.ownedStocks.firstIndex(of: addedStock)
-                                    totalValues += Float(User.shared.ownedStocksShares[addedStock]!) * User.shared.ownedStocks[index!].price
-                               }
-                               
-                               // Set up User info
-                               User.shared.values = totalValues
-                               User.shared.cashes = UserDefaults.standard.value(forKey: "cash") as! Float
-                                self.totalValueLbl.text = "\(totalValues + User.shared.cashes)"
+                                self.totalValueLbl.text = "\(User.shared.getTotalValues())"
+                                
+                                
                             }
                            //printing the message that WorldTradingData states:
                            // Ex: 'You requested 6 stocks but your account maximum is 5. Upgrade your account to increase the number of stocks available per request.'
@@ -271,7 +264,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     private func setupView(){
-        //TODO: to get user's stock list
+
         for symbol in getSymbols() {
             //default values for each stock if App is not fetching the data
             stocks.append(Stock(symbol: symbol, price: 0.00, change_pct: "0.0%", name: symbol, day_change: "+0.0", volumn: 0))
@@ -280,8 +273,8 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Clear separators of empty rows
         tableview.tableFooterView = UIView()
         
-        // Set button to be gray when loading data
-        
+        // set default
+        User.shared.chargedCash = UserDefaults.standard.value(forKey: "chargedCash") as! Float
         
         
         

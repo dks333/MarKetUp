@@ -15,24 +15,25 @@ class User {
     var ownedStocks: [Stock]
     var ownedStocksShares: [Stock:Int]
     var watchList: [Stock]
+    var chargedCash: Float
     
     
-    static let shared = User(userId: "testID", cashes: 10000.0, values: 0, ownedStocks: [], watchList: [], ownedStocksShares: [:])
+    static let shared = User(userId: "TestID", cashes: 10000.0, values: 0, ownedStocks: [], watchList: [], ownedStocksShares: [:], chargedCash: 0)
 
-    init(userId: String, cashes: Float, values: Float, ownedStocks: [Stock], watchList: [Stock], ownedStocksShares: [Stock:Int]){
+    init(userId: String, cashes: Float, values: Float, ownedStocks: [Stock], watchList: [Stock], ownedStocksShares: [Stock:Int], chargedCash: Float){
         self.userId = userId
         self.cashes = cashes
         self.values = values
         self.ownedStocks = ownedStocks
         self.watchList = watchList
         self.ownedStocksShares = ownedStocksShares
+        self.chargedCash = chargedCash
     }
 
     
     
     //Getting the toatal values that the user has in his/her account
     func getTotalValues() -> Float {
-        
         return cashes + values
     }
     

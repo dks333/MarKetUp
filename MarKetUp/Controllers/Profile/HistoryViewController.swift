@@ -8,10 +8,12 @@
 
 import UIKit
 import CoreData
+import GoogleMobileAds
 
 class HistoryViewController: SubProfileViewController {
 
     @IBOutlet weak var tableview: UITableView!
+    @IBOutlet weak var bannerView: GADBannerView!
     
     var stockHistory = [StockHistory]()
     
@@ -24,6 +26,11 @@ class HistoryViewController: SubProfileViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableview.reloadData()
+        if !UserDefaults.standard.bool(forKey: "RemovedAds") {
+            
+        } else {
+            bannerView.isHidden = true
+        }
     }
     
     private func fetchHistory(){
@@ -38,10 +45,18 @@ class HistoryViewController: SubProfileViewController {
         self.tableview.reloadData()
     }
     
+    private func loadBannerView(){
+           // Set up Google Ad Banner View
+           bannerView.adUnitID = AdUnit.TestID  //TODO: Change this Unit Ad back when got to production
+           bannerView.rootViewController = self
+           bannerView.load(GADRequest())
+    }
     
     private func setUpView(){
         // Clear separators of empty rows
         tableview.tableFooterView = UIView()
+        loadBannerView()
+        print("hahhahahhah")
         
     }
     
@@ -67,7 +82,7 @@ extension HistoryViewController: UITableViewDelegate, UITableViewDataSource{
         let history = stockHistory[indexPath.row]
         cell.symbolLbl.text = "\(history.symbol) Market \(history.type)"
         cell.dateLbl.text = "\(history.date)"
-        cell.priceLbl.text = "\(history.price)"
+        cell.priceLbl.text = "$\(history.price)"
         
         return cell
     }
@@ -95,3 +110,45 @@ extension HistoryViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
 }
+
+// Google Banner View
+extension HistoryViewController: GADBannerViewDelegate{
+
+    // Tells the delegate an ad request loaded an ad.
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        bannerView.alpha = 0
+        UIView.animate(withDuration: 0.5, animations: {
+          bannerView.alpha = 1
+        })
+        print("adViewDidReceiveAd")
+    }
+
+    // Tells the delegate an ad request failed.
+    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+        print("adView:didFailToReceiveAdWithError: \(error.localizedDescription)")
+    }
+
+    // Tells the delegate that a full-screen view will be presented in response
+    // to the user clicking on an ad.
+    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
+        print("adViewWillPresentScreen")
+    }
+
+    // Tells the delegate that the full-screen view will be dismissed.
+    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewWillDismissScreen")
+    }
+
+    // Tells the delegate that the full-screen view has been dismissed.
+    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewDidDismissScreen")
+    }
+
+    // Tells the delegate that a user click will open another app (such as
+    // the App Store), backgrounding the current app.
+    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
+        print("adViewWillLeaveApplication")
+    }
+}
+
+

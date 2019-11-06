@@ -1,4 +1,7 @@
 PODS:
+  - Charts (3.4.0):
+    - Charts/Core (= 3.4.0)
+  - Charts/Core (3.4.0)
   - Google-Mobile-Ads-SDK (7.51.0):
     - GoogleAppMeasurement (~> 6.0)
   - GoogleAppMeasurement (6.1.3):
@@ -31,11 +34,13 @@ PODS:
   - SwiftChart (1.0.1)
 
 DEPENDENCIES:
+  - Charts
   - Google-Mobile-Ads-SDK
   - SwiftChart
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - Charts
     - Google-Mobile-Ads-SDK
     - GoogleAppMeasurement
     - GoogleUtilities
@@ -43,12 +48,13 @@ SPEC REPOS:
     - SwiftChart
 
 SPEC CHECKSUMS:
+  Charts: 74c9f256eaf0460c0c416522d1cf8c634ea6b286
   Google-Mobile-Ads-SDK: 5c625884f0788d22b48e3bb641e1d65c673dc7a5
   GoogleAppMeasurement: 434cc7be25e71dc04b8d0e3079125127b330e84a
   GoogleUtilities: f895fde57977df4e0233edda0dbeac490e3703b6
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   SwiftChart: ba767a678d568a5ee22d419e146a0582865e1aff
 
-PODFILE CHECKSUM: 5ee364d752602922f6b29ce208817460b34bc551
+PODFILE CHECKSUM: e62d72363a3f3f31c803576cb8f2fcb0a5b77aec
 
 COCOAPODS: 1.7.5
