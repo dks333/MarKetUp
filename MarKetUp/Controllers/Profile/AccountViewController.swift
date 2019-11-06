@@ -97,7 +97,7 @@ class AccountViewController: SubProfileViewController {
     
     private func loadBannerView(){
            // Set up Google Ad Banner View
-           bannerView.adUnitID = AdUnit.TestID  //TODO: Change this Unit Ad back when got to production
+           bannerView.adUnitID = AdUnit.AdUnit  //TODO: Change this Unit Ad back when got to production
            bannerView.rootViewController = self
            bannerView.load(GADRequest())
     }

@@ -35,14 +35,25 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var storedStock = [StoredStock]()
     
     let APIRequestLimit = 20
+    var loadingTimer = Timer()
+    
+    var yesterdayTotalValues : Float = 0.0
+    var valueChanged: Float = 0.0
+    var percentChanged: Float = 0.0
+    
+    var numberFormatter = NumberFormatter()
     
     @IBOutlet weak var profileView: UIView!
-     var refreshControl = UIRefreshControl()
 
+    @objc func loadStocks(){
+        self.yesterdayTotalValues = 0.0 //reset the yesterday total values
+        loadingStocks()   // TODO: Uncomment this line
+        print("refreshed")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         let firstRun = UserDefaults.standard.bool(forKey: "firstRun") as Bool
         if !firstRun {
             User.shared.setCash()
@@ -50,7 +61,8 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
             UserDefaults.standard.set(true, forKey: "firstRun")
         }
 
-        
+        loadingTimer = Timer.scheduledTimer(timeInterval: 60.0, target: self, selector: #selector(self.loadStocks), userInfo: nil, repeats: true)
+        loadingTimer.fire()
         
         setupView()
 
@@ -62,7 +74,6 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
             loadingStocks()
         }
         
-        pullToRefresh()
         
     }
     
@@ -73,17 +84,6 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     private var timer = Timer(timeInterval: 60.0, repeats: false) { _ in print("Done!") }
     
-    fileprivate func pullToRefresh(){
-        refreshControl.tintColor = .lightGray
-        refreshControl.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
-        tableview.addSubview(refreshControl) // not required when using UITableViewController
-
-    }
-    
-    @objc private func refresh(sender:AnyObject) {
-       // refresh table view
-        loadingStocks()
-    }
     
     // Fetching WatchList from Core Data
     private func fetchWatchList(){
@@ -98,8 +98,6 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         for stock in watchList {
             User.shared.watchList.append(Stock(symbol: stock.symbol))
         }
-        print("------------------")
-        print("\(watchList)")
     }
     
     // Fetching Stock List from Core Data
@@ -119,14 +117,12 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
             User.shared.ownedStocksShares[addedStock] = Int(stock.shares)
             totalValues += Float(User.shared.ownedStocksShares[addedStock]!) * stock.buyingPrice
             
-            print("------------------")
-            print("\(storedStock)")
         }
         
         // Set up User info
         User.shared.values = totalValues
         User.shared.cashes = UserDefaults.standard.value(forKey: "cash") as! Float
-        totalValueLbl.text = "\(totalValues + User.shared.cashes)"
+        totalValueLbl.text = numberFormatter.string(from: NSNumber(value: User.shared.getTotalValues()))
         
         
     }
@@ -145,7 +141,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     // Helper method for viewWillAppear
     private func updateDataBeforeViewLoad(){
-        totalValueLbl.text = "\(User.shared.getTotalValues())"
+        totalValueLbl.text = numberFormatter.string(from: NSNumber(value: User.shared.getTotalValues()))
         tableview.reloadData()
         
     }
@@ -182,9 +178,6 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                print(error?.localizedDescription ?? "Response Error")
                             // Cannot Access the network
                             DispatchQueue.main.async {
-                                if self.refreshControl.isRefreshing {
-                                    self.refreshControl.endRefreshing()
-                                }
                                 
                                 if self.presentedViewController as? UIAlertController == nil{
                                     let NetworkAlert = UIAlertController(title: "Network Error", message: nil, preferredStyle: .alert)
@@ -213,7 +206,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                    User.shared.setOwnedStock(stock: stock)
                                    let index = User.shared.ownedStocks.firstIndex(of: stock)
                                    totalValues += Float(User.shared.ownedStocksShares[stock]!) * User.shared.ownedStocks[index!].price
-                                
+                                self.yesterdayTotalValues += stock.close_yesterday * Float(User.shared.ownedStocksShares[stock]!)
                                }
                                if User.shared.watchList.contains(stock){
                                    User.shared.setWatchList(stock: stock)
@@ -221,15 +214,29 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                
                            }
                            User.shared.values = totalValues
-
+                           // Two sub labels calculation
+                           self.yesterdayTotalValues += User.shared.cashes
+                           self.valueChanged = User.shared.getTotalValues() - self.yesterdayTotalValues
+                           self.percentChanged = (User.shared.getTotalValues() - self.yesterdayTotalValues) * 100.0 / self.yesterdayTotalValues
+                           
+                        
                             DispatchQueue.main.async {
-                                if self.refreshControl.isRefreshing {
-                                    self.refreshControl.endRefreshing()
+                                self.tableview.reloadData()
+                               
+                                self.valueChangedLbl.text = self.numberFormatter.string(from: NSNumber(value: self.valueChanged))
+                                self.percentChangedLbl.text = self.numberFormatter.string(from: NSNumber(value: self.percentChanged))!+"%"
+                                
+                                if self.valueChanged < 0 {
+                                    self.valueChangedLbl.textColor = .customRed
+                                    self.percentChangedLbl.textColor = .customRed
+                                } else {
+                                    self.valueChangedLbl.textColor = .lightGreen
+                                    self.percentChangedLbl.textColor = .lightGreen
+                                    self.valueChangedLbl.text = "+" + self.valueChangedLbl.text!
+                                    self.percentChangedLbl.text = "+" + self.percentChangedLbl.text!
                                     
                                 }
-                                self.tableview.reloadData()
-                                
-                                self.totalValueLbl.text = "\(User.shared.getTotalValues())"
+                                self.totalValueLbl.text = self.numberFormatter.string(from: NSNumber(value: User.shared.getTotalValues()))
                                 
                                 
                             }
@@ -245,7 +252,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                        APILimitAlert.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
                                        APILimitAlert.message = reachedMaxError
 
-                                       //self.present(APILimitAlert, animated: true, completion: nil)
+                                       self.present(APILimitAlert, animated: true, completion: nil)
                                    }
                                }
                            }
@@ -264,6 +271,10 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     private func setupView(){
+        
+        // Set up number formatter
+        numberFormatter.minimumFractionDigits = 2
+        numberFormatter.maximumFractionDigits = 2
 
         for symbol in getSymbols() {
             //default values for each stock if App is not fetching the data
@@ -275,7 +286,6 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         // set default
         User.shared.chargedCash = UserDefaults.standard.value(forKey: "chargedCash") as! Float
-        
         
         
     }

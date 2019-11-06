@@ -19,9 +19,11 @@ class ProfileSelectionThreeTableViewCell: UITableViewCell {
     }
     
     private func setUpView(){
-        backgroundContentView.layer.cornerRadius = 8
+        backgroundContentView.layer.cornerRadius = 25
         self.selectedBackgroundView = UIView()
-         backgroundContentView.addDropShadow(scale: true, cornerRadius: 8)
+        backgroundContentView.layer.borderColor = UIColor.lightGreen.cgColor
+        backgroundContentView.layer.borderWidth = 1
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

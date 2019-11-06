@@ -139,6 +139,7 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
     
     // Add stocks to watchlist
     @IBAction func AddStock(_ button: UIButton) {
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
         let selectedStock = filteredStocks[button.tag]
 
         if button.tintColor != .black && !User.shared.watchList.contains(selectedStock){

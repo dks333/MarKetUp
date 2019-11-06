@@ -10,6 +10,7 @@ import UIKit
 import Foundation
 import SwiftChart
 import CoreData
+import GoogleMobileAds
 
 class IndividualStockViewController: UIViewController {
     
@@ -32,6 +33,7 @@ class IndividualStockViewController: UIViewController {
     @IBOutlet weak var timeLbl: UILabel!
     @IBOutlet weak var chart: Chart!
     
+    @IBOutlet weak var bannerView: GADBannerView!
     @IBOutlet weak var sellStockBtn: UIButton!{
         didSet{
             if !User.shared.isHeldStock(stock: currentStock){
@@ -52,19 +54,33 @@ class IndividualStockViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
-       // self.setTabBarVisible(visible: false, animated: true)
+        self.setTabBarVisible(visible: false, animated: true)
         //self.tabBarController?.tabBar.isHidden = true
+        if !UserDefaults.standard.bool(forKey: "RemovedAds") {
+            
+        } else {
+            bannerView.isHidden = true
+        }
         super.viewWillAppear(animated)
     }
     override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        //self.setTabBarVisible(visible: true, animated: true)
+        self.setTabBarVisible(visible: true, animated: true)
         //self.tabBarController?.tabBar.isHidden = false
         super.viewWillDisappear(animated)
     }
     
+    private func loadBannerView(){
+        // Set up Google Ad Banner View
+        bannerView.adUnitID = AdUnit.AdUnit  //TODO: Change this Unit Ad back when got to production
+        bannerView.rootViewController = self
+        bannerView.load(GADRequest())
+    }
+    
+    
     fileprivate func setupView(){
-        
+        // Load banner view
+        loadBannerView()
         
         // Make navigation bar transparent
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -128,6 +144,7 @@ class IndividualStockViewController: UIViewController {
     private var index = 0
     
     @IBAction func cancelFollowing(_ sender: Any) {
+         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         if !User.shared.watchList.contains(currentStock) && User.shared.isHeldStock(stock: currentStock){
             // Storing
             cancelFollowingBtn.tintColor = .darkGray
@@ -338,3 +355,44 @@ extension IndividualStockViewController: ChartDelegate{
     
     
 }
+
+// Google Banner View
+extension IndividualStockViewController: GADBannerViewDelegate{
+
+    // Tells the delegate an ad request loaded an ad.
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+        bannerView.alpha = 0
+        UIView.animate(withDuration: 0.5, animations: {
+          bannerView.alpha = 1
+        })
+        print("adViewDidReceiveAd")
+    }
+
+    // Tells the delegate an ad request failed.
+    func adView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: GADRequestError) {
+        print("adView:didFailToReceiveAdWithError: \(error.localizedDescription)")
+    }
+
+    // Tells the delegate that a full-screen view will be presented in response
+    // to the user clicking on an ad.
+    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
+        print("adViewWillPresentScreen")
+    }
+
+    // Tells the delegate that the full-screen view will be dismissed.
+    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewWillDismissScreen")
+    }
+
+    // Tells the delegate that the full-screen view has been dismissed.
+    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
+        print("adViewDidDismissScreen")
+    }
+
+    // Tells the delegate that a user click will open another app (such as
+    // the App Store), backgrounding the current app.
+    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
+        print("adViewWillLeaveApplication")
+    }
+}
+
