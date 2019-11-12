@@ -39,10 +39,11 @@
 		18A13F01231F8DFB00710999 /* Stocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A13F00231F8DFB00710999 /* Stocks.swift */; };
 		18A13F03231F8E7200710999 /* StockTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A13F02231F8E7200710999 /* StockTableViewCell.swift */; };
 		18BF4183234D223C0071D1A8 /* PurchaseCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BF4182234D223C0071D1A8 /* PurchaseCollectionViewCell.swift */; };
-		18BF41AA2355316C0071D1A8 /* StockList2019:10:14.json in Resources */ = {isa = PBXBuildFile; fileRef = 18BF41A92355316C0071D1A8 /* StockList2019:10:14.json */; };
+		18BF41AA2355316C0071D1A8 /* StockList.json in Resources */ = {isa = PBXBuildFile; fileRef = 18BF41A92355316C0071D1A8 /* StockList.json */; };
 		18CEE6C5236E1DFA009B6FC0 /* StockHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CEE6C4236E1DFA009B6FC0 /* StockHistoryTableViewCell.swift */; };
 		18CEE6C7236E1E46009B6FC0 /* DetailStockHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CEE6C6236E1E46009B6FC0 /* DetailStockHistoryViewController.swift */; };
 		18CEE6C9236ED4B2009B6FC0 /* StockHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CEE6C8236ED4B2009B6FC0 /* StockHistory.swift */; };
+		18CEE6FA2378BE54009B6FC0 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18CEE6F92378BE54009B6FC0 /* ContentViewController.swift */; };
 		9950BAAD467E828A42BF9239 /* Pods_MarKetUpTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A5B8E1D102AC775B3BD5DEC /* Pods_MarKetUpTests.framework */; };
 		A7304A04A1ADCDB8F88D0E26 /* Pods_MarKetUp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 06FA679A82975C2CC28B9502 /* Pods_MarKetUp.framework */; };
 		E297F841C0D6415341E9FAD5 /* Pods_MarKetUpUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F7814514394AC87E521EC97 /* Pods_MarKetUpUITests.framework */; };
@@ -106,10 +107,11 @@
 		18A13F00231F8DFB00710999 /* Stocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stocks.swift; sourceTree = "<group>"; };
 		18A13F02231F8E7200710999 /* StockTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockTableViewCell.swift; sourceTree = "<group>"; };
 		18BF4182234D223C0071D1A8 /* PurchaseCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseCollectionViewCell.swift; sourceTree = "<group>"; };
-		18BF41A92355316C0071D1A8 /* StockList2019:10:14.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "StockList2019:10:14.json"; sourceTree = "<group>"; };
+		18BF41A92355316C0071D1A8 /* StockList.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = StockList.json; sourceTree = "<group>"; };
 		18CEE6C4236E1DFA009B6FC0 /* StockHistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockHistoryTableViewCell.swift; sourceTree = "<group>"; };
 		18CEE6C6236E1E46009B6FC0 /* DetailStockHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailStockHistoryViewController.swift; sourceTree = "<group>"; };
 		18CEE6C8236ED4B2009B6FC0 /* StockHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockHistory.swift; sourceTree = "<group>"; };
+		18CEE6F92378BE54009B6FC0 /* ContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		33F246CAEF33ED0D91089DE2 /* Pods-MarKetUpUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarKetUpUITests.release.xcconfig"; path = "Target Support Files/Pods-MarKetUpUITests/Pods-MarKetUpUITests.release.xcconfig"; sourceTree = "<group>"; };
 		3B33E1CC8FD642571D29C6AC /* Pods-MarKetUpTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarKetUpTests.release.xcconfig"; path = "Target Support Files/Pods-MarKetUpTests/Pods-MarKetUpTests.release.xcconfig"; sourceTree = "<group>"; };
 		526E08884745C966342D2425 /* Pods-MarKetUp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MarKetUp.release.xcconfig"; path = "Target Support Files/Pods-MarKetUp/Pods-MarKetUp.release.xcconfig"; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				182600202338468E00E9A85E /* StockSearchViewController.swift */,
 				182EDA0A231D9B25003D1B2A /* StockViewController.swift */,
 				18A0F39A233065B100BCBE50 /* IndividualStockViewController.swift */,
+				18CEE6F92378BE54009B6FC0 /* ContentViewController.swift */,
 				1803F6432359092900176D1F /* TradingViewController.swift */,
 			);
 			path = Stocks;
@@ -262,7 +265,7 @@
 		18A13EFF231F8D8200710999 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				18BF41A92355316C0071D1A8 /* StockList2019:10:14.json */,
+				18BF41A92355316C0071D1A8 /* StockList.json */,
 				182EDA08231D9B25003D1B2A /* AppDelegate.swift */,
 				182EDA11231D9B28003D1B2A /* Assets.xcassets */,
 				1803F6392358E91700176D1F /* Default-568h@2x.png */,
@@ -419,7 +422,7 @@
 			files = (
 				182EDA15231D9B28003D1B2A /* LaunchScreen.storyboard in Resources */,
 				182EDA12231D9B28003D1B2A /* Assets.xcassets in Resources */,
-				18BF41AA2355316C0071D1A8 /* StockList2019:10:14.json in Resources */,
+				18BF41AA2355316C0071D1A8 /* StockList.json in Resources */,
 				1803F63A2358E91700176D1F /* Default-568h@2x.png in Resources */,
 				182EDA10231D9B25003D1B2A /* Main.storyboard in Resources */,
 			);
@@ -558,6 +561,7 @@
 				1803E425236AB2AC007AAF06 /* StoredStocks.swift in Sources */,
 				182EDA0B231D9B25003D1B2A /* StockViewController.swift in Sources */,
 				18CEE6C5236E1DFA009B6FC0 /* StockHistoryTableViewCell.swift in Sources */,
+				18CEE6FA2378BE54009B6FC0 /* ContentViewController.swift in Sources */,
 				1803E42F236C11C1007AAF06 /* ProfileSelectionThreeTableViewCell.swift in Sources */,
 				18A0F399233048BC00BCBE50 /* User.swift in Sources */,
 			);
@@ -738,11 +742,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 458XY7U8R6;
 				INFOPLIST_FILE = MarKetUp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HypeKai.MarKetUp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -758,11 +763,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 458XY7U8R6;
 				INFOPLIST_FILE = MarKetUp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.HypeKai.MarKetUp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

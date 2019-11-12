@@ -72,6 +72,10 @@ class TradingViewController: UIViewController {
         //backspaceBtn.imageEdgeInsets = UIEdgeInsets(top: 10, left: 5, bottom: 5, right: 5)
     }
     
+    private func marketIsOpen() -> Bool{
+        return false
+    }
+    
     
     @IBAction func tradingAction(_ sender: Any) {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()

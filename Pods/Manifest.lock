@@ -32,11 +32,13 @@ PODS:
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
   - SwiftChart (1.0.1)
+  - SwipeMenuViewController (4.0.0)
 
 DEPENDENCIES:
   - Charts
   - Google-Mobile-Ads-SDK
   - SwiftChart
+  - SwipeMenuViewController
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -46,6 +48,7 @@ SPEC REPOS:
     - GoogleUtilities
     - nanopb
     - SwiftChart
+    - SwipeMenuViewController
 
 SPEC CHECKSUMS:
   Charts: 74c9f256eaf0460c0c416522d1cf8c634ea6b286
@@ -54,7 +57,8 @@ SPEC CHECKSUMS:
   GoogleUtilities: f895fde57977df4e0233edda0dbeac490e3703b6
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   SwiftChart: ba767a678d568a5ee22d419e146a0582865e1aff
+  SwipeMenuViewController: c2c1f9b62022ce6b904b2553f0fa340c9008becd
 
-PODFILE CHECKSUM: e62d72363a3f3f31c803576cb8f2fcb0a5b77aec
+PODFILE CHECKSUM: 97b6479ef8ed1724aa04db69396ff92789f90298
 
 COCOAPODS: 1.7.5

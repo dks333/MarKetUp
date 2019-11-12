@@ -8,11 +8,19 @@
 
 import UIKit
 import Foundation
-import SwiftChart
 import CoreData
 import GoogleMobileAds
+import SwipeMenuViewController
+import SwiftChart
+
+
+
 
 class IndividualStockViewController: UIViewController {
+    func changeTimeLbl(str: String) {
+        print(str)
+    }
+    
     
     var currentStock = Stock()
     
@@ -22,8 +30,8 @@ class IndividualStockViewController: UIViewController {
     
     //Constraints
     @IBOutlet weak var labelLeadingMarginConstraint: NSLayoutConstraint!
-    fileprivate var labelLeadingMarginInitialConstant: CGFloat!
-    @IBOutlet weak var chartWidthConstraint: NSLayoutConstraint!
+    var labelLeadingMarginInitialConstant: CGFloat!
+
     
     @IBOutlet weak var stockNameLbl: UILabel!
     @IBOutlet weak var priceLbl: UILabel!
@@ -31,7 +39,6 @@ class IndividualStockViewController: UIViewController {
     @IBOutlet weak var companyNameLbl: UILabel!
     @IBOutlet weak var cancelFollowingBtn: UIButton!
     @IBOutlet weak var timeLbl: UILabel!
-    @IBOutlet weak var chart: Chart!
     
     @IBOutlet weak var bannerView: GADBannerView!
     @IBOutlet weak var sellStockBtn: UIButton!{
@@ -44,12 +51,30 @@ class IndividualStockViewController: UIViewController {
     }
     @IBOutlet weak var buyStockBtn: UIButton!
     
+    private var datas: [String] = ["1D","1W", "1M", "3M", "1Y", "5Y"]
+    var swipeMenuView: SwipeMenuView!{
+        didSet{
+            
+            swipeMenuView.options.tabView.addition = .circle
+            swipeMenuView.options.tabView.style = .segmented
+            swipeMenuView.options.tabView.itemView.textColor = .darkGray
+            swipeMenuView.options.tabView.itemView.selectedTextColor = .black
+            swipeMenuView.options.tabView.additionView.backgroundColor = .lightGreen
+            swipeMenuView.options.tabView.height = 25
+            swipeMenuView.options.tabView.margin = 20
+            
+            swipeMenuView.dataSource = self
+            swipeMenuView.delegate = self
+
+        }
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        initializeChart()
         
+        addChildVC()
+        setupView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,11 +88,23 @@ class IndividualStockViewController: UIViewController {
         }
         super.viewWillAppear(animated)
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
         self.setTabBarVisible(visible: true, animated: true)
         //self.tabBarController?.tabBar.isHidden = false
         super.viewWillDisappear(animated)
+    }
+    
+    // This function takes in different time periods as parameters and add UIViewController to children
+    fileprivate func addChildVC(){
+        datas.forEach { data in
+            let vc = ContentViewController()
+            vc.title = data
+            vc.content = data
+            vc.currentStock = self.currentStock
+            self.addChild(vc)
+        }
     }
     
     private func loadBannerView(){
@@ -107,24 +144,33 @@ class IndividualStockViewController: UIViewController {
 //            cancelFollowingBtn.isHidden = true
 //        }
         
-        // Chart
-        chart.delegate = self
-        chart.hideHighlightLineOnTouchEnd = true
+        // Menu View
+        swipeMenuView = SwipeMenuView(frame: CGRect(x:0, y: view.frame.height * 0.25, width: view.frame.width, height: view.frame.height * 0.55))
+        view.addSubview(swipeMenuView)
         
-        labelLeadingMarginInitialConstant = labelLeadingMarginConstraint.constant
-        setUpTimeLbl()
         
-        // Before data finish loading
-        self.showSpinner(onView: self.chart)
-        self.chart.isUserInteractionEnabled = false
+        timeLbl.bottomAnchor.constraint(equalTo: swipeMenuView.topAnchor, constant: 50).isActive = true
+        self.view.layoutIfNeeded()
     }
     
-    fileprivate func setUpTimeLbl(){
+    // Change UI for percentageLBL
+    func checkIncOrDec(){
+        if currentStock.change_pct.first == "-" {
+           //priceLbl.textColor = .customRed
+           percentageLbl.textColor = .customRed
+        } else {
+           //priceLbl.textColor = .custumGreen
+           percentageLbl.textColor = .custumGreen
+        }
+    }
+    
+    func setUpTimeLbl(){
         timeLbl.text = "00:00"
         timeLbl.textColor = .black
-        
     }
+    
     @IBAction func sellingStocks(_ sender: Any) {
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -145,6 +191,7 @@ class IndividualStockViewController: UIViewController {
     
     @IBAction func cancelFollowing(_ sender: Any) {
          UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        
         if !User.shared.watchList.contains(currentStock) && User.shared.isHeldStock(stock: currentStock){
             // Storing
             cancelFollowingBtn.tintColor = .darkGray
@@ -185,172 +232,25 @@ class IndividualStockViewController: UIViewController {
 
 }
 
-extension IndividualStockViewController: ChartDelegate{
+
+extension IndividualStockViewController: SwipeMenuViewDelegate, SwipeMenuViewDataSource{
     
 
-    
-    
-    func initializeChart() {
-        
-        let symbolStr = currentStock.symbol
-        
-        guard let url = URL(string: "https://intraday.worldtradingdata.com/api/v1/intraday?symbol=\(symbolStr)&range=1&interval=5&sort=asc&api_token=\(WorldTradingDataAPIKey)") else {return}
-
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-           guard let dataResponse = data,
-               error == nil else {
-                   print(error?.localizedDescription ?? "Response Error")
-                   return }
-           do{
-               //here dataResponse received from a network request
-            let jsonResponse = try JSONSerialization.jsonObject(with:
-                   dataResponse, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
-            guard let dataArray = jsonResponse["intraday"] as? Dictionary<String, AnyObject> else { return }
-            let sortedDataArray = dataArray.sorted(by: {$0.key < $1.key})
-            
-            var enumeratedNum = 0
-            
-            for (key, value) in sortedDataArray{
-                self.seriesData.append(Double(Float(value["close"] as? String ?? "") ?? 0.0))
-                self.labels.append(Double(enumeratedNum))
-                
-                let start = key.index(key.startIndex, offsetBy: 11)
-                let end = key.index(key.endIndex, offsetBy: -3)
-                let range = start..<end
-
-                let mySubstring = key[range]  // play
-                self.labelsAsString.append(String(mySubstring))
-                enumeratedNum += 1
-            }
-            
-
-            DispatchQueue.main.async {
-                // After load up data
-                self.removeSpinner()
-                self.chart.isUserInteractionEnabled = true
-                
-                let series = ChartSeries(self.seriesData)
-                series.area = true
-               
-                // Configure chart layout
-                self.chart.lineWidth = 1
-                self.chart.areaAlphaComponent = 0.07
-                
-                self.chart.showYLabelsAndGrid = false
-                self.chart.showXLabelsAndGrid = false
-                
-                
-                // TODO: Some stocks may have different number of <labelAsString>
-                // 拿一个现实的时间，然后divide by 5， if 时间 == key, get(value), else : get(lastValue)
-                self.chartWidthConstraint = self.chartWidthConstraint.setMultiplier(1 / 78 * CGFloat(self.labelsAsString.count))
-                
-                self.chart.gridColor = .white
-                self.chart.maxY = self.seriesData.max()! * 1.001
-                self.chart.minY = self.seriesData.min()! * 0.999
-                self.chart.labelColor = .white
-                self.chart.highlightLineColor = .white
-                series.colors = (
-                    above: .lightGreen,
-                    below: .red,
-                  zeroLevel: Double(self.currentStock.close_yesterday)
-                )
-                
-                self.chart.add(series)
-                self.chart.setNeedsDisplay()
-                self.chart.layoutIfNeeded()
-            }
-              
-           } catch let parsingError {
-               print("Error", parsingError)
-           }
-        }
-        task.resume()
-           
-        
-           
+    func numberOfPages(in swipeMenuView: SwipeMenuView) -> Int {
+        return datas.count
     }
-    
-    func didTouchChart(_ chart: Chart, indexes: [Int?], x: Double, left: CGFloat) {
-        
-        if let value = chart.valueForSeries(0, atIndex: indexes[0]) {
-            
-            let numberFormatter = NumberFormatter()
-            numberFormatter.minimumFractionDigits = 2
-            numberFormatter.maximumFractionDigits = 2
-            priceLbl.text = numberFormatter.string(from: NSNumber(value: value))
-            var percentage = (value/Double(currentStock.close_yesterday) - 1.0) * 100.0
-            
-            
-            
-            
-            // Show percentage
-            if percentage < 0.0 {
-                // Negative
-                percentage *= -1.0
-                percentageLbl.text = "-\(numberFormatter.string(from: NSNumber(value: percentage)) ?? "0.0")%"
-                percentageLbl.textColor = .customRed
-                
-            } else {
-                // Positive
-                percentageLbl.text = "\(numberFormatter.string(from: NSNumber(value: percentage)) ?? "0.0")%"
-                percentageLbl.textColor = .custumGreen
-            }
 
-            // Only presenting the time, NOT DATE
-            timeLbl.textColor = .lightGray
-            timeLbl.text = labelsAsString[Int(x.rounded())]
-            
-            // Align the label to the touch left position, centered
-            var constant = labelLeadingMarginInitialConstant + left - timeLbl.frame.width/2
+    func swipeMenuView(_ swipeMenuView: SwipeMenuView, titleForPageAt index: Int) -> String {
 
-            // Avoid placing the label on the left of the chart
-            if constant < labelLeadingMarginInitialConstant {
-                constant = labelLeadingMarginInitialConstant
-            }
-            
-            // Avoid placing the label on the right of the chart
-            let rightMargin = chart.frame.width - timeLbl.frame.width
-            if constant > rightMargin {
-                constant = rightMargin
-            }
+        return datas[index]
+    }
 
-            labelLeadingMarginConstraint.constant = constant
-        }
-    }
-    
-    func didFinishTouchingChart(_ chart: Chart) {
-        priceLbl.text = "\(currentStock.price)"
-        percentageLbl.text = "\(currentStock.change_pct)"
-        checkIncOrDec()
-        setUpTimeLbl()
-    }
-    
-    func didEndTouchingChart(_ chart: Chart) {
-        priceLbl.text = "\(currentStock.price)"
-        percentageLbl.text = "\(currentStock.change_pct)"
-        checkIncOrDec()
-        setUpTimeLbl()
-        
-    }
-    
-    // Change UI for percentageLBL
-    func checkIncOrDec(){
-        if currentStock.change_pct.first == "-" {
-           //priceLbl.textColor = .customRed
-           percentageLbl.textColor = .customRed
-        } else {
-           //priceLbl.textColor = .custumGreen
-           percentageLbl.textColor = .custumGreen
-        }
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        
-        super.viewWillTransition(to: size, with: coordinator)
-        
-        // Redraw chart on rotation
-        chart.setNeedsDisplay()
-        
+    func swipeMenuView(_ swipeMenuView: SwipeMenuView, viewControllerForPageAt index: Int) -> UIViewController {
+
+        let vc = children[index]
+        vc.didMove(toParent: self)
+        return vc
+
     }
     
     
@@ -395,4 +295,5 @@ extension IndividualStockViewController: GADBannerViewDelegate{
         print("adViewWillLeaveApplication")
     }
 }
+
 

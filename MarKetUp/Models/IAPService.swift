@@ -44,7 +44,9 @@ class IAPService: NSObject {
     func restorePurchases(){
         print("restore purchases")
         paymentQueue.restoreCompletedTransactions()
-        UserDefaults.standard.set(true, forKey: "RemovedAds")
+        if (SKPaymentQueue.canMakePayments()){
+            UserDefaults.standard.set(true, forKey: "RemovedAds")
+        }
     }
     
 }

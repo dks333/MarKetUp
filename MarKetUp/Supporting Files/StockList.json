@@ -536,10 +536,6 @@
     "name": "Atlas Financial Holdings, Inc."
   },
   {
-    "symbol": "AFHBL",
-    "name": "Atlas Financial Holdings, Inc."
-  },
-  {
     "symbol": "AFI",
     "name": "Armstrong Flooring, Inc."
   },
@@ -1046,10 +1042,6 @@
   {
     "symbol": "ALL-B",
     "name": "ALLSTATE 5.100% FTF RATE SUB DEBENT"
-  },
-  {
-    "symbol": "ALL-D",
-    "name": "ALSTT DS REP 1/1000 SRS D NN CM PRF"
   },
   {
     "symbol": "ALL-G",
@@ -1800,10 +1792,6 @@
     "name": "Alexandria Real Estate Equities, Inc."
   },
   {
-    "symbol": "ARE-D",
-    "name": "Alexandria Real Estate Equities Inc Conv. Pref. Shrs Series D"
-  },
-  {
     "symbol": "ARES",
     "name": "Ares Management Corporation"
   },
@@ -1849,7 +1837,7 @@
   },
   {
     "symbol": "ARKQ",
-    "name": "ARK Industrial Innovation ETF"
+    "name": "ARK Autonomous Technology & Robotics ETF"
   },
   {
     "symbol": "ARKR",
@@ -1857,7 +1845,7 @@
   },
   {
     "symbol": "ARKW",
-    "name": "ARK Web x.0 ETF"
+    "name": "ARK Next Generation Internet ETF"
   },
   {
     "symbol": "ARL",
@@ -3524,6 +3512,10 @@
     "name": "BioLineRx Ltd."
   },
   {
+    "symbol": "BLU",
+    "name": "BELLUS Health Inc."
+  },
+  {
     "symbol": "BLUE",
     "name": "bluebird bio, Inc."
   },
@@ -3828,6 +3820,10 @@
     "name": "Black Ridge Acquisition Corp."
   },
   {
+    "symbol": "BRBR",
+    "name": "BellRing Brands, Inc."
+  },
+  {
     "symbol": "BRC",
     "name": "Brady Corporation"
   },
@@ -3890,6 +3886,10 @@
   {
     "symbol": "BRO",
     "name": "Brown & Brown, Inc."
+  },
+  {
+    "symbol": "BRP",
+    "name": "BRP Group, Inc."
   },
   {
     "symbol": "BRPA",
@@ -4358,6 +4358,10 @@
   {
     "symbol": "CAAS",
     "name": "China Automotive Systems, Inc."
+  },
+  {
+    "symbol": "CABA",
+    "name": "Cabaletta Bio, Inc."
   },
   {
     "symbol": "CABO",
@@ -5109,7 +5113,7 @@
   },
   {
     "symbol": "CG",
-    "name": "The Carlyle Group L.P."
+    "name": "Carlyle Group L.P."
   },
   {
     "symbol": "CGA",
@@ -5881,7 +5885,7 @@
   },
   {
     "symbol": "CMRE-C",
-    "name": "COSTAMARE 8.50 SRS C CUM RED PRP PRF"
+    "name": "COSTAMARE Inc/RED PFD sh S C"
   },
   {
     "symbol": "CMRE-D",
@@ -6108,14 +6112,6 @@
     "name": "Capital One Financial Corporation"
   },
   {
-    "symbol": "COF-C",
-    "name": "CAPTL ONE DS REP 1 40 SRS C PERP PRF"
-  },
-  {
-    "symbol": "COF-D",
-    "name": "CAPTL DS REP 1 40 NON CUM SRS D PRF"
-  },
-  {
     "symbol": "COF-F",
     "name": "CAP DS REP 1/40 NN CM SRS F PERP PRF"
   },
@@ -6205,7 +6201,7 @@
   },
   {
     "symbol": "COP",
-    "name": "ConocoPhillips"
+    "name": "ConocoPhillips Company"
   },
   {
     "symbol": "COPX",
@@ -6893,7 +6889,7 @@
   },
   {
     "symbol": "CUR",
-    "name": "Neuralstem, Inc."
+    "name": "Seneca Biopharma, Inc."
   },
   {
     "symbol": "CURE",
@@ -7220,6 +7216,10 @@
     "name": "Dana Incorporated"
   },
   {
+    "symbol": "DAO",
+    "name": "Youdao, Inc."
+  },
+  {
     "symbol": "DAR",
     "name": "Darling Ingredients Inc."
   },
@@ -7400,6 +7400,10 @@
     "name": "Dominion Energy, Inc. UT SER A 081519"
   },
   {
+    "symbol": "DD",
+    "name": "DuPont de Nemours Inc"
+  },
+  {
     "symbol": "DDBI",
     "name": "Legg Mason Dev ex-US Divers Cor ETF"
   },
@@ -7505,7 +7509,7 @@
   },
   {
     "symbol": "DESC",
-    "name": "DBX ETF Trust - Xtrackers Russell 2000 Comprehensive Factor ETF"
+    "name": "Xtrackers Russell 2000 Comprehensive Factor ETF"
   },
   {
     "symbol": "DESP",
@@ -8173,7 +8177,7 @@
   },
   {
     "symbol": "DS-C",
-    "name": "DRIVE SHACK 8.05% SRS C CUM RED PRF"
+    "name": "DRIVE SHACK Inc/8.05% RED PFD sh S"
   },
   {
     "symbol": "DS-D",
@@ -8245,7 +8249,7 @@
   },
   {
     "symbol": "DSX-B",
-    "name": "DIANA SRS B 8.875% CUM RED PERP PRF"
+    "name": "DIANA SHIPPING/8.875% RED PFD sh S"
   },
   {
     "symbol": "DT",
@@ -8326,6 +8330,10 @@
   {
     "symbol": "DUKH",
     "name": "Duke Energy Corporation JR SUB DEB 73"
+  },
+  {
+    "symbol": "DUO",
+    "name": "Fangdd Network Group Ltd."
   },
   {
     "symbol": "DURA",
@@ -9681,7 +9689,7 @@
   },
   {
     "symbol": "ESGD",
-    "name": "iShares MSCI EAFE ESG Optimized ETF"
+    "name": "iShares ESG MSCI EAFE ETF"
   },
   {
     "symbol": "ESGE",
@@ -9690,10 +9698,6 @@
   {
     "symbol": "ESGF",
     "name": "Invesco Global ESG Revenue ETF"
-  },
-  {
-    "symbol": "ESGG",
-    "name": "FlexShares STOXX Global ESG Impact Index Fund"
   },
   {
     "symbol": "ESGL",
@@ -9721,7 +9725,7 @@
   },
   {
     "symbol": "ESGU",
-    "name": "iShares MSCI USA ESG Optimized ETF"
+    "name": "iShares ESG MSCI USA ETF"
   },
   {
     "symbol": "ESGW",
@@ -9834,6 +9838,10 @@
   {
     "symbol": "ETN",
     "name": "Eaton Corporation plc"
+  },
+  {
+    "symbol": "ETNB",
+    "name": "89bio Inc"
   },
   {
     "symbol": "ETO",
@@ -11585,7 +11593,7 @@
   },
   {
     "symbol": "FRAC",
-    "name": "Keane Group, Inc."
+    "name": "NexTier Oilfield Solutions Inc."
   },
   {
     "symbol": "FRAF",
@@ -11610,10 +11618,6 @@
   {
     "symbol": "FRC",
     "name": "First Republic Bank"
-  },
-  {
-    "symbol": "FRC-D",
-    "name": "First Republic Bank Preference Shares"
   },
   {
     "symbol": "FRC-F",
@@ -11976,6 +11980,10 @@
     "name": "First US Bancshares, Inc."
   },
   {
+    "symbol": "FUTU",
+    "name": "Futu Holdings Limited"
+  },
+  {
     "symbol": "FUTY",
     "name": "Fidelity MSCI Utilities Index ETF"
   },
@@ -12161,7 +12169,7 @@
   },
   {
     "symbol": "GAB-J",
-    "name": "GABELLI EQUITY 5.45 CUM SRS J PRF"
+    "name": "GABELLI EQUITY/5.45% RED PFD sh S"
   },
   {
     "symbol": "GABC",
@@ -12312,10 +12320,6 @@
     "name": "The Gabelli Convertible and Income Securities Fund Inc."
   },
   {
-    "symbol": "GCV-B",
-    "name": "GABELLI CONV INC SEC 6% SR B CUM PRF"
-  },
-  {
     "symbol": "GD",
     "name": "General Dynamics Corporation"
   },
@@ -12345,7 +12349,7 @@
   },
   {
     "symbol": "GDMA",
-    "name": "ETF Series Solutions - Gadsden Dynamic Multi-Asset ETF"
+    "name": "Gadsden Dynamic Multi-Asset ETF New"
   },
   {
     "symbol": "GDO",
@@ -12381,7 +12385,7 @@
   },
   {
     "symbol": "GDV-H",
-    "name": "GABELLI DIVID INCOME SRS H PRF"
+    "name": "GABELLI DIV & I/ RED PFD SH S H"
   },
   {
     "symbol": "GDX",
@@ -12617,7 +12621,7 @@
   },
   {
     "symbol": "GIGB",
-    "name": "Goldman Sachs ETF Trust - Goldman Sachs Access Investment Grade Corporate Bond ETF"
+    "name": "Goldman Sachs Access Investment Grade Corporate Bond ETF"
   },
   {
     "symbol": "GIGE",
@@ -12669,7 +12673,7 @@
   },
   {
     "symbol": "GJP",
-    "name": "Synthetic Fixed-Income Securiti"
+    "name": "STRATS Trust For Dominion Resources Inc. Securities, Series 2005-6"
   },
   {
     "symbol": "GJR",
@@ -13260,6 +13264,10 @@
     "name": "Gritstone Oncology, Inc."
   },
   {
+    "symbol": "GRTX",
+    "name": "Galera Therapeutics Inc"
+  },
+  {
     "symbol": "GRU",
     "name": "ELEMENTS Linked to the MLCX Grains Index - Total Return"
   },
@@ -13377,7 +13385,7 @@
   },
   {
     "symbol": "GSL-B",
-    "name": "GLBL SHP LS DS REP 8.75 SRS B PRF"
+    "name": "Glb SHIP LEASE/DEPOSITARY SH S B"
   },
   {
     "symbol": "GSLC",
@@ -13781,7 +13789,7 @@
   },
   {
     "symbol": "HCP",
-    "name": "HCP, Inc."
+    "name": "Healthpeak Properties, Inc."
   },
   {
     "symbol": "HCR",
@@ -15272,6 +15280,10 @@
     "name": "International Game Technology PLC"
   },
   {
+    "symbol": "IGV",
+    "name": "iShares Expanded Tech-Software Sector ETF"
+  },
+  {
     "symbol": "IHC",
     "name": "Independence Holding Company"
   },
@@ -15369,7 +15381,7 @@
   },
   {
     "symbol": "IIPR-A",
-    "name": "INVTV INDS PRP 9 CUM RDMBL SRS A PRF"
+    "name": "INNOVATIVE Indl/9.00% RED PFD SH S"
   },
   {
     "symbol": "IIVI",
@@ -15796,6 +15808,10 @@
     "name": "IPG Photonics Corporation"
   },
   {
+    "symbol": "IPHA",
+    "name": "Innate Pharma S.A."
+  },
+  {
     "symbol": "IPHI",
     "name": "Inphi Corporation"
   },
@@ -15970,6 +15986,10 @@
   {
     "symbol": "ISEE",
     "name": "IVERIC bio, Inc."
+  },
+  {
+    "symbol": "ISEM",
+    "name": "INVESCO EXCHANG/RAFI STRATEGIC EMER"
   },
   {
     "symbol": "ISF",
@@ -16298,6 +16318,10 @@
   {
     "symbol": "IYH",
     "name": "iShares U.S. Healthcare ETF"
+  },
+  {
+    "symbol": "IYJ",
+    "name": "iShares U.S. Industrials ETF"
   },
   {
     "symbol": "IYK",
@@ -17377,7 +17401,7 @@
   },
   {
     "symbol": "KOOL",
-    "name": "Cesca Therapeutics Inc."
+    "name": "ThermoGenesis Holdings, Inc."
   },
   {
     "symbol": "KOP",
@@ -17418,6 +17442,10 @@
   {
     "symbol": "KRA",
     "name": "Kraton Corporation"
+  },
+  {
+    "symbol": "KRAT",
+    "name": "Karat Packaging Inc"
   },
   {
     "symbol": "KRC",
@@ -21112,10 +21140,6 @@
     "name": "NUSTAR ENRG 7 625 SRS B CMRDPRP PRF"
   },
   {
-    "symbol": "NS-C",
-    "name": "NUSTAR ENERGY L/RED PFD SH S C"
-  },
-  {
     "symbol": "NSA",
     "name": "National Storage Affiliates Trust"
   },
@@ -21760,6 +21784,10 @@
     "name": "Oragenics, Inc."
   },
   {
+    "symbol": "OGI",
+    "name": "OrganiGram Holdings Inc."
+  },
+  {
     "symbol": "OGIG",
     "name": "O&apos;Shares Global Internet Giants ETF"
   },
@@ -21954,6 +21982,10 @@
   {
     "symbol": "ONEV",
     "name": "SPDR Russell 1000 Low Volatility Focus ETF"
+  },
+  {
+    "symbol": "ONEW",
+    "name": "OneWater Marine"
   },
   {
     "symbol": "ONEY",
@@ -22237,7 +22269,7 @@
   },
   {
     "symbol": "OUSM",
-    "name": "OSI ETF Trust - O'Shares FTSE Russell Small Cap Quality Dividend ETF"
+    "name": "O&apos;Shares FTSE Russell Small Cap Quality Dividend ETF"
   },
   {
     "symbol": "OUT",
@@ -22300,6 +22332,10 @@
     "name": "Occidental Petroleum Corporation"
   },
   {
+    "symbol": "OYST",
+    "name": "Oyster Point Pharma, Inc."
+  },
+  {
     "symbol": "OZK",
     "name": "Bank OZK"
   },
@@ -22310,6 +22346,10 @@
   {
     "symbol": "PAA",
     "name": "Plains All American Pipeline, L.P."
+  },
+  {
+    "symbol": "PAAC",
+    "name": "PROFICIENT ALPH/SH"
   },
   {
     "symbol": "PAAS",
@@ -22677,7 +22717,7 @@
   },
   {
     "symbol": "PDLB",
-    "name": "Ponce Bank"
+    "name": "PDL Community Bancorp"
   },
   {
     "symbol": "PDLI",
@@ -23004,6 +23044,10 @@
     "name": "Progenics Pharmaceuticals, Inc."
   },
   {
+    "symbol": "PGNY",
+    "name": "Progyny, Inc."
+  },
+  {
     "symbol": "PGP",
     "name": "PIMCO Global StocksPLUS & Income Fund"
   },
@@ -23034,6 +23078,10 @@
   {
     "symbol": "PHAS",
     "name": "PhaseBio Pharmaceuticals, Inc."
+  },
+  {
+    "symbol": "PHAT",
+    "name": "Phathom Pharmaceuticals, Inc."
   },
   {
     "symbol": "PHB",
@@ -23333,7 +23381,7 @@
   },
   {
     "symbol": "PLW",
-    "name": "Invesco 1-30 Laddered Treasury ETF"
+    "name": "Invesco Exchange-Traded Fund Trust II - Invesco 1-30 Laddered Treasury ETF"
   },
   {
     "symbol": "PLX",
@@ -23880,10 +23928,6 @@
     "name": "PS Business Parks, Inc."
   },
   {
-    "symbol": "PSB-U",
-    "name": "PS DS REP 1/1000 5.75% SRS U CUM PRF"
-  },
-  {
     "symbol": "PSB-V",
     "name": "PS BUS PARKS IN/DEPOSITARY SH S V"
   },
@@ -24153,7 +24197,7 @@
   },
   {
     "symbol": "PUTW",
-    "name": "WisdomTree Trust - WisdomTree CBOE S&P 500 PutWrite Strategy Fund"
+    "name": "WisdomTree CBOE S&amp;P 500 PutWrite Strategy Fund"
   },
   {
     "symbol": "PUYI",
@@ -24181,7 +24225,7 @@
   },
   {
     "symbol": "PVI",
-    "name": "Invesco VRDO Tax-Free Weekly ETF"
+    "name": "Invesco Exchange-Traded Fund Trust II - Invesco VRDO Tax-Free Weekly ETF"
   },
   {
     "symbol": "PVL",
@@ -24329,7 +24373,7 @@
   },
   {
     "symbol": "PZA",
-    "name": "Invesco National AMT-Free Municipal Bond ETF"
+    "name": "Invesco Exchange-Traded Fund Trust II - Invesco National AMT-Free Municipal Bond ETF"
   },
   {
     "symbol": "PZC",
@@ -24377,7 +24421,7 @@
   },
   {
     "symbol": "QARP",
-    "name": "DBX ETF Trust - Xtrackers Russell 1000 US Quality at a Reasonable Price ETF"
+    "name": "Xtrackers Russell 1000 US QARP ETF"
   },
   {
     "symbol": "QAT",
@@ -24490,6 +24534,10 @@
   {
     "symbol": "QJPN",
     "name": "SPDR MSCI Japan StrategicFactors ETF"
+  },
+  {
+    "symbol": "QK",
+    "name": "Q&K International Group Limited"
   },
   {
     "symbol": "QLD",
@@ -24684,6 +24732,10 @@
     "name": "Rand Capital Corporation"
   },
   {
+    "symbol": "RAPT",
+    "name": "RAPT Therapeutics, Inc."
+  },
+  {
     "symbol": "RARE",
     "name": "Ultragenyx Pharmaceutical Inc."
   },
@@ -24762,6 +24814,10 @@
   {
     "symbol": "RCD",
     "name": "Invesco S&P 500 Equal Weight Consumer Discretionary ETF"
+  },
+  {
+    "symbol": "RCEL",
+    "name": "Avita Medical Limited"
   },
   {
     "symbol": "RCG",
@@ -24849,11 +24905,11 @@
   },
   {
     "symbol": "RDS.A",
-    "name": "Royal Dutch Shell plc ADR Class A"
+    "name": "Royal Dutch Shell plc"
   },
   {
     "symbol": "RDS.B",
-    "name": "Royal Dutch Shell plc ADR Class B"
+    "name": "Royal Dutch Shell plc"
   },
   {
     "symbol": "RDUS",
@@ -24966,6 +25022,10 @@
   {
     "symbol": "REPL",
     "name": "Replimune Group, Inc."
+  },
+  {
+    "symbol": "REPR",
+    "name": "Repro Med Systems, Inc."
   },
   {
     "symbol": "RES",
@@ -26021,7 +26081,7 @@
   },
   {
     "symbol": "SB-D",
-    "name": "SAFE BLKR  8 SRS D CUM RED PERP PRF"
+    "name": "SAFE BULKERS In/RED PFD sh S D"
   },
   {
     "symbol": "SBAC",
@@ -26169,7 +26229,7 @@
   },
   {
     "symbol": "SCE-E",
-    "name": "Southern California Edison Co."
+    "name": "Southern California Edison Co. 4.78% Preferred Shares"
   },
   {
     "symbol": "SCE-G",
@@ -26904,10 +26964,6 @@
     "name": "Site Centers Corp Depository Receipt Class A"
   },
   {
-    "symbol": "SITC-J",
-    "name": "SITE CNTR DS REP CUM RED CL J PRF"
-  },
-  {
     "symbol": "SITC-K",
     "name": "SITE CNTR DS REP CUM RED CL K PRF"
   },
@@ -27082,6 +27138,10 @@
   {
     "symbol": "SLRC",
     "name": "Solar Capital Ltd."
+  },
+  {
+    "symbol": "SLRX",
+    "name": "Salarius Pharmaceuticals Inc"
   },
   {
     "symbol": "SLS",
@@ -28013,7 +28073,7 @@
   },
   {
     "symbol": "SSW-I",
-    "name": "SEASPAN CUM RED PERP SRS I PRF"
+    "name": "SEASPAN CORP/PERP PFD SH S I"
   },
   {
     "symbol": "SSWA",
@@ -29062,6 +29122,10 @@
   {
     "symbol": "THO",
     "name": "Thor Industries, Inc."
+  },
+  {
+    "symbol": "THOR",
+    "name": "Synthorx Inc"
   },
   {
     "symbol": "THQ",
@@ -30548,14 +30612,6 @@
     "name": "Americas Gold and Silver Corporation"
   },
   {
-    "symbol": "USAT",
-    "name": "USA Technologies, Inc."
-  },
-  {
-    "symbol": "USATP",
-    "name": "USA Technologies, Inc."
-  },
-  {
     "symbol": "USAU",
     "name": "U.S. Gold Corp."
   },
@@ -31141,7 +31197,7 @@
   },
   {
     "symbol": "VIOG",
-    "name": "Vanguard S&P Small-Cap 600 Growth Index Fund ETF Shares"
+    "name": "Vanguard Admiral Funds - Vanguard S&P Small-Cap 600 Growth ETF"
   },
   {
     "symbol": "VIOO",
@@ -31982,10 +32038,6 @@
   {
     "symbol": "WFC-Y",
     "name": "WL FRG DS REP CL A NCUMPRP SRS Y PRF"
-  },
-  {
-    "symbol": "WFE-A",
-    "name": "Wells Fargo Real Estate Investment Corp"
   },
   {
     "symbol": "WFT",

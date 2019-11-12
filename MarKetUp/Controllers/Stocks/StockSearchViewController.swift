@@ -55,7 +55,7 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
 //        }
 //        task.resume()
         
-        if let path = Bundle.main.path(forResource: "StockList2019:10:14", ofType: "json") {
+        if let path = Bundle.main.path(forResource: "StockList", ofType: "json") {
                    do {
                          let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
                          let jsonResponse = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject

@@ -33,8 +33,9 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var stocks = [Stock]()
     var watchList = [WatchList]()
     var storedStock = [StoredStock]()
+    var stockHistory = [StockHistory]()
     
-    let APIRequestLimit = 20
+    let APIRequestLimit = 50
     var loadingTimer = Timer()
     
     var yesterdayTotalValues : Float = 0.0
@@ -46,7 +47,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var profileView: UIView!
 
     @objc func loadStocks(){
-        self.yesterdayTotalValues = 0.0 //reset the yesterday total values
+
         loadingStocks()   // TODO: Uncomment this line
         print("refreshed")
     }
@@ -60,8 +61,15 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
             setUpDefault()
             UserDefaults.standard.set(true, forKey: "firstRun")
         }
+        
+        //UserDefaults.standard.removeObject(forKey: "RemovedAds")
+        if UserDefaults.standard.value(forKey: "check") == nil {
+            UserDefaults.standard.setValue(Date(), forKey: "storedDate")
+            UserDefaults.standard.setValue(10000.0, forKey: "storedTotalValues")
+            UserDefaults.standard.setValue(true, forKey: "check")
+        }
 
-        loadingTimer = Timer.scheduledTimer(timeInterval: 60.0, target: self, selector: #selector(self.loadStocks), userInfo: nil, repeats: true)
+        loadingTimer = Timer.scheduledTimer(timeInterval: 65.0, target: self, selector: #selector(self.loadStocks), userInfo: nil, repeats: true)
         loadingTimer.fire()
         
         setupView()
@@ -73,6 +81,8 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if getSymbols().count != 0{
             loadingStocks()
         }
+        
+        setLocalYesterdayTotalValue()
         
         
     }
@@ -122,8 +132,12 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Set up User info
         User.shared.values = totalValues
         User.shared.cashes = UserDefaults.standard.value(forKey: "cash") as! Float
-        totalValueLbl.text = numberFormatter.string(from: NSNumber(value: User.shared.getTotalValues()))
+        totalValueLbl.text = "$" + numberFormatter.string(from: NSNumber(value: User.shared.getTotalValues()))!
         
+    }
+    
+    private func setLocalYesterdayTotalValue(){
+        self.yesterdayTotalValues = User.shared.getTotalValues()
         
     }
     
@@ -141,7 +155,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     // Helper method for viewWillAppear
     private func updateDataBeforeViewLoad(){
-        totalValueLbl.text = numberFormatter.string(from: NSNumber(value: User.shared.getTotalValues()))
+        totalValueLbl.text = "$" + numberFormatter.string(from: NSNumber(value: User.shared.getTotalValues()))!
         tableview.reloadData()
         
     }
@@ -193,12 +207,29 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                            let jsonResponse = try JSONSerialization.jsonObject(with:
                                dataResponse, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
                            guard let dataArray = jsonResponse["data"] as? [[String: Any]] else { return }
-                        
+                           let tradeDay = dataArray[0]["last_trade_time"] as! String
+                           let date = self.checkIfToday(tradeDay: tradeDay)
+
                            // creating stock objects
                            self.stocks = dataArray.compactMap{Stock($0)}
-                           
+                           // reset values
                            var totalValues : Float = 0.0
+                        
+                           if  Date() > date.advanced(by: 25200) {  // 7 hours later
+                            
+                               print("Changed total values to latest")
+                               UserDefaults.standard.setValue(Date(), forKey: "storedDate")
+                               UserDefaults.standard.setValue(User.shared.getTotalValues(), forKey: "storedTotalValues")
+                               self.yesterdayTotalValues = User.shared.getTotalValues()
+                               // 超过trading 时间不能trade
 
+                           } else {
+                                print("============")
+
+                                self.yesterdayTotalValues = UserDefaults.standard.value(forKey: "storedTotalValues") as! Float
+                           }
+                        
+                        
                            for stock in self.stocks {
                                
                                //self.getStoredStocks(stock: stock)
@@ -206,23 +237,27 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                    User.shared.setOwnedStock(stock: stock)
                                    let index = User.shared.ownedStocks.firstIndex(of: stock)
                                    totalValues += Float(User.shared.ownedStocksShares[stock]!) * User.shared.ownedStocks[index!].price
-                                self.yesterdayTotalValues += stock.close_yesterday * Float(User.shared.ownedStocksShares[stock]!)
+                                   //self.yesterdayTotalValues += stock.close_yesterday * Float(User.shared.ownedStocksShares[stock]!)
                                }
                                if User.shared.watchList.contains(stock){
                                    User.shared.setWatchList(stock: stock)
                                }
                                
                            }
+                        
                            User.shared.values = totalValues
                            // Two sub labels calculation
-                           self.yesterdayTotalValues += User.shared.cashes
+                           //self.yesterdayTotalValues += User.shared.cashes
                            self.valueChanged = User.shared.getTotalValues() - self.yesterdayTotalValues
                            self.percentChanged = (User.shared.getTotalValues() - self.yesterdayTotalValues) * 100.0 / self.yesterdayTotalValues
                            
                         
                             DispatchQueue.main.async {
                                 self.tableview.reloadData()
-                               
+                                
+                                print("====== totalValuesyesterday =======")
+                                print(self.yesterdayTotalValues)
+                                
                                 self.valueChangedLbl.text = self.numberFormatter.string(from: NSNumber(value: self.valueChanged))
                                 self.percentChangedLbl.text = self.numberFormatter.string(from: NSNumber(value: self.percentChanged))!+"%"
                                 
@@ -236,7 +271,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     self.percentChangedLbl.text = "+" + self.percentChangedLbl.text!
                                     
                                 }
-                                self.totalValueLbl.text = self.numberFormatter.string(from: NSNumber(value: User.shared.getTotalValues()))
+                                self.totalValueLbl.text = "$" + self.numberFormatter.string(from: NSNumber(value: User.shared.getTotalValues()))!
                                 
                                 
                             }
@@ -268,8 +303,20 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
+    // check the date if it is today
+    fileprivate func checkIfToday(tradeDay: String) -> Date{
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC-5")
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = dateFormatter.date(from:String(tradeDay.prefix(20)))!
+        
+        return date
+        
+    }
     
     
+    // Set up all Views
     private func setupView(){
         
         // Set up number formatter
