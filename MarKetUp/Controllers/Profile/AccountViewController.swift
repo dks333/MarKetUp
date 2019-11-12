@@ -49,14 +49,16 @@ class AccountViewController: SubProfileViewController {
         
         
         let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
         numberFormatter.minimumFractionDigits = 2
         numberFormatter.maximumFractionDigits = 2
+        
 
-        cashDataEntry.value = Double(numberFormatter.string(from: NSNumber(value: User.shared.cashes))!)!
+        cashDataEntry.value =  Double(User.shared.cashes)
         cashLbl.text = "$" + numberFormatter.string(from: NSNumber(value: User.shared.cashes))!
         cashDataEntry.label = ""
 
-        valueDataEntry.value = Double(numberFormatter.string(from: NSNumber(value: User.shared.values))!)!
+        valueDataEntry.value = Double(User.shared.values)
         stockValueLbl.text = "$" + numberFormatter.string(from: NSNumber(value: User.shared.values))!
         valueDataEntry.label = ""
         

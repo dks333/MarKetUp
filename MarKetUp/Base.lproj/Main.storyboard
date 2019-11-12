@@ -374,7 +374,7 @@
                                     <action selector="cancelFollowing:" destination="cob-fv-CR0" eventType="touchUpInside" id="wDk-YU-qRD"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bLk-my-NTa">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bLk-my-NTa">
                                 <rect key="frame" x="0.0" y="189" width="0.0" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="wLS-75-RHm"/>
@@ -411,9 +411,9 @@
                             <constraint firstItem="H23-Q9-4li" firstAttribute="trailing" secondItem="lm2-Ez-oPy" secondAttribute="trailingMargin" id="OXv-F6-FLv"/>
                             <constraint firstItem="9ui-O4-ECL" firstAttribute="height" secondItem="Ils-jr-Ad5" secondAttribute="height" multiplier="0.06" id="Oea-NP-pkk"/>
                             <constraint firstItem="bLk-my-NTa" firstAttribute="leading" secondItem="Ils-jr-Ad5" secondAttribute="leading" id="Qmh-YW-LvC"/>
-                            <constraint firstItem="Ils-jr-Ad5" firstAttribute="bottom" secondItem="bLk-my-NTa" secondAttribute="bottom" constant="652" id="UOi-5C-1Es"/>
                             <constraint firstItem="H23-Q9-4li" firstAttribute="top" secondItem="cxE-MX-jGB" secondAttribute="bottom" constant="5" id="XVN-LP-mLJ"/>
                             <constraint firstItem="IGo-nW-AMR" firstAttribute="centerX" secondItem="Ils-jr-Ad5" secondAttribute="centerX" constant="93" id="aBQ-Mq-1y2"/>
+                            <constraint firstItem="Ils-jr-Ad5" firstAttribute="trailing" secondItem="cxE-MX-jGB" secondAttribute="trailing" priority="250" constant="245" id="bUd-yc-p6Y"/>
                             <constraint firstItem="9ui-O4-ECL" firstAttribute="centerX" secondItem="Ils-jr-Ad5" secondAttribute="centerX" id="nea-BR-RIe"/>
                             <constraint firstItem="0TV-8F-mif" firstAttribute="centerX" secondItem="Ils-jr-Ad5" secondAttribute="centerX" id="tls-z7-rHM"/>
                             <constraint firstItem="5P2-HE-VI2" firstAttribute="centerX" secondItem="Ils-jr-Ad5" secondAttribute="centerX" multiplier="0.7" constant="3.1000000000000227" id="w7f-i3-tgX"/>
@@ -1053,8 +1053,18 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NnY-GV-k5R" customClass="PieChartView" customModule="Charts">
                                 <rect key="frame" x="83" y="258.5" width="248" height="248.5"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Portfolio" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4xQ-rk-DHo">
+                                        <rect key="frame" x="74" y="112.5" width="100.5" height="24"/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="20"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="4xQ-rk-DHo" firstAttribute="centerY" secondItem="NnY-GV-k5R" secondAttribute="centerY" id="MUH-4Y-Ck5"/>
+                                    <constraint firstItem="4xQ-rk-DHo" firstAttribute="centerX" secondItem="NnY-GV-k5R" secondAttribute="centerX" id="Vp6-AJ-JEu"/>
                                     <constraint firstAttribute="width" secondItem="NnY-GV-k5R" secondAttribute="height" multiplier="1:1" id="Xwt-Ij-vTG"/>
                                 </constraints>
                             </view>

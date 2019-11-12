@@ -14,8 +14,6 @@ import SwipeMenuViewController
 import SwiftChart
 
 
-
-
 class IndividualStockViewController: UIViewController {
     func changeTimeLbl(str: String) {
         print(str)

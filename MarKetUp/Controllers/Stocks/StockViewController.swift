@@ -69,6 +69,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
             UserDefaults.standard.setValue(true, forKey: "check")
         }
 
+        // Refresh Stocks every ONE minute
         loadingTimer = Timer.scheduledTimer(timeInterval: 65.0, target: self, selector: #selector(self.loadStocks), userInfo: nil, repeats: true)
         loadingTimer.fire()
         
@@ -132,7 +133,8 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // Set up User info
         User.shared.values = totalValues
         User.shared.cashes = UserDefaults.standard.value(forKey: "cash") as! Float
-        totalValueLbl.text = "$" + numberFormatter.string(from: NSNumber(value: User.shared.getTotalValues()))!
+        let totalValueStr = numberFormatter.string(from: NSNumber(value:  UserDefaults.standard.value(forKey: "storedTotalValues") as! Float))!
+        totalValueLbl.text = "$" + totalValueStr
         
     }
     
@@ -153,9 +155,15 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         updateDataBeforeViewLoad()
     }
     
+    fileprivate var checkFirstLoadTotalValueLbl = false
+    
     // Helper method for viewWillAppear
     private func updateDataBeforeViewLoad(){
-        totalValueLbl.text = "$" + numberFormatter.string(from: NSNumber(value: User.shared.getTotalValues()))!
+        if checkFirstLoadTotalValueLbl {
+            totalValueLbl.text = "$" + numberFormatter.string(from: NSNumber(value: User.shared.getTotalValues()))!
+        } else {
+            checkFirstLoadTotalValueLbl = true
+        }
         tableview.reloadData()
         
     }
@@ -215,7 +223,25 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                            // reset values
                            var totalValues : Float = 0.0
                         
-                           if  Date() > date.advanced(by: 25200) {  // 7 hours later
+                        
+                           for stock in self.stocks {
+                               
+                               //self.getStoredStocks(stock: stock)
+                               if User.shared.ownedStocks.contains(stock){
+                                   User.shared.setOwnedStock(stock: stock)
+                                   let index = User.shared.ownedStocks.firstIndex(of: stock)
+                                   totalValues += Float(User.shared.ownedStocksShares[stock]!) * User.shared.ownedStocks[index!].price
+                               }
+                               if User.shared.watchList.contains(stock){
+                                   User.shared.setWatchList(stock: stock)
+                               }
+                               
+                           }
+                        
+                           User.shared.values = totalValues
+                           // Two sub labels calculation
+                        
+                           if  Date() > date.advanced(by: 28800) {  //  hours later
                             
                                print("Changed total values to latest")
                                UserDefaults.standard.setValue(Date(), forKey: "storedDate")
@@ -229,25 +255,6 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 self.yesterdayTotalValues = UserDefaults.standard.value(forKey: "storedTotalValues") as! Float
                            }
                         
-                        
-                           for stock in self.stocks {
-                               
-                               //self.getStoredStocks(stock: stock)
-                               if User.shared.ownedStocks.contains(stock){
-                                   User.shared.setOwnedStock(stock: stock)
-                                   let index = User.shared.ownedStocks.firstIndex(of: stock)
-                                   totalValues += Float(User.shared.ownedStocksShares[stock]!) * User.shared.ownedStocks[index!].price
-                                   //self.yesterdayTotalValues += stock.close_yesterday * Float(User.shared.ownedStocksShares[stock]!)
-                               }
-                               if User.shared.watchList.contains(stock){
-                                   User.shared.setWatchList(stock: stock)
-                               }
-                               
-                           }
-                        
-                           User.shared.values = totalValues
-                           // Two sub labels calculation
-                           //self.yesterdayTotalValues += User.shared.cashes
                            self.valueChanged = User.shared.getTotalValues() - self.yesterdayTotalValues
                            self.percentChanged = (User.shared.getTotalValues() - self.yesterdayTotalValues) * 100.0 / self.yesterdayTotalValues
                            
@@ -271,6 +278,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     self.percentChangedLbl.text = "+" + self.percentChangedLbl.text!
                                     
                                 }
+                                self.totalValueLbl.textColor = .white
                                 self.totalValueLbl.text = "$" + self.numberFormatter.string(from: NSNumber(value: User.shared.getTotalValues()))!
                                 
                                 
@@ -320,6 +328,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     private func setupView(){
         
         // Set up number formatter
+        numberFormatter.numberStyle = .decimal
         numberFormatter.minimumFractionDigits = 2
         numberFormatter.maximumFractionDigits = 2
 
@@ -334,6 +343,10 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
         // set default
         User.shared.chargedCash = UserDefaults.standard.value(forKey: "chargedCash") as! Float
         
+        // Views
+        valueChangedLbl.textColor = .darkGray
+        percentChangedLbl.textColor = .darkGray
+        totalValueLbl.textColor = .lightGray
         
     }
     

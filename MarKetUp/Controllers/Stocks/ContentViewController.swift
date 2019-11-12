@@ -57,7 +57,13 @@ class ContentViewController: UIViewController {
     var currentStock = Stock()
     
     var seriesData: [Double] = []
-    var labels: [Double] = []
+    var labels: [Double] = [] {
+        didSet{
+            for i in 0..<78 {
+                labels.append(Double(i))
+            }
+        }
+    }
     var labelsAsString: Array<String> = []
 
 
@@ -172,7 +178,7 @@ extension ContentViewController: ChartDelegate{
             
             for i in sortedDataArray{
                 self.seriesData.append(Double(Float(i.value["close"] as? String ?? "") ?? 0.0))
-                self.labels.append(Double(enumeratedNum))
+                //self.labels.append(Double(enumeratedNum))
                 
                 if ["1D"].contains(self.content) {
                     let start = i.key.index(i.key.startIndex, offsetBy: 11)
@@ -189,7 +195,6 @@ extension ContentViewController: ChartDelegate{
                 enumeratedNum += 1
             }
             
-
             DispatchQueue.main.async {
                 // After load up data
                 self.ai.stopAnimating()
@@ -204,7 +209,7 @@ extension ContentViewController: ChartDelegate{
                 
                 self.chart.showYLabelsAndGrid = false
                 self.chart.showXLabelsAndGrid = false
-                
+                self.chart.xLabels = self.labels
                 
                 // TODO: Some stocks may have different number of <labelAsString>
                 // 拿一个现实的时间，然后divide by 5， if 时间 == key, get(value), else : get(lastValue)
