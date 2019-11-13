@@ -44,6 +44,8 @@ class IndividualStockViewController: UIViewController {
             if !User.shared.isHeldStock(stock: currentStock){
                 sellStockBtn.isEnabled = false
                 sellStockBtn.backgroundColor = .gray
+            } else {
+                sellStockBtn.backgroundColor = .customRed
             }
         }
     }
@@ -135,15 +137,16 @@ class IndividualStockViewController: UIViewController {
         
         checkIncOrDec()
         
-        cancelFollowingBtn.tintColor = (User.shared.watchList.contains(currentStock)) ? .darkGray : .custumGreen
         
-        // CancelFollowingBtn should not present in ownedStock VC
-//        if User.shared.isHeldStock(stock: currentStock) && !User.shared.watchList.contains(currentStock){
-//            cancelFollowingBtn.isHidden = true
-//        }
+        cancelFollowingBtn.layer.borderWidth = 1
+        cancelFollowingBtn.layer.cornerRadius = 10
+        cancelFollowingBtn.tintColor = (User.shared.watchList.contains(currentStock)) ? .darkGray : .custumGreen
+        cancelFollowingBtn.layer.borderColor = (User.shared.watchList.contains(currentStock)) ? UIColor.darkGray.cgColor : UIColor.custumGreen.cgColor
+        cancelFollowingBtn.setTitle((User.shared.watchList.contains(currentStock)) ? "Unfollow" : "Follow", for: .normal)
+        cancelFollowingBtn.setTitleColor((User.shared.watchList.contains(currentStock)) ? .darkGray : .custumGreen, for: .normal)
         
         // Menu View
-        swipeMenuView = SwipeMenuView(frame: CGRect(x:0, y: view.frame.height * 0.25, width: view.frame.width, height: view.frame.height * 0.55))
+        swipeMenuView = SwipeMenuView(frame: CGRect(x:0, y: view.frame.height * 0.285, width: view.frame.width, height: view.frame.height * 0.65))
         view.addSubview(swipeMenuView)
         
         
@@ -162,9 +165,15 @@ class IndividualStockViewController: UIViewController {
         }
     }
     
-    func setUpTimeLbl(){
-        timeLbl.text = "00:00"
+    func setUpTimeLbl(period: String){
         timeLbl.textColor = .black
+        if period == "1D" {
+            timeLbl.text = "00:00"
+        } else if period == "1W" || period == "1M" {
+            timeLbl.text = "0000-00-00 00:00:00"
+        } else {
+            timeLbl.text = "0000-00-00"
+        }
     }
     
     @IBAction func sellingStocks(_ sender: Any) {
@@ -192,7 +201,13 @@ class IndividualStockViewController: UIViewController {
         
         if !User.shared.watchList.contains(currentStock) && User.shared.isHeldStock(stock: currentStock){
             // Storing
+            // UI
             cancelFollowingBtn.tintColor = .darkGray
+            cancelFollowingBtn.layer.borderColor = UIColor.darkGray.cgColor
+            cancelFollowingBtn.setTitle("Unfollow", for: .normal)
+            cancelFollowingBtn.setTitleColor(.darkGray, for: .normal)
+            
+            // Backend
             User.shared.addStocks(stock: currentStock, type: "watchList", index: index)
             
             // Add to database
@@ -207,6 +222,9 @@ class IndividualStockViewController: UIViewController {
             index = User.shared.watchList.firstIndex(of: self.currentStock)!
             User.shared.cancelFollowingStock(stock: currentStock)
             cancelFollowingBtn.tintColor = .custumGreen
+            cancelFollowingBtn.layer.borderColor = UIColor.custumGreen.cgColor
+            cancelFollowingBtn.setTitle("Follow", for: .normal)
+            cancelFollowingBtn.setTitleColor(.custumGreen, for: .normal)
             
             // Delete from Core Data
             let managedContext = PersistenceServce.context
@@ -233,7 +251,14 @@ class IndividualStockViewController: UIViewController {
 
 extension IndividualStockViewController: SwipeMenuViewDelegate, SwipeMenuViewDataSource{
     
-
+    func swipeMenuView(_ swipeMenuView: SwipeMenuView, viewWillSetupAt currentIndex: Int) {
+        setUpTimeLbl(period: datas[currentIndex])
+    }
+    
+    func swipeMenuView(_ swipeMenuView: SwipeMenuView, willChangeIndexFrom fromIndex: Int, to toIndex: Int) {
+        setUpTimeLbl(period: datas[toIndex])
+    }
+    
     func numberOfPages(in swipeMenuView: SwipeMenuView) -> Int {
         return datas.count
     }
@@ -247,6 +272,7 @@ extension IndividualStockViewController: SwipeMenuViewDelegate, SwipeMenuViewDat
 
         let vc = children[index]
         vc.didMove(toParent: self)
+        setUpTimeLbl(period: datas[index])
         return vc
 
     }

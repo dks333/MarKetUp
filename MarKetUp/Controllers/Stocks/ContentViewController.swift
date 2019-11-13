@@ -69,14 +69,16 @@ class ContentViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+    
         setupView()
-
         initializeChart()
         
-        
-
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let parentVC = self.parent as! IndividualStockViewController
+        parentVC.setUpTimeLbl(period: content)
+        super.viewWillAppear(animated)
     }
     
     private func setupView(){
@@ -92,7 +94,7 @@ class ContentViewController: UIViewController {
         let parentVC = self.parent as! IndividualStockViewController
         parentVC.labelLeadingMarginInitialConstant = parentVC.labelLeadingMarginConstraint.constant
         
-        parentVC.setUpTimeLbl()
+        parentVC.setUpTimeLbl(period: content)
         
         // Before data finish loading
         self.chart.isUserInteractionEnabled = false
@@ -102,6 +104,7 @@ class ContentViewController: UIViewController {
     override func didMove(toParent parent: UIViewController?) {
         
     }
+    
     
 }
 
@@ -310,7 +313,7 @@ extension ContentViewController: ChartDelegate{
         parentVC.priceLbl.text = "\(currentStock.price)"
         parentVC.percentageLbl.text = "\(currentStock.change_pct)"
         parentVC.checkIncOrDec()
-        parentVC.setUpTimeLbl()
+        parentVC.setUpTimeLbl(period: content)
 
     }
     
@@ -319,7 +322,7 @@ extension ContentViewController: ChartDelegate{
         parentVC.priceLbl.text = "\(currentStock.price)"
         parentVC.percentageLbl.text = "\(currentStock.change_pct)"
         parentVC.checkIncOrDec()
-        parentVC.setUpTimeLbl()
+        parentVC.setUpTimeLbl(period: content)
 
     }
 

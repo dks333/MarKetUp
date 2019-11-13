@@ -18,6 +18,8 @@ class searchResultTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         self.contentView.backgroundColor = .GrayBlack
+        self.addBtn.layer.borderWidth = 1
+        addBtn.layer.cornerRadius = self.frame.height * 0.15
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

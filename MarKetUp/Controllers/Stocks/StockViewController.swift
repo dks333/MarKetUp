@@ -16,6 +16,13 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     @IBOutlet var tableview: UITableView!
+    @IBOutlet weak var searchBtn: UIButton! {
+        didSet{
+            searchBtn.layer.borderWidth = 1
+            searchBtn.layer.cornerRadius = 10
+            searchBtn.layer.borderColor = UIColor.custumGreen.cgColor
+        }
+    }
     
     @IBOutlet weak var totalValueLbl: UILabel!
     @IBOutlet weak var valueChangedLbl: UILabel!

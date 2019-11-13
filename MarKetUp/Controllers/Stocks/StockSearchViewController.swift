@@ -116,9 +116,7 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
         // Set up tableview
         tableview.tableFooterView = UIView()
         tableview.allowsSelection = true
-        
         tableview.backgroundColor = .GrayBlack
-        
         
         // Set up navigation bar
         self.navigationController?.navigationBar.tintColor = .custumGreen
@@ -145,6 +143,10 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
         if button.tintColor != .black && !User.shared.watchList.contains(selectedStock){
             // following
             button.tintColor = .black
+            button.layer.borderColor = UIColor.darkGray.cgColor
+            button.setTitle("Unfollow", for: .normal)
+            button.setTitleColor(.darkGray, for: .normal)
+            
             if !User.shared.watchList.contains(selectedStock) {
                 User.shared.watchList.append(selectedStock)
                 
@@ -157,6 +159,10 @@ class StockSearchViewController: UIViewController, UISearchResultsUpdating, UISe
             }
         } else {
             button.tintColor = .custumGreen
+            button.layer.borderColor = UIColor.custumGreen.cgColor
+            button.setTitle("Follow", for: .normal)
+            button.setTitleColor(.custumGreen, for: .normal)
+            
             if let index = User.shared.watchList.firstIndex(of: selectedStock) {
                 User.shared.watchList.remove(at: index)
                 
@@ -251,8 +257,14 @@ extension StockSearchViewController: UITableViewDelegate, UITableViewDataSource{
         
         if User.shared.watchList.contains(currentStock) {
             cell.addBtn.tintColor = .black
+            cell.addBtn.layer.borderColor = UIColor.darkGray.cgColor
+            cell.addBtn.setTitle("Unfollow", for: .normal)
+            cell.addBtn.setTitleColor(.darkGray, for: .normal)
         } else {
             cell.addBtn.tintColor = .custumGreen
+            cell.addBtn.layer.borderColor = UIColor.custumGreen.cgColor
+            cell.addBtn.setTitle("Follow", for: .normal)
+            cell.addBtn.setTitleColor(.custumGreen, for: .normal)
         }
         
         cell.addBtn.tag = indexPath.row
