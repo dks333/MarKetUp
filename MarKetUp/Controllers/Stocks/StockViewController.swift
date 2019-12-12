@@ -42,7 +42,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var storedStock = [StoredStock]()
     var stockHistory = [StockHistory]()
     
-    let APIRequestLimit = 50
+    let APIRequestLimit = 20
     var loadingTimer = Timer()
     
     var yesterdayTotalValues : Float = 0.0

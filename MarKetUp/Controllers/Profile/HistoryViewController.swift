@@ -30,6 +30,7 @@ class HistoryViewController: SubProfileViewController {
             
         } else {
             bannerView.isHidden = true
+            tableview.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         }
     }
     

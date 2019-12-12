@@ -247,6 +247,7 @@ extension StockSearchViewController: UITableViewDelegate, UITableViewDataSource{
         return filteredStocks.count
     }
     
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "searchResultCell", for: indexPath) as! searchResultTableViewCell
         
