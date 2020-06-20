@@ -1,2 +1,2 @@
 # MarKetUp
-An iOS Stock Market Simulator Using WorldTradingData
+An iOS Stock Market Simulator Using Third Party APIs
