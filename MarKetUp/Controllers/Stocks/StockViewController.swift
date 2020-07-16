@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import CoreData
 
-let WorldTradingDataAPIKey = "fhGOT6U6HafLz2aazzTXti58aetYaJNZAr6cZzkibkcMut0p2MMgbgMLEDNv"
+let WorldTradingDataAPIKey = "18733fc298a603345dcbea37de1edd0d"
 
 class StockViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -199,7 +199,7 @@ class StockViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let allSymbllStr = tempSymbols.prefix(self.APIRequestLimit).joined(separator: ",")
             tempSymbols = Array(tempSymbols.dropFirst(self.APIRequestLimit))
             
-            guard let url = URL(string: "https://api.worldtradingdata.com/api/v1/stock?symbol=\(allSymbllStr),&api_token=\(WorldTradingDataAPIKey)") else { return }
+            guard let url = URL(string: "https://api.marketstack.com/v1/stock?symbol=\(allSymbllStr),&api_token=\(WorldTradingDataAPIKey)") else { return }
                    
                    let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
                        guard let dataResponse = data,
