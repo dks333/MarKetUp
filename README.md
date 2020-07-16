@@ -6,4 +6,4 @@ Due to the shutdown of the stock API, this applicaiton is deprecated.
 
 ## Previews
 ### Home Page
-![](/preview/Home.png){height=400px width=500px}
+![](/preview/Home.png){height=100 width=60}
