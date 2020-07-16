@@ -6,7 +6,7 @@ Due to the shutdown of the stock API, this applicaiton is deprecated.
 
 ## Previews
 ### Home Page
-<img src="./preview/Home.png" alt="drawing" width="200"/><img src="./preview/Intraday.png" alt="drawing" width="200"/>
+<img src="./preview/Home.png" alt="drawing" width="200"/>   <img src="./preview/Intraday.png" alt="drawing" width="200"/>   <img src="./preview/Intraday.png" alt="drawing" width="200"/>   <img src="./preview/Intraday.png" alt="drawing" width="200"/>   <img src="./preview/monitor.png" alt="drawing" width="200"/>   <img src="./preview/History.png" alt="drawing" width="200"/>
 ### Intraday Page
 <img src="./preview/Intraday.png" alt="drawing" width="200"/>
 ### Trading Page
